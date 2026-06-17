@@ -21,6 +21,26 @@ export const Users: CollectionConfig = {
       name: 'name',
       type: 'text',
     },
+    {
+      name: 'role',
+      type: 'select',
+      required: true,
+      defaultValue: 'customer',
+      options: [
+        {
+          label: 'Customer',
+          value: 'customer',
+        },
+        {
+          label: 'Farm',
+          value: 'farm',
+        },
+        {
+          label: 'Admin',
+          value: 'admin',
+        },
+      ],
+    },
   ],
   timestamps: true,
 }
