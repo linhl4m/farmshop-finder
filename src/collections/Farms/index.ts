@@ -1,8 +1,28 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from 'payload'
+import { anyone, isAdmin } from '@/access/roles'
 
 export const Farms: CollectionConfig = {
   slug: 'farms',
+  access: {
+    read: anyone,
+
+    create: ({ req }) => {
+      return req.user?.role === 'farm' || req.user?.role === 'admin'
+    },
+
+    update: ({ req }) => {
+      if (req.user?.role === 'admin') return true
+
+      return {
+        owner: {
+          equals: req.user?.id,
+        },
+      }
+    },
+
+    delete: isAdmin,
+  },
   admin: {
     useAsTitle: 'name',
   },
@@ -12,6 +32,7 @@ export const Farms: CollectionConfig = {
       type: 'relationship',
       relationTo: 'users',
       required: true,
+      unique: true,
     },
 
     {

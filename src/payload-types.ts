@@ -72,6 +72,10 @@ export interface Config {
     media: Media;
     categories: Category;
     users: User;
+    products: Product;
+    farms: Farm;
+    reviews: Review;
+    orders: Order;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -94,6 +98,10 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    farms: FarmsSelect<false> | FarmsSelect<true>;
+    reviews: ReviewsSelect<false> | ReviewsSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -784,6 +792,97 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: string;
+  farm: string | Farm;
+  name: string;
+  description?: string | null;
+  photos?: (string | Media)[] | null;
+  price: number;
+  unit: 'kg' | 'lb' | 'dozen' | 'bunch' | 'piece';
+  category: 'produce' | 'dairy' | 'eggs' | 'meat' | 'honey' | 'baked_goods';
+  stock?: number | null;
+  status?: ('produce' | 'available' | 'sold_out' | 'out_of_season') | null;
+  ratingAverage?: number | null;
+  ratingCount?: number | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "farms".
+ */
+export interface Farm {
+  id: string;
+  owner: string | User;
+  name: string;
+  description?: string | null;
+  type?: ('produce' | 'dairy' | 'livestock' | 'mixed' | 'orchard') | null;
+  organic?: boolean | null;
+  region?: string | null;
+  location?: {
+    address?: string | null;
+    city?: string | null;
+    latitude?: number | null;
+    longitude?: number | null;
+  };
+  photos?: (string | Media)[] | null;
+  ratingAverage?: number | null;
+  ratingCount?: number | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews".
+ */
+export interface Review {
+  id: string;
+  customer: string | User;
+  farm: string | Farm;
+  product?: (string | null) | Product;
+  rating: number;
+  title?: string | null;
+  comment?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: string;
+  customer: string | User;
+  farm: string | Farm;
+  items: {
+    product: string | Product;
+    quantity: number;
+    priceSnapshot: number;
+    unitSnapshot?: string | null;
+    productNameSnapshot?: string | null;
+    id?: string | null;
+  }[];
+  total: number;
+  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  note?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -991,6 +1090,22 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'products';
+        value: string | Product;
+      } | null)
+    | ({
+        relationTo: 'farms';
+        value: string | Farm;
+      } | null)
+    | ({
+        relationTo: 'reviews';
+        value: string | Review;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: string | Order;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1357,6 +1472,91 @@ export interface UsersSelect<T extends boolean = true> {
         createdAt?: T;
         expiresAt?: T;
       };
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  farm?: T;
+  name?: T;
+  description?: T;
+  photos?: T;
+  price?: T;
+  unit?: T;
+  category?: T;
+  stock?: T;
+  status?: T;
+  ratingAverage?: T;
+  ratingCount?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "farms_select".
+ */
+export interface FarmsSelect<T extends boolean = true> {
+  owner?: T;
+  name?: T;
+  description?: T;
+  type?: T;
+  organic?: T;
+  region?: T;
+  location?:
+    | T
+    | {
+        address?: T;
+        city?: T;
+        latitude?: T;
+        longitude?: T;
+      };
+  photos?: T;
+  ratingAverage?: T;
+  ratingCount?: T;
+  generateSlug?: T;
+  slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "reviews_select".
+ */
+export interface ReviewsSelect<T extends boolean = true> {
+  customer?: T;
+  farm?: T;
+  product?: T;
+  rating?: T;
+  title?: T;
+  comment?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  customer?: T;
+  farm?: T;
+  items?:
+    | T
+    | {
+        product?: T;
+        quantity?: T;
+        priceSnapshot?: T;
+        unitSnapshot?: T;
+        productNameSnapshot?: T;
+        id?: T;
+      };
+  total?: T;
+  status?: T;
+  note?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

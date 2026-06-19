@@ -1,8 +1,36 @@
 import type { CollectionConfig } from 'payload'
 import { updateFarmRatingAfterChange, updateFarmRatingAfterDelete } from './hooks/updateFarmRating'
+import { anyone } from '@/access/roles'
 
 export const Reviews: CollectionConfig = {
   slug: 'reviews',
+  access: {
+    read: anyone,
+
+    create: ({ req }) => {
+      return req.user?.role === 'customer' || req.user?.role === 'admin'
+    },
+
+    update: ({ req }) => {
+      if (req.user?.role === 'admin') return true
+
+      return {
+        customer: {
+          equals: req.user?.id,
+        },
+      }
+    },
+
+    delete: ({ req }) => {
+      if (req.user?.role === 'admin') return true
+
+      return {
+        customer: {
+          equals: req.user?.id,
+        },
+      }
+    },
+  },
   admin: {
     useAsTitle: 'title',
   },

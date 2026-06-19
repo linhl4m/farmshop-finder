@@ -1,7 +1,66 @@
 import { slugField, type CollectionConfig } from 'payload'
+import { anyone } from '@/access/roles'
 
 export const Products: CollectionConfig = {
   slug: 'products',
+
+  access: {
+    read: anyone,
+
+    create: ({ req }) => {
+      return req.user?.role === 'farm' || req.user?.role === 'admin'
+    },
+
+    update: async ({ req }) => {
+      if (req.user?.role === 'admin') return true
+      if (req.user?.role !== 'farm') return false
+
+      const farm = await req.payload.find({
+        collection: 'farms',
+        where: {
+          owner: {
+            equals: req.user.id,
+          },
+        },
+        limit: 1,
+      })
+
+      const farmId = farm.docs[0]?.id
+
+      if (!farmId) return false
+
+      return {
+        farm: {
+          equals: farmId,
+        },
+      }
+    },
+
+    delete: async ({ req }) => {
+      if (req.user?.role === 'admin') return true
+      if (req.user?.role !== 'farm') return false
+
+      const farm = await req.payload.find({
+        collection: 'farms',
+        where: {
+          owner: {
+            equals: req.user.id,
+          },
+        },
+        limit: 1,
+      })
+
+      const farmId = farm.docs[0]?.id
+
+      if (!farmId) return false
+
+      return {
+        farm: {
+          equals: farmId,
+        },
+      }
+    },
+  },
 
   admin: {
     useAsTitle: 'name',
@@ -19,12 +78,6 @@ export const Products: CollectionConfig = {
       name: 'name',
       type: 'text',
       required: true,
-    },
-
-    {
-      name: 'slug',
-      type: 'text',
-      unique: true,
     },
 
     {
@@ -57,7 +110,32 @@ export const Products: CollectionConfig = {
       name: 'category',
       type: 'select',
       required: true,
-      options: ['produce', 'dairy', 'eggs', 'meat', 'honey', 'baked_goods'],
+      options: [
+        {
+          label: 'Produce',
+          value: 'produce',
+        },
+        {
+          label: 'Dairy',
+          value: 'dairy',
+        },
+        {
+          label: 'Eggs',
+          value: 'eggs',
+        },
+        {
+          label: 'Meat',
+          value: 'meat',
+        },
+        {
+          label: 'Honey',
+          value: 'honey',
+        },
+        {
+          label: 'Baked Goods',
+          value: 'baked_goods',
+        },
+      ],
     },
 
     {
@@ -70,7 +148,24 @@ export const Products: CollectionConfig = {
       name: 'status',
       type: 'select',
       defaultValue: 'available',
-      options: ['available', 'sold_out', 'out_of_season'],
+      options: [
+        {
+          label: 'Produce',
+          value: 'produce',
+        },
+        {
+          label: 'Available',
+          value: 'available',
+        },
+        {
+          label: 'Sold Out',
+          value: 'sold_out',
+        },
+        {
+          label: 'Out of Season',
+          value: 'out_of_season',
+        },
+      ],
     },
     {
       name: 'ratingAverage',

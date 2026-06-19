@@ -1,8 +1,42 @@
 import type { CollectionConfig } from 'payload'
 import { createOrderSnapshot } from './hooks/createOrderSnapshot'
+import { isAdmin } from '@/access/roles'
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
+  access: {
+    read: ({ req }) => {
+      if (req.user?.role === 'admin') return true
+
+      if (req.user?.role === 'customer') {
+        return {
+          customer: {
+            equals: req.user.id,
+          },
+        }
+      }
+
+      if (req.user?.role === 'farm') {
+        return {
+          farm: {
+            equals: req.user.id,
+          },
+        }
+      }
+
+      return false
+    },
+
+    create: ({ req }) => {
+      return req.user?.role === 'customer' || req.user?.role === 'admin'
+    },
+
+    update: ({ req }) => {
+      return req.user?.role === 'admin' || req.user?.role === 'farm'
+    },
+
+    delete: isAdmin,
+  },
   admin: {
     useAsTitle: 'id',
   },
