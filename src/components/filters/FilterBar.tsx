@@ -119,19 +119,6 @@ export function FilterBar({ mapOpen, onToggleMap, categories = [] }: Props) {
 
             <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2" />
           </div>
-          <div className="relative">
-            <select
-              value={searchParams.get('availability') ?? ''}
-              onChange={(e) => updateParam('availability', e.target.value)}
-              className="appearance-none rounded-full border border-[#c2c9bb]/40 bg-white py-2 pl-4 pr-10 text-sm"
-            >
-              <option value="">Availability</option>
-              <option value="available">Available</option>
-              <option value="sold_out">Sold Out</option>
-              <option value="out_of_season">Out of Season</option>
-            </select>
-            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2" />
-          </div>
 
           <div className="relative">
             <select

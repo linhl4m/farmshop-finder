@@ -7,7 +7,6 @@ type Props = {
   searchParams: Promise<{
     category?: string
     price?: string
-    availability?: string
     distance?: string
   }>
 }
@@ -18,7 +17,6 @@ export default async function HomePage({ searchParams }: Props) {
   const products = await getProducts({
     category: params.category,
     price: params.price,
-    availability: params.availability,
     distance: params.distance,
     lat: params.lat,
     lng: params.lng,

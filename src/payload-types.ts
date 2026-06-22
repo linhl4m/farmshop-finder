@@ -806,7 +806,7 @@ export interface Product {
   unit: 'kg' | 'lb' | 'dozen' | 'bunch' | 'piece';
   productCategory: string | ProductCategory;
   stock?: number | null;
-  status?: ('produce' | 'available' | 'sold_out' | 'out_of_season') | null;
+  status?: ('in_season' | 'out_of_season' | 'sold_out') | null;
   ratingAverage?: number | null;
   ratingCount?: number | null;
   /**

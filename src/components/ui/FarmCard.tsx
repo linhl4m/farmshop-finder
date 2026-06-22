@@ -27,16 +27,18 @@ export function FarmCard({ farm }: Props) {
       </div>
 
       <div className="p-6">
-        <div className="flex justify-between">
+        <div className="flex justify-between items-start">
           <div>
-            <h3 className="font-serif text-2xl font-semibold text-[#154212]">{farm.name}</h3>
+            <h3 className="font-serif text-2xl font-semibold ">{farm.name}</h3>
 
-            <p className="mt-2 text-[#42493e]">{farm.description}</p>
+            <p className="mt-2 text-secondary">{farm.description}</p>
 
-            <p className="mt-3 text-sm text-[#42493e]">{farm.region}</p>
+            <p className="mt-3 text-sm text-secondary">{farm.region}</p>
           </div>
 
-          <div className="rounded-lg bg-[#bcf0ae]/30 px-3 py-1">⭐ {farm.ratingAverage ?? 0}</div>
+          <div className="flex flex-col items-center rounded-lg bg-[#bcf0ae]/30 px-3 py-1">
+            <span>⭐</span> <span>{farm.ratingAverage ?? 0}</span>
+          </div>
         </div>
       </div>
     </Link>

@@ -3,12 +3,14 @@ import config from '@payload-config'
 import { filterFarmsByRadius } from '@/lib/maps/filterFarmsByRadius'
 
 type ProductFilters = {
+  farmId?: string
+  search?: string
   category?: string | string[]
   price?: string
-  availability?: string
   distance?: string
   lat?: string
   lng?: string
+  organic?: string
 }
 
 export async function getProducts(filters: ProductFilters = {}) {
@@ -16,6 +18,31 @@ export async function getProducts(filters: ProductFilters = {}) {
 
   const where: any = {
     and: [],
+  }
+
+  if (filters.farmId) {
+    where.and.push({
+      farm: {
+        equals: filters.farmId,
+      },
+    })
+  }
+
+  if (filters.search) {
+    where.and.push({
+      or: [
+        {
+          name: {
+            like: filters.search,
+          },
+        },
+        {
+          description: {
+            like: filters.search,
+          },
+        },
+      ],
+    })
   }
 
   if (filters.category) {
@@ -46,22 +73,6 @@ export async function getProducts(filters: ProductFilters = {}) {
     })
   }
 
-  if (filters.availability) {
-    where.and.push({
-      status: {
-        equals: filters.availability,
-      },
-    })
-  }
-
-  if (filters.availability) {
-    where.and.push({
-      status: {
-        equals: filters.availability,
-      },
-    })
-  }
-
   if (filters.distance) {
     const farms = await payload.find({
       collection: 'farms',
@@ -80,6 +91,24 @@ export async function getProducts(filters: ProductFilters = {}) {
     where.and.push({
       farm: {
         in: farmsInRadius.map((farm) => farm.id),
+      },
+    })
+  }
+
+  if (filters.organic === 'true') {
+    const organicFarms = await payload.find({
+      collection: 'farms',
+      where: {
+        organic: {
+          equals: true,
+        },
+      },
+      limit: 100,
+    })
+
+    where.and.push({
+      farm: {
+        in: organicFarms.docs.map((farm) => farm.id),
       },
     })
   }

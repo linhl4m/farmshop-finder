@@ -13,20 +13,3 @@ export async function getFarms() {
 
   return farms.docs
 }
-
-export async function getFarmBySlug(slug: string) {
-  const payload = await getPayload({ config })
-
-  const farms = await payload.find({
-    collection: 'farms',
-    depth: 1,
-    limit: 1,
-    where: {
-      slug: {
-        equals: slug,
-      },
-    },
-  })
-
-  return farms.docs[0] ?? null
-}

@@ -122,23 +122,19 @@ export const Products: CollectionConfig = {
     {
       name: 'status',
       type: 'select',
-      defaultValue: 'available',
+      defaultValue: 'in_season',
       options: [
         {
-          label: 'Produce',
-          value: 'produce',
-        },
-        {
-          label: 'Available',
-          value: 'available',
-        },
-        {
-          label: 'Sold Out',
-          value: 'sold_out',
+          label: 'In Season',
+          value: 'in_season',
         },
         {
           label: 'Out of Season',
           value: 'out_of_season',
+        },
+        {
+          label: 'Sold Out',
+          value: 'sold_out',
         },
       ],
     },

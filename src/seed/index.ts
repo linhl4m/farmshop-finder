@@ -149,6 +149,15 @@ async function seed() {
   console.log('Database cleared')
   console.log('Payload initialized')
 
+  await payload.create({
+    collection: 'users',
+    data: {
+      email: 'admin@farmshop.com',
+      password: 'admin',
+      role: 'admin',
+    },
+  })
+
   const customerDocs = []
 
   for (const email of customers) {
@@ -256,7 +265,7 @@ async function seed() {
           price,
           unit,
           stock,
-          status: 'available',
+          status: 'in_season',
         },
       })
 
