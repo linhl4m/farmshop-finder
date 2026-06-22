@@ -76,6 +76,7 @@ export interface Config {
     farms: Farm;
     reviews: Review;
     orders: Order;
+    'product-categories': ProductCategory;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -102,6 +103,7 @@ export interface Config {
     farms: FarmsSelect<false> | FarmsSelect<true>;
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     orders: OrdersSelect<false> | OrdersSelect<true>;
+    'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -802,7 +804,7 @@ export interface Product {
   photos?: (string | Media)[] | null;
   price: number;
   unit: 'kg' | 'lb' | 'dozen' | 'bunch' | 'piece';
-  category: 'produce' | 'dairy' | 'eggs' | 'meat' | 'honey' | 'baked_goods';
+  productCategory: string | ProductCategory;
   stock?: number | null;
   status?: ('produce' | 'available' | 'sold_out' | 'out_of_season') | null;
   ratingAverage?: number | null;
@@ -836,6 +838,21 @@ export interface Farm {
   photos?: (string | Media)[] | null;
   ratingAverage?: number | null;
   ratingCount?: number | null;
+  /**
+   * When enabled, the slug will auto-generate from the title field on save and autosave.
+   */
+  generateSlug?: boolean | null;
+  slug: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories".
+ */
+export interface ProductCategory {
+  id: string;
+  name: string;
   /**
    * When enabled, the slug will auto-generate from the title field on save and autosave.
    */
@@ -1106,6 +1123,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'orders';
         value: string | Order;
+      } | null)
+    | ({
+        relationTo: 'product-categories';
+        value: string | ProductCategory;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1484,7 +1505,7 @@ export interface ProductsSelect<T extends boolean = true> {
   photos?: T;
   price?: T;
   unit?: T;
-  category?: T;
+  productCategory?: T;
   stock?: T;
   status?: T;
   ratingAverage?: T;
@@ -1555,6 +1576,17 @@ export interface OrdersSelect<T extends boolean = true> {
   total?: T;
   status?: T;
   note?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "product-categories_select".
+ */
+export interface ProductCategoriesSelect<T extends boolean = true> {
+  name?: T;
+  generateSlug?: T;
+  slug?: T;
   updatedAt?: T;
   createdAt?: T;
 }

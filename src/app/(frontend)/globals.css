@@ -44,7 +44,8 @@
   --breakpoint-xl: 80rem;
   --breakpoint-2xl: 86rem;
   --font-mono: var(--font-geist-mono);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-body);
+  --font-serif: var(--font-heading);
 }
 
 @layer utilities {
@@ -52,6 +53,10 @@
     width: 100%;
     margin-inline: auto;
     padding-inline: 1rem;
+  }
+
+  .container-page {
+    @apply mx-auto w-full max-w-[1440px] px-8 py-6;
   }
 
   @variant sm {
@@ -125,7 +130,7 @@
   --error: oklch(75% 0.15 25deg);
 }
 
-[data-theme='dark'] {
+/* [data-theme='dark'] {
   --background: oklch(14.5% 0 0deg);
   --foreground: oklch(98.5% 0 0deg);
   --card: oklch(17% 0 0deg);
@@ -161,7 +166,7 @@
   --success: oklch(28% 0.1 200deg);
   --warning: oklch(35% 0.08 70deg);
   --error: oklch(45% 0.1 25deg);
-}
+} */
 
 @theme inline {
   --color-background: var(--background);
@@ -211,6 +216,19 @@
   }
   body {
     @apply bg-background text-foreground min-h-[100vh] flex flex-col;
+    font-family: var(--font-body);
+    color: #154212;
+  }
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-heading);
+  }
+  button {
+    @apply cursor-pointer;
   }
 }
 

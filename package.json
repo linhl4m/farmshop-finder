@@ -19,10 +19,12 @@
     "start": "cross-env NODE_OPTIONS=--no-deprecation next start",
     "test": "pnpm run test:int && pnpm run test:e2e",
     "test:e2e": "cross-env NODE_OPTIONS=\"--no-deprecation --import=tsx/esm\" playwright test --config=playwright.config.ts",
-    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts"
+    "test:int": "cross-env NODE_OPTIONS=--no-deprecation vitest run --config ./vitest.config.mts",
+    "seed": "tsx src/seed/index.ts"
   },
   "dependencies": {
     "@payloadcms/admin-bar": "3.85.1",
+    "@payloadcms/db-mongodb": "3.85.1",
     "@payloadcms/live-preview-react": "3.85.1",
     "@payloadcms/next": "3.85.1",
     "@payloadcms/plugin-form-builder": "3.85.1",
@@ -43,6 +45,7 @@
     "geist": "^1.3.0",
     "graphql": "^16.8.2",
     "lucide-react": "0.563.0",
+    "mapbox-gl": "^3.25.0",
     "next": "16.2.6",
     "next-sitemap": "^4.2.3",
     "payload": "3.85.1",
@@ -51,8 +54,7 @@
     "react-dom": "19.2.6",
     "react-hook-form": "7.71.1",
     "sharp": "0.34.2",
-    "tailwind-merge": "^3.4.0",
-    "@payloadcms/db-mongodb": "3.85.1"
+    "tailwind-merge": "^3.4.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

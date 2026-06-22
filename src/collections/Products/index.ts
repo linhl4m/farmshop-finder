@@ -107,35 +107,10 @@ export const Products: CollectionConfig = {
     },
 
     {
-      name: 'category',
-      type: 'select',
+      name: 'productCategory',
+      type: 'relationship',
+      relationTo: 'product-categories',
       required: true,
-      options: [
-        {
-          label: 'Produce',
-          value: 'produce',
-        },
-        {
-          label: 'Dairy',
-          value: 'dairy',
-        },
-        {
-          label: 'Eggs',
-          value: 'eggs',
-        },
-        {
-          label: 'Meat',
-          value: 'meat',
-        },
-        {
-          label: 'Honey',
-          value: 'honey',
-        },
-        {
-          label: 'Baked Goods',
-          value: 'baked_goods',
-        },
-      ],
     },
 
     {
