@@ -1,30 +1,43 @@
-import { getCachedGlobal } from '@/utilities/getGlobals'
 import Link from 'next/link'
-import React from 'react'
 
-import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
-import { CMSLink } from '@/components/Link'
-import { Logo } from '@/components/Logo/Logo'
-
-export async function Footer() {
-  const footerData = await getCachedGlobal('footer', 1)()
-
-  const navItems = footerData?.navItems || []
-
+export function Footer() {
   return (
-    <footer className="mt-auto border-t border-border bg-black dark:bg-card text-white">
-      <div className="container py-8 gap-8 flex flex-col md:flex-row md:justify-between">
-        <Link className="flex items-center" href="/">
-          <Logo />
-        </Link>
+    <footer className="border-t border-[#c2c9bb]/20 bg-[#f9faf2] z-10">
+      <div className="mx-auto max-w-7xl px-6 py-12 lg:px-16">
+        <div className="grid gap-10 md:grid-cols-3">
+          <div>
+            <h3 className="font-serif text-2xl font-bold text-primary">Farmshop Finder</h3>
 
-        <div className="flex flex-col-reverse items-start md:flex-row gap-4 md:items-center">
-          <ThemeSelector />
-          <nav className="flex flex-col md:flex-row gap-4">
-            {navItems.map(({ link }, i) => {
-              return <CMSLink className="text-white" key={i} {...link} />
-            })}
-          </nav>
+            <p className="mt-3 max-w-sm text-sm text-secondary">
+              Discover local farms, support sustainable agriculture, and buy fresh products directly
+              from the source.
+            </p>
+          </div>
+
+          <div>
+            <h4 className="mb-4 font-semibold text-primary">Explore</h4>
+
+            <div className="flex flex-col gap-2 text-sm text-secondary">
+              <Link href="/">Home</Link>
+              <Link href="/farms">Farms</Link>
+              <Link href="/map">Map</Link>
+              <Link href="/products">Products</Link>
+            </div>
+          </div>
+
+          <div>
+            <h4 className="mb-4 font-semibold text-primary">Account</h4>
+
+            <div className="flex flex-col gap-2 text-sm text-secondary">
+              <Link href="/login">Login</Link>
+              <Link href="/register">Register</Link>
+              <Link href="/account">My Orders</Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-10 border-t border-[#c2c9bb]/20 pt-6 text-sm text-secondary">
+          © {new Date().getFullYear()} Farmshop Finder. Built for local farms.
         </div>
       </div>
     </footer>

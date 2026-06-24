@@ -36,3 +36,21 @@ export async function getOrdersByFarm(farmId: string) {
 
   return orders.docs
 }
+
+export async function getRecentOrders(farmId: string) {
+  const payload = await getPayload({ config })
+
+  const recentOrders = await payload.find({
+    collection: 'orders',
+    where: {
+      farm: {
+        equals: farmId,
+      },
+    },
+    sort: '-createdAt',
+    limit: 5,
+    depth: 2,
+  })
+
+  return recentOrders.docs
+}

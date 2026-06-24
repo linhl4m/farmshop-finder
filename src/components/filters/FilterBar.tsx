@@ -23,6 +23,7 @@ export function FilterBar({ mapOpen, onToggleMap, categories = [] }: Props) {
   const searchParams = useSearchParams()
 
   const activeCategories = searchParams.getAll('category')
+  const organicActive = searchParams.get('organic') === 'true'
 
   const updateParam = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString())
@@ -59,6 +60,18 @@ export function FilterBar({ mapOpen, onToggleMap, categories = [] }: Props) {
 
   const categoryLabel =
     activeCategories.length === 0 ? 'Categories' : `${activeCategories.length} selected`
+
+  const toggleOrganic = () => {
+    const params = new URLSearchParams(searchParams.toString())
+
+    if (organicActive) {
+      params.delete('organic')
+    } else {
+      params.set('organic', 'true')
+    }
+
+    router.push(`/?${params.toString()}`)
+  }
 
   return (
     <section>
@@ -134,6 +147,25 @@ export function FilterBar({ mapOpen, onToggleMap, categories = [] }: Props) {
             </select>
 
             <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2" />
+          </div>
+
+          <div className="relative">
+            <label className="flex cursor-pointer items-center gap-3 rounded-full bg-white py-2 text-sm">
+              <div
+                className={`flex h-4 w-4 items-center justify-center rounded border ${
+                  organicActive ? 'bg-primary text-white' : 'border-[#c2c9bb]'
+                }`}
+              >
+                {organicActive && <Check className="h-3 w-3" />}
+              </div>
+              <input
+                type="checkbox"
+                checked={organicActive}
+                onChange={toggleOrganic}
+                className="hidden"
+              />
+              Organic farms
+            </label>
           </div>
         </div>
 

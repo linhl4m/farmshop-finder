@@ -7,19 +7,19 @@ import {
   getReviewsByFarmId,
 } from '@/lib/data/farmDetails'
 import { Star, Leaf, MapPin, ShieldCheck, ArrowRight } from 'lucide-react'
-import { ProductCard } from '@/components/ui/ProductCard'
+import { ProductCard } from '@/components/products/ProductCard'
 import Link from 'next/link'
 
 type Props = {
   params: Promise<{
-    slug: string
+    farmSlug: string
   }>
 }
 
 export default async function FarmPage({ params }: Props) {
-  const { slug } = await params
+  const { farmSlug } = await params
 
-  const farm = await getFarmBySlug(slug)
+  const farm = await getFarmBySlug(farmSlug)
 
   if (!farm) notFound()
 

@@ -1,5 +1,5 @@
 import { FarmCard } from '@/components/ui/FarmCard'
-import { ProductCard } from '@/components/ui/ProductCard'
+import { ProductCard } from '@/components/products/ProductCard'
 import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
@@ -36,7 +36,7 @@ export function FarmsFeed({ farms, products, mapOpen, categories }: Props) {
         </section>
       )}
       <section>
-        <h2 className="mb-6 font-serif text-3xl font-semibold">Discover Farms in Brandenburg</h2>
+        <h2 className="mb-6 font-serif text-3xl font-semibold">Discover Farms</h2>
 
         {farms.length > 0 ? (
           <div

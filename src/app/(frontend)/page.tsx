@@ -8,6 +8,7 @@ type Props = {
     category?: string
     price?: string
     distance?: string
+    organic?: boolean
   }>
 }
 
@@ -20,6 +21,7 @@ export default async function HomePage({ searchParams }: Props) {
     distance: params.distance,
     lat: params.lat,
     lng: params.lng,
+    organic: params.organic,
   })
 
   const farms = await getFarms()

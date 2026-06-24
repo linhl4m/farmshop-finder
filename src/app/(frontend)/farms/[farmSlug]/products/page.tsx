@@ -6,7 +6,7 @@ import { getProducts } from '@/lib/data/products'
 
 type Props = {
   params: Promise<{
-    slug: string
+    farmSlug: string
   }>
   searchParams: Promise<{
     search?: string
@@ -16,10 +16,10 @@ type Props = {
 }
 
 export default async function FarmProductsPage({ params, searchParams }: Props) {
-  const { slug } = await params
+  const { farmSlug } = await params
   const filters = await searchParams
 
-  const farm = await getFarmBySlug(slug)
+  const farm = await getFarmBySlug(farmSlug)
 
   if (!farm) notFound()
 

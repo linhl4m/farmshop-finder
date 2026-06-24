@@ -6,7 +6,7 @@ import React from 'react'
 
 import { AdminBar } from '@/components/AdminBar'
 import { Footer } from '@/Footer/Component'
-import { Header } from '@/components/layout/Header'
+import { Header } from '@/Header/Component'
 import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
@@ -15,6 +15,8 @@ import { draftMode } from 'next/headers'
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
 import 'mapbox-gl/dist/mapbox-gl.css'
+import { CartProvider } from '@/components/cart/CartProvider'
+import { getCart } from '@/lib/data/cart'
 
 const bodyFont = Be_Vietnam_Pro({
   subsets: ['latin'],
@@ -31,6 +33,9 @@ const headingFont = Literata({
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
   const { isEnabled } = await draftMode()
 
+  const cart = await getCart()
+  const cartCount = cart.length
+
   return (
     <html
       className={cn(bodyFont.variable, headingFont.variable)}
@@ -44,10 +49,12 @@ export default async function RootLayout({ children }: { children: React.ReactNo
       </head>
       <body>
         <Providers>
-          <Header />
-          {children}
-          <Footer />
+          <CartProvider initialCount={cartCount}>
+            <Header />
+            {children}
+          </CartProvider>
         </Providers>
+        <Footer />
       </body>
     </html>
   )

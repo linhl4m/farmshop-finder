@@ -34,7 +34,7 @@ export function ProductFilters({ categories, showGlobalFilters = true }: Props) 
 
   return (
     <aside className="hidden w-64 flex-shrink-0 md:block">
-      <div className="sticky top-28 space-y-8">
+      <div className="top-28 space-y-8">
         <div>
           <h3 className="mb-4 font-serif text-2xl font-semibold text-primary">Search</h3>
           <SearchInput />
@@ -112,6 +112,7 @@ export function ProductFilters({ categories, showGlobalFilters = true }: Props) 
                 className="w-full appearance-none rounded-full border border-[#c2c9bb]/40 bg-white py-2 pl-4 pr-10 text-sm"
               >
                 <option value="">Any distance</option>
+                <option value="5">5 km</option>
                 <option value="10">10 km</option>
                 <option value="25">25 km</option>
                 <option value="50">50 km</option>
