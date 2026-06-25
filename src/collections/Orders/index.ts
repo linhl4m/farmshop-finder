@@ -5,7 +5,7 @@ import { isAdmin } from '@/access/roles'
 export const Orders: CollectionConfig = {
   slug: 'orders',
   access: {
-    read: ({ req }) => {
+    read: async ({ req }) => {
       if (req.user?.role === 'admin') return true
 
       if (req.user?.role === 'customer') {
@@ -17,9 +17,19 @@ export const Orders: CollectionConfig = {
       }
 
       if (req.user?.role === 'farm') {
+        const farms = await req.payload.find({
+          collection: 'farms',
+          where: { owner: { equals: req.user.id } },
+          limit: 1,
+        })
+
+        const farmId = farms.docs[0]?.id
+
+        if (!farmId) return false
+
         return {
           farm: {
-            equals: req.user.id,
+            equals: farmId,
           },
         }
       }

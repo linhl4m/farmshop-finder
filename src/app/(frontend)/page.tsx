@@ -15,7 +15,7 @@ type Props = {
 export default async function HomePage({ searchParams }: Props) {
   const params = await searchParams
 
-  const products = await getProducts({
+  const productsForFilter = await getProducts({
     category: params.category,
     price: params.price,
     distance: params.distance,
@@ -24,10 +24,12 @@ export default async function HomePage({ searchParams }: Props) {
     organic: params.organic,
   })
 
+  const products = await getProducts()
+
   const farms = await getFarms()
 
   const farmIds = new Set(
-    products.map((product: any) =>
+    productsForFilter.map((product: any) =>
       typeof product.farm === 'string' ? product.farm : product.farm?.id,
     ),
   )

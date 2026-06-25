@@ -54,3 +54,55 @@ export async function getRecentOrders(farmId: string) {
 
   return recentOrders.docs
 }
+
+export async function customerHasOrderFromFarm(customerId: string, farmId: string) {
+  const payload = await getPayload({ config })
+
+  const result = await payload.find({
+    collection: 'orders',
+    where: {
+      and: [
+        {
+          customer: {
+            equals: customerId,
+          },
+        },
+        {
+          farm: {
+            equals: farmId,
+          },
+        },
+      ],
+    },
+    limit: 1,
+    depth: 0,
+  })
+
+  return result.docs.length > 0
+}
+
+export async function customerHasOrderedProduct(customerId: string, productId: string) {
+  const payload = await getPayload({ config })
+
+  const result = await payload.find({
+    collection: 'orders',
+    where: {
+      and: [
+        {
+          customer: {
+            equals: customerId,
+          },
+        },
+        {
+          'items.product': {
+            equals: productId,
+          },
+        },
+      ],
+    },
+    limit: 1,
+    depth: 0,
+  })
+
+  return result.docs.length > 0
+}

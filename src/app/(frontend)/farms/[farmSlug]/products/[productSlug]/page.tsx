@@ -3,8 +3,12 @@ import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import { Leaf, MapPin, Star, Store } from 'lucide-react'
 import { getFarmBySlug } from '@/lib/data/farmDetails'
-import { getProductBySlugAndFarmId } from '@/lib/data/productDetails'
 import { ProductQuantity } from '@/components/products/ProductQuantity'
+import { ReviewsSection } from '@/components/reviews/ReviewsSection'
+import { getCurrentUser } from '@/lib/auth'
+import { customerHasOrderedProduct } from '@/lib/data/orders'
+import { ReviewModalButton } from '@/components/reviews/ReviewModalButton'
+import { getProductBySlugAndFarmId, getReviewsByProductId } from '@/lib/data/productDetails'
 
 type Props = {
   params: Promise<{
@@ -28,12 +32,18 @@ export default async function ProductDetailPage({ params }: Props) {
   const product = await getProductBySlugAndFarmId(productSlug, farm.id)
   if (!product) notFound()
 
+  const reviews = await getReviewsByProductId(product.id)
+
+  const user = await getCurrentUser()
+
+  const canWriteReview =
+    user?.role === 'customer' ? await customerHasOrderedProduct(user.id, product.id) : false
+
   const image = product.photos?.[0]
   const category = typeof product.productCategory === 'object' ? product.productCategory.name : null
 
   const availability = getAvailability(product)
   const canBuy = availability === 'Available'
-  /* TODO make first section max page viewheight */
   return (
     <main className="container-page space-y-16">
       <section className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
@@ -156,12 +166,24 @@ export default async function ProductDetailPage({ params }: Props) {
 
           <ProductQuantity
             productId={product.id}
+            farmId={farm.id}
             disabled={!canBuy}
             stock={product.stock}
             unit={product.unit}
+            availability={availability}
           />
         </div>
       </section>
+      <ReviewsSection
+        reviews={reviews}
+        ratingAverage={product.ratingAverage ?? 0}
+        ratingCount={product.ratingCount ?? 0}
+        canWriteReview={canWriteReview}
+        reviewButton={
+          <ReviewModalButton farmId={farm.id} farmSlug={farm.slug} productId={product.id} />
+        }
+        viewAllHref={`/farms/${farm.slug}/products/${product.slug}/reviews`}
+      />
     </main>
   )
 }

@@ -6,22 +6,25 @@ export const Farms: CollectionConfig = {
   slug: 'farms',
   access: {
     read: anyone,
-
-    create: ({ req }) => {
-      return req.user?.role === 'farm' || req.user?.role === 'admin'
-    },
-
-    update: ({ req }) => {
-      if (req.user?.role === 'admin') return true
+    create: anyone,
+    update: ({ req: { user } }) => {
+      if (user?.role === 'admin') return true
 
       return {
         owner: {
-          equals: req.user?.id,
+          equals: user?.id,
         },
       }
     },
+    delete: ({ req: { user } }) => {
+      if (user?.role === 'admin') return true
 
-    delete: isAdmin,
+      return {
+        owner: {
+          equals: user?.id,
+        },
+      }
+    },
   },
   admin: {
     useAsTitle: 'name',
@@ -87,7 +90,13 @@ export const Farms: CollectionConfig = {
     },
 
     {
-      name: 'photos',
+      name: 'coverImage',
+      type: 'upload',
+      relationTo: 'media',
+    },
+
+    {
+      name: 'gallery',
       type: 'upload',
       relationTo: 'media',
       hasMany: true,

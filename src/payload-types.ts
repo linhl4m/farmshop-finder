@@ -835,7 +835,8 @@ export interface Farm {
     latitude?: number | null;
     longitude?: number | null;
   };
-  photos?: (string | Media)[] | null;
+  coverImage?: (string | null) | Media;
+  gallery?: (string | Media)[] | null;
   ratingAverage?: number | null;
   ratingCount?: number | null;
   /**
@@ -1534,7 +1535,8 @@ export interface FarmsSelect<T extends boolean = true> {
         latitude?: T;
         longitude?: T;
       };
-  photos?: T;
+  coverImage?: T;
+  gallery?: T;
   ratingAverage?: T;
   ratingCount?: T;
   generateSlug?: T;

@@ -56,7 +56,7 @@
   }
 
   .container-page {
-    @apply mx-auto w-full max-w-[1440px] px-8 py-6;
+    @apply mx-auto w-full max-w-7xl px-6 py-8;
   }
 
   @variant sm {

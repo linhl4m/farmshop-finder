@@ -1,4 +1,5 @@
 import { Package } from 'lucide-react'
+import Link from 'next/link'
 
 type Props = {
   orders: any[]
@@ -32,6 +33,9 @@ export function RecentOrders({ orders }: Props) {
 
           <p className="text-sm text-muted-foreground">Latest purchases from your customers</p>
         </div>
+        <Link href="#" className="text-sm font-semibold text-primary hover:underline">
+          View All
+        </Link>
       </div>
 
       {orders.length === 0 ? (

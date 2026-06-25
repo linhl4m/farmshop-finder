@@ -10,7 +10,6 @@ export function MapPanel({ farms }: Props) {
   return (
     <aside className="w-full">
       <div className="sticky top-24 h-[550px] w-full overflow-hidden rounded-2xl border bg-white shadow">
-        TODO: add map filters, farm markers, and popups
         <FarmMap farms={farms} />
       </div>
     </aside>

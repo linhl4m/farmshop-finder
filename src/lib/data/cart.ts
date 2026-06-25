@@ -7,6 +7,7 @@ import config from '@payload-config'
 export type CartItem = {
   productId: string
   quantity: number
+  farmId: string
 }
 
 const CART_COOKIE = 'farmshop-cart'
@@ -18,7 +19,8 @@ export async function getCart() {
   if (!value) return []
 
   try {
-    return JSON.parse(value) as CartItem[]
+    const items = JSON.parse(value) as CartItem[]
+    return items.filter((item) => item.productId && item.farmId)
   } catch {
     return []
   }

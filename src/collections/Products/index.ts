@@ -1,5 +1,6 @@
 import { slugField, type CollectionConfig } from 'payload'
 import { anyone } from '@/access/roles'
+import { setFarmFromUser } from './hooks/setFarmFromUser'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -64,6 +65,10 @@ export const Products: CollectionConfig = {
 
   admin: {
     useAsTitle: 'name',
+  },
+
+  hooks: {
+    beforeValidate: [setFarmFromUser],
   },
 
   fields: [

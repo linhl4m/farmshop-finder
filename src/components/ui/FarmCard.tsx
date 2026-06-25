@@ -12,9 +12,9 @@ export function FarmCard({ farm }: Props) {
       className="block overflow-hidden rounded-xl border border-[#c2c9bb]/20 bg-white shadow-sm transition"
     >
       <div className="h-56 relative">
-        {farm.photos?.[0]?.url ? (
+        {farm.coverImage?.url ? (
           <Image
-            src={farm.photos[0].url}
+            src={farm.coverImage?.url}
             alt={farm.name}
             fill
             sizes="(max-width: 1024px) 100vw, 560px"

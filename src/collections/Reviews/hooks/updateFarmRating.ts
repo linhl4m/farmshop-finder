@@ -27,6 +27,7 @@ async function recalculateFarmRating(req: PayloadRequest, farmId: string) {
       ratingAverage: Math.round(average * 10) / 10,
       ratingCount: count,
     },
+    overrideAccess: true,
   })
 }
 

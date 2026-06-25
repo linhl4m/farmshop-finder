@@ -19,19 +19,18 @@ export function Footer() {
 
             <div className="flex flex-col gap-2 text-sm text-secondary">
               <Link href="/">Home</Link>
-              <Link href="/farms">Farms</Link>
-              <Link href="/map">Map</Link>
               <Link href="/products">Products</Link>
             </div>
           </div>
 
           <div>
-            <h4 className="mb-4 font-semibold text-primary">Account</h4>
+            <h4 className="mb-4 font-semibold text-primary">More</h4>
 
             <div className="flex flex-col gap-2 text-sm text-secondary">
-              <Link href="/login">Login</Link>
-              <Link href="/register">Register</Link>
-              <Link href="/account">My Orders</Link>
+              <Link href="/about">About Us</Link>
+              <Link href="/imprint">Imprint</Link>
+              <Link href="/privacy">Privacy Policy</Link>
+              <Link href="/terms">Terms & Conditions</Link>
             </div>
           </div>
         </div>

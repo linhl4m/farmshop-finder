@@ -27,3 +27,20 @@ export async function getProductBySlugAndFarmId(productSlug: string, farmId: str
 
   return products.docs[0] ?? null
 }
+
+export async function getReviewsByProductId(productId: string) {
+  const payload = await getPayload({ config })
+
+  const result = await payload.find({
+    collection: 'reviews',
+    where: {
+      product: {
+        equals: productId,
+      },
+    },
+    depth: 1,
+    sort: '-createdAt',
+  })
+
+  return result.docs
+}

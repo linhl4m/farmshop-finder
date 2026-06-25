@@ -11,6 +11,7 @@ import { Providers } from '@/providers'
 import { InitTheme } from '@/providers/Theme/InitTheme'
 import { mergeOpenGraph } from '@/utilities/mergeOpenGraph'
 import { draftMode } from 'next/headers'
+import { Toaster } from 'sonner'
 
 import './globals.css'
 import { getServerSideURL } from '@/utilities/getURL'
@@ -34,7 +35,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
   const { isEnabled } = await draftMode()
 
   const cart = await getCart()
-  const cartCount = cart.length
+  const cartCount = cart.filter((item) => item.farmId).length
 
   return (
     <html
@@ -52,6 +53,7 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           <CartProvider initialCount={cartCount}>
             <Header />
             {children}
+            <Toaster richColors />
           </CartProvider>
         </Providers>
         <Footer />

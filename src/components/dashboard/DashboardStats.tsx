@@ -34,10 +34,7 @@ export function DashboardStats() {
 
       <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
-          <div
-            key={stat.label}
-            className={`rounded-2xl bg-card p-5 shadow-sm transition hover:-translate-y-1 hover:shadow-md`}
-          >
+          <div key={stat.label} className={`rounded-2xl bg-card p-5 shadow-sm transition`}>
             <div
               className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${stat.color}`}
             >

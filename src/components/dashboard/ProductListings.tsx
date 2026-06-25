@@ -1,24 +1,10 @@
 import Link from 'next/link'
 
-export function FarmListings() {
-  const products = [
-    {
-      name: 'Organic Carrots',
-      stock: 24,
-      price: 2.99,
-    },
-    {
-      name: 'Fresh Eggs',
-      stock: 16,
-      price: 4.5,
-    },
-    {
-      name: 'Raw Honey',
-      stock: 8,
-      price: 7.99,
-    },
-  ]
+type Props = {
+  products: any[]
+}
 
+export function ProductListings({ products }: Props) {
   return (
     <section className="rounded-2xl border bg-card p-6 shadow-sm">
       <div className="mb-6 flex items-center justify-between">

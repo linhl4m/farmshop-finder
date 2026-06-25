@@ -1,14 +1,25 @@
 'use server'
 
 import { revalidatePath } from 'next/cache'
-import { getCart, setCart, getCartWithProducts } from '@/lib/data/cart'
-import { requireUser } from '@/lib/auth'
+import { getCart, setCart } from '@/lib/data/cart'
+import { getCurrentUser, requireUser } from '@/lib/auth'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 import { redirect } from 'next/navigation'
 
 export async function addToCartAction(formData: FormData) {
+  const user = await getCurrentUser()
+
+  if (user?.role === 'farm') {
+    return {
+      success: false,
+      message: 'Farm accounts cannot order.',
+      isNewProduct: false,
+    }
+  }
+
   const productId = String(formData.get('productId'))
+  const farmId = String(formData.get('farmId'))
   const quantity = Number(formData.get('quantity') || 1)
 
   const cart = await getCart()
@@ -24,7 +35,7 @@ export async function addToCartAction(formData: FormData) {
     return { isNewProduct: false }
   }
 
-  cart.push({ productId, quantity })
+  cart.push({ productId, farmId, quantity })
 
   await setCart(cart)
   revalidatePath('/cart')
@@ -76,38 +87,52 @@ export async function checkoutAction() {
   const user = await requireUser()
 
   if (user.role !== 'customer') {
-    redirect('/login')
+    redirect('/account')
   }
 
-  const cartGroups = await getCartWithProducts()
+  const cart = await getCart()
 
-  if (cartGroups.length === 0) {
+  if (cart.length === 0) {
+    redirect('/cart')
+  }
+
+  const groups = new Map<
+    string,
+    { farmId: string; items: { productId: string; quantity: number }[] }
+  >()
+
+  for (const item of cart) {
+    if (!item.farmId) continue
+
+    if (!groups.has(item.farmId)) {
+      groups.set(item.farmId, { farmId: item.farmId, items: [] })
+    }
+
+    groups.get(item.farmId)!.items.push({ productId: item.productId, quantity: item.quantity })
+  }
+
+  if (groups.size === 0) {
     redirect('/cart')
   }
 
   const payload = await getPayload({ config })
 
-  for (const group of cartGroups) {
-    const total = group.items.reduce((sum: number, item: any) => {
-      return sum + item.price * item.quantity
-    }, 0)
-
+  for (const group of groups.values()) {
     await payload.create({
       collection: 'orders',
-      user,
       data: {
         customer: user.id,
-        farm: group.farm.id,
-        items: group.items.map((item: any) => ({
+        farm: group.farmId,
+        items: group.items.map((item) => ({
           product: item.productId,
           quantity: item.quantity,
-          priceSnapshot: item.price,
-          unitSnapshot: item.unit,
-          productNameSnapshot: item.name,
+          priceSnapshot: 0,
         })),
-        total,
+        total: 0,
         status: 'pending',
       },
+      overrideAccess: false,
+      user,
     })
   }
 

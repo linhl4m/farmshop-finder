@@ -1,15 +1,38 @@
 import type { CollectionConfig } from 'payload'
-
-import { authenticated } from '../../access/authenticated'
+import { anyone, isAdmin } from '@/access/roles'
 
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
-    admin: authenticated,
-    create: authenticated,
-    delete: authenticated,
-    read: authenticated,
-    update: authenticated,
+    admin: isAdmin,
+    create: anyone,
+    read: ({ req: { user } }) => {
+      if (user?.role === 'admin') return true
+
+      return {
+        id: {
+          equals: user?.id,
+        },
+      }
+    },
+    update: ({ req: { user } }) => {
+      if (user?.role === 'admin') return true
+
+      return {
+        id: {
+          equals: user?.id,
+        },
+      }
+    },
+    delete: ({ req: { user } }) => {
+      if (user?.role === 'admin') return true
+
+      return {
+        id: {
+          equals: user?.id,
+        },
+      }
+    },
   },
   admin: {
     defaultColumns: ['name', 'email'],

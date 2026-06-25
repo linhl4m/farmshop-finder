@@ -13,18 +13,25 @@ export function ProductCard({ product, variant = 'small' }: Props) {
   const isSeasonal = variant === 'seasonal'
   const isMarket = variant === 'market'
 
+  const farmId = typeof product.farm === 'object' ? product.farm.id : product.farm
+
   const categoryName =
     typeof product.productCategory === 'object' ? product.productCategory.name : ''
 
   function getProductAvailability(product: any) {
-    if (product.stock > 0) return 'Available'
-    return product.status
+    if (product.status === 'out_of_season') return 'Out of Season'
+    if (product.status === 'sold_out') return 'Sold Out'
+    if (product.stock <= 0) return 'Sold Out'
+
+    return 'Available'
   }
+
+  const disabled = getProductAvailability(product) !== 'Available'
 
   if (isSeasonal) {
     return (
       <Link href={`/farms/${product.farm.slug}/products/${product.slug}`}>
-        <div className="group relative h-64 overflow-hidden rounded-xl bg-[#e2e3dc] shadow-sm transition hover:shadow-md">
+        <div className="group relative h-64 overflow-hidden rounded-xl bg-[#e2e3dc] shadow-sm transition">
           {image?.url ? (
             <Image
               src={image.url}
@@ -55,7 +62,7 @@ export function ProductCard({ product, variant = 'small' }: Props) {
 
   if (isMarket) {
     return (
-      <div className="group flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-sm transition hover:shadow-md">
+      <div className="group flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-sm transition">
         <Link href={`/farms/${product.farm.slug}/products/${product.slug}`}>
           <div className="relative aspect-square overflow-hidden bg-[#e2e3dc]">
             {image?.url ? (
@@ -72,7 +79,7 @@ export function ProductCard({ product, variant = 'small' }: Props) {
 
             <div className="absolute left-4 top-4 flex gap-2">
               {categoryName && (
-                <span className="rounded-full bg-[#bcf0ae]/30 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
+                <span className="rounded-full bg-[#ffdcc3] px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
                   {categoryName}
                 </span>
               )}
@@ -93,18 +100,25 @@ export function ProductCard({ product, variant = 'small' }: Props) {
             {typeof product.farm === 'object' ? product.farm.name : ''}
           </p>
 
-          <div className="mt-auto flex items-end justify-between gap-4">
+          <div className="mt-auto flex items-center justify-between gap-4">
             <div>
               <p className="text-2xl font-bold text-primary">€{product.price.toFixed(2)}</p>
 
               <p className="text-xs text-secondary">per {product.unit}</p>
             </div>
 
-            <AddToCartButton
-              productId={product.id}
-              disabled={product.stock <= 0}
-              className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
-            />
+            {disabled ? (
+              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-destructive">
+                {getProductAvailability(product)}
+              </p>
+            ) : (
+              <AddToCartButton
+                productId={product.id}
+                farmId={farmId}
+                disabled={disabled}
+                className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-white disabled:opacity-50"
+              />
+            )}
           </div>
         </div>
       </div>
@@ -112,14 +126,14 @@ export function ProductCard({ product, variant = 'small' }: Props) {
   }
 
   return (
-    <Link href={`/farms/${product.farm.slug}/products/${product.slug}`}>
-      <div
-        className={
-          isLarge
-            ? 'overflow-hidden rounded-xl bg-white shadow-sm'
-            : 'w-45 flex-shrink-0 overflow-hidden rounded-xl border border-border bg-white shadow-sm'
-        }
-      >
+    <div
+      className={
+        isLarge
+          ? 'overflow-hidden rounded-xl bg-white shadow-sm'
+          : 'w-45 flex-shrink-0 overflow-hidden rounded-xl border border-border bg-white shadow-sm'
+      }
+    >
+      <Link href={`/farms/${product.farm.slug}/products/${product.slug}`}>
         <div className={isLarge ? 'relative h-56' : 'relative h-32'}>
           {image?.url ? (
             <Image
@@ -147,22 +161,23 @@ export function ProductCard({ product, variant = 'small' }: Props) {
             </div>
           )}
         </div>
+      </Link>
 
-        <div className={isLarge ? 'p-4' : 'p-3'}>
-          <p
-            className={
-              isLarge
-                ? 'mb-1 font-serif text-lg font-semibold text-primary'
-                : 'truncate text-sm font-semibold'
-            }
-          >
-            {product.name}
-          </p>
+      <div className={isLarge ? 'p-4' : 'p-3'}>
+        <p
+          className={
+            isLarge
+              ? 'mb-1 font-serif text-lg font-semibold text-primary'
+              : 'truncate text-sm font-semibold'
+          }
+        >
+          {product.name}
+        </p>
 
-          <p className="text-xs text-secondary">
-            {typeof product.farm === 'object' ? product.farm.name : ''}
-          </p>
-
+        <p className="text-xs text-secondary">
+          {typeof product.farm === 'object' ? product.farm.name : ''}
+        </p>
+        <div className="flex justify-between">
           <p className={isLarge ? 'mt-2 font-semibold text-primary' : 'mt-1 text-sm font-bold'}>
             €{product.price.toFixed(2)} / {product.unit}
           </p>
@@ -170,12 +185,13 @@ export function ProductCard({ product, variant = 'small' }: Props) {
           {isLarge && (
             <AddToCartButton
               productId={product.id}
-              disabled={product.stock <= 0}
+              farmId={farmId}
+              disabled={disabled}
               className="rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
             />
           )}
         </div>
       </div>
-    </Link>
+    </div>
   )
 }

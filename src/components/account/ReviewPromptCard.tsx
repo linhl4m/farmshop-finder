@@ -9,7 +9,7 @@ export function ReviewPromptCard() {
         Share your feedback for your latest farm order.
       </p>
 
-      <div className="mt-4 flex gap-1 text-orange-900">
+      <div className="mt-4 flex gap-1 text-yellow-500">
         {[1, 2, 3, 4, 5].map((star) => (
           <Star key={star} size={22} />
         ))}

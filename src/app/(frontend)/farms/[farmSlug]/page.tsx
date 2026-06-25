@@ -9,6 +9,10 @@ import {
 import { Star, Leaf, MapPin, ShieldCheck, ArrowRight } from 'lucide-react'
 import { ProductCard } from '@/components/products/ProductCard'
 import Link from 'next/link'
+import { ReviewsSection } from '@/components/reviews/ReviewsSection'
+import { getCurrentUser } from '@/lib/auth'
+import { customerHasOrderFromFarm } from '@/lib/data/orders'
+import { ReviewModalButton } from '@/components/reviews/ReviewModalButton'
 
 type Props = {
   params: Promise<{
@@ -23,11 +27,16 @@ export default async function FarmPage({ params }: Props) {
 
   if (!farm) notFound()
 
+  const user = await getCurrentUser()
+
+  const canWriteReview =
+    user?.role === 'customer' ? await customerHasOrderFromFarm(user.id, farm.id) : false
+
   const availableProducts = await getAvailableProductsByFarmId(farm.id)
   const seasonalProducts = await getSeasonalProductsByFarmId(farm.id)
   const reviews = await getReviewsByFarmId(farm.id)
 
-  const heroImage = farm.photos?.[0]?.url
+  const heroImage = farm.coverImage?.url
 
   return (
     <main className="container-page">
@@ -88,7 +97,7 @@ export default async function FarmPage({ params }: Props) {
 
               <div>
                 <p className="font-semibold text-primary">Certified Local Farm</p>
-                <p className="text-xs text-secondary">Fresh products from Brandenburg</p>
+                <p className="text-xs text-secondary">Fresh products from {farm.region}</p>
               </div>
             </div>
 
@@ -159,61 +168,14 @@ export default async function FarmPage({ params }: Props) {
       </section>
 
       {/* Customer Reviews */}
-      <section className="rounded-2xl border border-[#c2c9bb]/20 bg-[#f3f4ed] p-6 md:p-10">
-        <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
-          <div>
-            <h2 className="font-serif text-2xl font-semibold text-primary">Customer Reviews</h2>
-
-            <div className="mt-2 flex items-center gap-2">
-              <div className="flex text-[#5a2e00]">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className="h-4 w-4 fill-current" />
-                ))}
-              </div>
-
-              <span className="text-sm font-semibold text-primary">
-                {farm.ratingAverage ?? 0} average based on {farm.ratingCount ?? 0} reviews
-              </span>
-            </div>
-          </div>
-
-          <button className="rounded-full border border-primary px-6 py-2 text-sm font-semibold text-primary hover:bg-primary/5">
-            Write a Review
-          </button>
-        </div>
-
-        {reviews.length > 0 ? (
-          <div className="grid gap-6 md:grid-cols-2">
-            {reviews.map((review: any) => (
-              <div
-                key={review.id}
-                className="rounded-xl border border-[#c2c9bb]/20 bg-white p-6 shadow-sm"
-              >
-                <div className="mb-4 flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#bcf0ae] font-bold text-[#23501e]">
-                    {review.customer?.email?.slice(0, 2).toUpperCase() ?? 'CU'}
-                  </div>
-
-                  <div>
-                    <p className="font-semibold text-primary">{review.title}</p>
-                    <p className="text-xs text-secondary">Verified Customer</p>
-                  </div>
-                </div>
-
-                <p className="mb-4 italic text-secondary">"{review.comment}"</p>
-
-                <div className="flex text-[#5a2e00]">
-                  {Array.from({ length: review.rating ?? 5 }).map((_, index) => (
-                    <Star key={index} className="h-4 w-4 fill-current" />
-                  ))}
-                </div>
-              </div>
-            ))}
-          </div>
-        ) : (
-          <p className="text-secondary">No reviews yet.</p>
-        )}
-      </section>
+      <ReviewsSection
+        reviews={reviews}
+        ratingAverage={farm.ratingAverage}
+        ratingCount={farm.ratingCount}
+        canWriteReview={canWriteReview}
+        reviewButton={<ReviewModalButton farmId={farm.id} farmSlug={farm.slug} />}
+        viewAllHref="#"
+      />
     </main>
   )
 }
