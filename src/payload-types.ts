@@ -77,6 +77,7 @@ export interface Config {
     reviews: Review;
     orders: Order;
     'product-categories': ProductCategory;
+    favorites: Favorite;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -104,6 +105,7 @@ export interface Config {
     reviews: ReviewsSelect<false> | ReviewsSelect<true>;
     orders: OrdersSelect<false> | OrdersSelect<true>;
     'product-categories': ProductCategoriesSelect<false> | ProductCategoriesSelect<true>;
+    favorites: FavoritesSelect<false> | FavoritesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -901,6 +903,17 @@ export interface Order {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "favorites".
+ */
+export interface Favorite {
+  id: string;
+  customer: string | User;
+  farm: string | Farm;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1128,6 +1141,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'product-categories';
         value: string | ProductCategory;
+      } | null)
+    | ({
+        relationTo: 'favorites';
+        value: string | Favorite;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1589,6 +1606,16 @@ export interface ProductCategoriesSelect<T extends boolean = true> {
   name?: T;
   generateSlug?: T;
   slug?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "favorites_select".
+ */
+export interface FavoritesSelect<T extends boolean = true> {
+  customer?: T;
+  farm?: T;
   updatedAt?: T;
   createdAt?: T;
 }

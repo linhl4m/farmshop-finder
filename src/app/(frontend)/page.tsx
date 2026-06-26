@@ -2,6 +2,8 @@ import { getFarms } from '@/lib/data/farms'
 import { getProducts } from '@/lib/data/products'
 import { HomeContent } from '@/components/home/HomeContent'
 import { getProductCategories } from '@/lib/data/productCategories'
+import { getCurrentUser } from '@/lib/auth'
+import { getFavoriteFarmIds } from '@/lib/data/favorites'
 
 type Props = {
   searchParams: Promise<{
@@ -28,6 +30,8 @@ export default async function HomePage({ searchParams }: Props) {
 
   const farms = await getFarms()
 
+  const user = await getCurrentUser()
+
   const farmIds = new Set(
     productsForFilter.map((product: any) =>
       typeof product.farm === 'string' ? product.farm : product.farm?.id,
@@ -36,11 +40,19 @@ export default async function HomePage({ searchParams }: Props) {
 
   const filteredFarms = farms.filter((farm: any) => farmIds.has(farm.id))
 
+  const favoriteFarmIds =
+    user?.role === 'customer' ? new Set(await getFavoriteFarmIds(user.id)) : new Set()
+
+  const farmsWithFavorites = filteredFarms.map((farm: any) => ({
+    ...farm,
+    isFavorited: favoriteFarmIds.has(farm.id),
+  }))
+
   const categories = await getProductCategories()
 
   return (
     <>
-      <HomeContent farms={filteredFarms} products={products} categories={categories} />
+      <HomeContent farms={farmsWithFavorites} products={products} categories={categories} />
     </>
   )
 }

@@ -1,6 +1,7 @@
 import Link from 'next/link'
-import { ArrowRight, Leaf } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { ProductCard } from '@/components/products/ProductCard'
+import { HorizontalScroll } from '@/components/ui/HorizontalScroll'
 
 type Props = {
   products: any[]
@@ -8,27 +9,21 @@ type Props = {
 
 export function TrendingProducts({ products }: Props) {
   return (
-    <section className="mb-8">
-      <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
+    <section className="mb-12">
+      <div className="mb-6 flex items-end justify-between">
         <div>
-          <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-primary">
-            <Leaf className="h-4 w-4" />
-            Fresh from local farms
-          </div>
-
           <h2 className="font-serif text-3xl font-semibold text-primary">Trending Products</h2>
-
-          <p className="mt-1 text-sm text-secondary">
-            Seasonal picks customers are browsing right now.
-          </p>
+          <p className="mt-1 text-sm text-secondary">Freshly harvested from your neighbors.</p>
         </div>
-
-        <Link href="/products" className="text-sm font-semibold text-primary hover:underline">
+        <Link
+          href="/products"
+          className="flex items-center gap-1 text-sm font-semibold text-primary hover:underline"
+        >
           View all <ArrowRight className="inline h-4 w-4" />
         </Link>
       </div>
 
-      <div className="flex gap-5 overflow-x-auto pb-2 scrollbar-hide">
+      <HorizontalScroll>
         {products.length > 0 ? (
           products
             .slice(0, 7)
@@ -38,7 +33,7 @@ export function TrendingProducts({ products }: Props) {
             <p className="p-6 text-sm text-muted-foreground">No products found.</p>
           </div>
         )}
-      </div>
+      </HorizontalScroll>
     </section>
   )
 }

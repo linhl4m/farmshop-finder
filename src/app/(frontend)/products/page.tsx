@@ -2,6 +2,7 @@ import { ProductListing } from '@/components/products/ProductListing'
 import { ProductFilters } from '@/components/products/ProductFilters'
 import { getProducts } from '@/lib/data/products'
 import { getProductCategories } from '@/lib/data/productCategories'
+import { FilterSidebar } from '@/components/filters/FilterSidebar'
 
 type Props = {
   searchParams: Promise<{
@@ -31,7 +32,7 @@ export default async function ProductsPage({ searchParams }: Props) {
       title="All Products"
       description="Fresh products from all farms"
       products={products}
-      filters={<ProductFilters categories={categories} showGlobalFilters={true} />}
+      filters={<FilterSidebar categories={categories} sidebar showGlobalFilters={false} />}
     />
   )
 }

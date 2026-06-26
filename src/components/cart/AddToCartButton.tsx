@@ -1,5 +1,6 @@
 'use client'
 
+import type { ReactNode } from 'react'
 import { addToCartAction } from '@/app/(frontend)/cart/actions'
 import { useCart } from '@/components/cart/CartProvider'
 import { toast } from 'sonner'
@@ -9,9 +10,10 @@ type Props = {
   farmId: string
   disabled?: boolean
   className?: string
+  children?: ReactNode
 }
 
-export function AddToCartButton({ productId, farmId, disabled, className }: Props) {
+export function AddToCartButton({ productId, farmId, disabled, className, children }: Props) {
   const { increaseCount } = useCart()
 
   async function handleAddToCart(formData: FormData) {
@@ -34,7 +36,7 @@ export function AddToCartButton({ productId, farmId, disabled, className }: Prop
       <input type="hidden" name="quantity" value="1" />
 
       <button type="submit" disabled={disabled} className={className}>
-        Add to Cart
+        {children ?? 'Add to Cart'}
       </button>
     </form>
   )

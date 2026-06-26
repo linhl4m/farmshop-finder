@@ -138,5 +138,7 @@ export async function checkoutAction() {
 
   await setCart([])
 
-  redirect('/checkout/success')
+  revalidatePath('/', 'layout')
+
+  return { success: true }
 }

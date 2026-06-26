@@ -1,6 +1,6 @@
 'use client'
 
-import { Minus, Plus, ShoppingBasket, Heart, OctagonAlert } from 'lucide-react'
+import { Minus, Plus, ShoppingBasket, OctagonAlert } from 'lucide-react'
 import { addToCartAction } from '@/app/(frontend)/cart/actions'
 import { useState } from 'react'
 import { useCart } from '@/components/cart/CartProvider'
@@ -81,10 +81,6 @@ export function ProductQuantity({ productId, farmId, disabled, stock, unit, avai
             {disabled ? 'Not available' : 'Add to Cart'}
           </button>
         </form>
-
-        <button className="flex h-14 w-14 items-center justify-center rounded-xl border-2 border-primary text-primary hover:bg-primary/5">
-          <Heart className="h-5 w-5" />
-        </button>
       </div>
     </div>
   )

@@ -2,9 +2,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { ArrowLeft, Minus, Plus, Store, ShoppingBasket } from 'lucide-react'
 import { getCartWithProducts } from '@/lib/data/cart'
-import { incrementCartItemAction, checkoutAction } from './actions'
+import { incrementCartItemAction } from './actions'
 import { RemoveCartButton } from '@/components/cart/RemoveCartButton'
 import { DecrementCartButton } from '@/components/cart/DecrementCartButton'
+import { CheckoutButton } from '@/components/cart/CheckoutButton'
 
 export default async function CartPage() {
   const cartGroups = await getCartWithProducts()
@@ -151,14 +152,7 @@ export default async function CartPage() {
                 </div>
               </div>
 
-              <form action={checkoutAction}>
-                <button
-                  disabled={cartGroups.length === 0}
-                  className="mt-8 w-full rounded-xl bg-primary py-4 text-lg font-bold text-white disabled:cursor-not-allowed disabled:opacity-50"
-                >
-                  Proceed to Checkout
-                </button>
-              </form>
+              <CheckoutButton disabled={cartGroups.length === 0} />
 
               <p className="mt-4 text-center text-xs text-muted-foreground">
                 By checking out, you agree to our Terms of Service and Privacy Policy.

@@ -19,6 +19,7 @@ import { Reviews } from './collections/Reviews'
 import { Farms } from './collections/Farms'
 import { Products } from './collections/Products'
 import { ProductCategories } from './collections/ProductCategories'
+import { Favorites } from './collections/Favorites'
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
@@ -75,6 +76,7 @@ export default buildConfig({
     Reviews,
     Orders,
     ProductCategories,
+    Favorites,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

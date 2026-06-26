@@ -13,6 +13,8 @@ import { ReviewsSection } from '@/components/reviews/ReviewsSection'
 import { getCurrentUser } from '@/lib/auth'
 import { customerHasOrderFromFarm } from '@/lib/data/orders'
 import { ReviewModalButton } from '@/components/reviews/ReviewModalButton'
+import { FavoriteFarmButton } from '@/components/favorites/FavoriteFarmButton'
+import { getIsFarmFavorited } from '@/lib/data/favorites'
 
 type Props = {
   params: Promise<{
@@ -31,6 +33,9 @@ export default async function FarmPage({ params }: Props) {
 
   const canWriteReview =
     user?.role === 'customer' ? await customerHasOrderFromFarm(user.id, farm.id) : false
+
+  const isFavorited =
+    user?.role === 'customer' ? await getIsFarmFavorited(user.id, farm.id) : false
 
   const availableProducts = await getAvailableProductsByFarmId(farm.id)
   const seasonalProducts = await getSeasonalProductsByFarmId(farm.id)
@@ -56,6 +61,13 @@ export default async function FarmPage({ params }: Props) {
           )}
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
+
+          <FavoriteFarmButton
+            farmId={farm.id}
+            farmSlug={farm.slug}
+            initialFavorited={isFavorited}
+            className="absolute right-6 top-6 z-20"
+          />
 
           <div className="absolute bottom-8 left-8 z-10 text-white">
             <h1 className="mb-4 font-serif text-4xl font-bold md:text-5xl">{farm.name}</h1>

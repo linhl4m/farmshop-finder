@@ -1,3 +1,4 @@
+import { ShoppingBasket } from 'lucide-react'
 import { requireUser } from '@/lib/auth'
 import { getOrdersByCustomer } from '@/lib/data/orders'
 import Link from 'next/link'
