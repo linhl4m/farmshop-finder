@@ -1,5 +1,4 @@
 import { ProductListing } from '@/components/products/ProductListing'
-import { ProductFilters } from '@/components/products/ProductFilters'
 import { getProducts } from '@/lib/data/products'
 import { getProductCategories } from '@/lib/data/productCategories'
 import { FilterSidebar } from '@/components/filters/FilterSidebar'
@@ -13,6 +12,9 @@ type Props = {
     price?: string
     distance?: string
     organic?: string
+    available?: string
+    lat?: string
+    lng?: string
   }>
 }
 
@@ -25,6 +27,9 @@ export default async function ProductsPage({ searchParams }: Props) {
     price: filters.price,
     distance: filters.distance,
     organic: filters.organic,
+    available: filters.available,
+    lat: filters.lat,
+    lng: filters.lng,
   })
 
   const categories = await getProductCategories()

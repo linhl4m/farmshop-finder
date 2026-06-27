@@ -1,8 +1,9 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { parseAsArrayOf, parseAsBoolean, parseAsString, useQueryState } from 'nuqs'
-import { Check, ChevronDown, Map, SlidersHorizontal, X } from 'lucide-react'
+import { Check, ChevronDown, Locate, Map, SlidersHorizontal, X } from 'lucide-react'
+import { SearchInput } from '@/components/products/SearchInput'
 
 type ProductCategory = {
   id: string
@@ -15,6 +16,7 @@ type Props = {
   onToggleMap?: () => void
   categories?: ProductCategory[]
   showGlobalFilters?: boolean
+  showDistanceFilter?: boolean
   sidebar?: boolean
   mobileOpen?: boolean
   onMobileClose?: () => void
@@ -28,15 +30,21 @@ export function FilterSidebar({
   onToggleMap,
   categories = [],
   showGlobalFilters = false,
+  showDistanceFilter = true,
   mobileOpen,
   onMobileClose,
 }: Props) {
   const [drawerOpen, setDrawerOpen] = useState(false)
+  const [locating, setLocating] = useState(false)
 
   const isControlled = mobileOpen !== undefined
   const open = isControlled ? mobileOpen! : drawerOpen
   const closeDrawer = isControlled ? (onMobileClose ?? (() => {})) : () => setDrawerOpen(false)
 
+  const [search, setSearch] = useQueryState(
+    'search',
+    parseAsString.withDefault('').withOptions({ ...opts, history: 'replace', throttleMs: 500 }),
+  )
   const [activeCategories, setActiveCategories] = useQueryState(
     'category',
     parseAsArrayOf(parseAsString).withDefault([]).withOptions(opts),
@@ -45,20 +53,30 @@ export function FilterSidebar({
     'organic',
     parseAsBoolean.withDefault(false).withOptions(opts),
   )
+  const [available, setAvailable] = useQueryState(
+    'available',
+    parseAsBoolean.withDefault(false).withOptions(opts),
+  )
   const [distance, setDistance] = useQueryState(
     'distance',
     parseAsString.withDefault('').withOptions(opts),
   )
-  const [price, setPrice] = useQueryState(
-    'price',
-    parseAsString.withDefault('').withOptions(opts),
-  )
+  const [price, setPrice] = useQueryState('price', parseAsString.withDefault('').withOptions(opts))
+  const [lat, setLat] = useQueryState('lat', parseAsString.withDefault('').withOptions(opts))
+  const [lng, setLng] = useQueryState('lng', parseAsString.withDefault('').withOptions(opts))
 
   const distanceIndex = Math.max(0, DISTANCE_STEPS.indexOf(distance))
   const [localDistanceIndex, setLocalDistanceIndex] = useState(distanceIndex)
 
+  const hasLocation = Boolean(lat && lng)
+
   const activeFilterCount =
-    activeCategories.length + (organic ? 1 : 0) + (distance ? 1 : 0) + (price ? 1 : 0)
+    (search ? 1 : 0) +
+    activeCategories.length +
+    (organic ? 1 : 0) +
+    (available ? 1 : 0) +
+    (distance ? 1 : 0) +
+    (price ? 1 : 0)
 
   const toggleCategory = (slug: string) =>
     setActiveCategories((prev) =>
@@ -66,10 +84,14 @@ export function FilterSidebar({
     )
 
   const clearAll = () => {
+    setSearch(null)
     setActiveCategories([])
     setOrganic(false)
+    setAvailable(false)
     setDistance('')
     setPrice('')
+    setLat(null)
+    setLng(null)
     closeDrawer()
   }
 
@@ -77,8 +99,49 @@ export function FilterSidebar({
     setLocalDistanceIndex(distanceIndex)
   }, [distanceIndex])
 
+  const requestLocation = useCallback(() => {
+    if (!navigator.geolocation) return
+    setLocating(true)
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        setLocating(false)
+        setLat(pos.coords.latitude.toFixed(6))
+        setLng(pos.coords.longitude.toFixed(6))
+      },
+      () => setLocating(false),
+      { timeout: 8000, maximumAge: 300000, enableHighAccuracy: false },
+    )
+  }, [setLat, setLng])
+
   const filterControls = (
     <div className="space-y-6">
+      {/* Search */}
+      <div>
+        <span className="mb-3 block text-xs font-semibold uppercase tracking-wider text-secondary">
+          Search
+        </span>
+        <SearchInput placeholder={showGlobalFilters ? 'Search farms...' : 'Search products…'} />
+      </div>
+
+      {/* Availability — only on product pages, not farm discovery */}
+      {!showGlobalFilters && (
+        <div>
+          <span className="mb-3 block text-xs font-semibold uppercase tracking-wider text-secondary">
+            Availability
+          </span>
+          <button
+            onClick={() => setAvailable(!available)}
+            className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+              available
+                ? 'border-primary bg-[#bcf0ae]/30 text-primary'
+                : 'border-[#c2c9bb] text-secondary hover:bg-[#f3f4ed]'
+            }`}
+          >
+            Available only
+          </button>
+        </div>
+      )}
+
       {/* Farm Type */}
       <div>
         <span className="mb-3 block text-xs font-semibold uppercase tracking-wider text-secondary">
@@ -98,30 +161,47 @@ export function FilterSidebar({
         </div>
       </div>
 
-      {/* Distance */}
-      <div>
-        <span className="mb-3 block text-xs font-semibold uppercase tracking-wider text-secondary">
-          Distance
-        </span>
-        <input
-          type="range"
-          min={0}
-          max={4}
-          step={1}
-          value={localDistanceIndex}
-          onChange={(e) => setLocalDistanceIndex(Number(e.target.value))}
-          onMouseUp={() => setDistance(DISTANCE_STEPS[localDistanceIndex])}
-          onTouchEnd={() => setDistance(DISTANCE_STEPS[localDistanceIndex])}
-          className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-[#e7e9e1] accent-primary"
-        />
-        <div className="mt-2 flex justify-between px-2 text-xs text-secondary">
-          <span className="text-left">Any</span>
-          <span className="text-center">5 km</span>
-          <span className="text-center">10 km</span>
-          <span className="text-center">25 km</span>
-          <span className="text-right">50 km</span>
+      {/* Distance — only on homepage and /products */}
+      {showDistanceFilter && (
+        <div>
+          <span className="mb-3 block text-xs font-semibold uppercase tracking-wider text-secondary">
+            Distance
+          </span>
+          <input
+            type="range"
+            min={0}
+            max={4}
+            step={1}
+            value={localDistanceIndex}
+            onChange={(e) => setLocalDistanceIndex(Number(e.target.value))}
+            onMouseUp={() => setDistance(DISTANCE_STEPS[localDistanceIndex])}
+            onTouchEnd={() => setDistance(DISTANCE_STEPS[localDistanceIndex])}
+            className="h-1.5 w-full cursor-pointer appearance-none rounded-lg bg-[#e7e9e1] accent-primary"
+          />
+          <div className="mt-2 flex justify-between px-2 text-xs text-secondary">
+            <span className="text-left">Any</span>
+            <span className="text-center">5 km</span>
+            <span className="text-center">10 km</span>
+            <span className="text-center">25 km</span>
+            <span className="text-right">50 km</span>
+          </div>
+          <button
+            onClick={requestLocation}
+            disabled={locating}
+            className={`mt-3 flex w-full items-center justify-center gap-2 rounded-xl border py-2 text-sm font-medium transition ${
+              hasLocation
+                ? 'border-primary/40 bg-[#bcf0ae]/20 text-primary'
+                : 'border-[#c2c9bb] text-secondary hover:bg-[#f3f4ed]'
+            }`}
+          >
+            <Locate className="h-4 w-4" />
+            {locating ? 'Locating…' : hasLocation ? 'Using your location' : 'Use my location'}
+          </button>
+          {!hasLocation && distance && (
+            <p className="mt-1 text-center text-xs text-secondary/70">Using Berlin as default</p>
+          )}
         </div>
-      </div>
+      )}
 
       {/* Max Price */}
       <div>

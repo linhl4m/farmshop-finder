@@ -1,3 +1,4 @@
+import 'server-only'
 import { getDistanceKm } from './distance'
 
 type FarmWithLocation = {

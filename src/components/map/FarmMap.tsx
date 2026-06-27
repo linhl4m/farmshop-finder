@@ -6,23 +6,48 @@ import { useRouter } from 'next/navigation'
 
 mapboxgl.accessToken = process.env.NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN!
 
-type Props = {
-  farms: any[]
+const DISTANCE_ZOOM: Record<string, number> = {
+  '5': 12,
+  '10': 11,
+  '25': 10,
+  '50': 9,
 }
 
-export function FarmMap({ farms }: Props) {
+type Props = {
+  farms: any[]
+  center?: { lat: number; lng: number }
+  distance?: string
+}
+
+export function FarmMap({ farms, center, distance }: Props) {
   const router = useRouter()
   const mapContainer = useRef<HTMLDivElement>(null)
+  const mapRef = useRef<mapboxgl.Map | null>(null)
 
   useEffect(() => {
     if (!mapContainer.current) return
 
+    if (mapRef.current) {
+      mapRef.current.remove()
+      mapRef.current = null
+    }
+
+    const zoom = distance && DISTANCE_ZOOM[distance] ? DISTANCE_ZOOM[distance] : center ? 11 : 8
+
     const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v12',
-      center: [13.405, 52.52],
-      zoom: 8,
+      center: center ? [center.lng, center.lat] : [13.405, 52.52],
+      zoom,
     })
+    mapRef.current = map
+
+    if (center) {
+      const el = document.createElement('div')
+      el.style.cssText =
+        'width:16px;height:16px;border-radius:50%;background:#4285f4;border:3px solid white;box-shadow:0 0 0 2px #4285f4;'
+      new mapboxgl.Marker({ element: el }).setLngLat([center.lng, center.lat]).addTo(map)
+    }
 
     farms.forEach((farm) => {
       const lat = farm.location?.latitude
@@ -86,8 +111,9 @@ export function FarmMap({ farms }: Props) {
 
     return () => {
       map.remove()
+      mapRef.current = null
     }
-  }, [farms, router])
+  }, [farms, router, center, distance])
 
   return <div ref={mapContainer} className="h-full w-full" />
 }

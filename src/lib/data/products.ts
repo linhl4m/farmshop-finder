@@ -11,7 +11,8 @@ type ProductFilters = {
   distance?: string
   lat?: string
   lng?: string
-  organic?: string
+  organic?: boolean | string
+  available?: boolean | string
 }
 
 export async function getProducts(filters: ProductFilters = {}) {
@@ -85,8 +86,8 @@ export async function getProducts(filters: ProductFilters = {}) {
     const farmsInRadius = filterFarmsByRadius({
       farms: farms.docs,
       center: {
-        lat: 52.52,
-        lng: 13.405,
+        lat: filters.lat ? Number(filters.lat) : 52.52,
+        lng: filters.lng ? Number(filters.lng) : 13.405,
       },
       radiusKm: Number(filters.distance),
     })
@@ -98,7 +99,7 @@ export async function getProducts(filters: ProductFilters = {}) {
     })
   }
 
-  if (filters.organic === 'true') {
+  if (filters.organic === true || filters.organic === 'true') {
     const organicFarms = await payload.find({
       collection: 'farms',
       where: {
@@ -113,6 +114,12 @@ export async function getProducts(filters: ProductFilters = {}) {
       farm: {
         in: organicFarms.docs.map((farm) => farm.id),
       },
+    })
+  }
+
+  if (filters.available === true || filters.available === 'true') {
+    where.and.push({
+      status: { equals: 'in_season' },
     })
   }
 

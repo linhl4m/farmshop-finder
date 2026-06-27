@@ -1,15 +1,29 @@
 'use client'
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { FarmsFeed } from '@/components/home/FarmsFeed'
 import { MapPanel } from '@/components/home/MapPanel'
 import { TrendingProducts } from './TrendingProducts'
 import { FilterSidebar } from '@/components/filters/FilterSidebar'
 import { Map, SlidersHorizontal } from 'lucide-react'
 
-export function HomeContent({ farms, products, categories }: any) {
+type Props = {
+  farms: any[]
+  products: any[]
+  categories: any[]
+  lat?: string
+  lng?: string
+  distance?: string
+}
+
+export function HomeContent({ farms, products, categories, lat, lng, distance }: Props) {
   const [mapOpen, setMapOpen] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
+
+  const mapCenter = useMemo(
+    () => (lat && lng ? { lat: Number(lat), lng: Number(lng) } : undefined),
+    [lat, lng],
+  )
 
   return (
     <main className="container-page">
@@ -30,7 +44,7 @@ export function HomeContent({ farms, products, categories }: any) {
         </aside>
 
         <div className="lg:col-span-9">
-          {mapOpen ? <MapPanel farms={farms} /> : <FarmsFeed farms={farms} />}
+          {mapOpen ? <MapPanel farms={farms} center={mapCenter} distance={distance} /> : <FarmsFeed farms={farms} />}
         </div>
       </section>
 

@@ -7,10 +7,12 @@ import { getFavoriteFarmIds, getFavoriteProductIds } from '@/lib/data/favorites'
 
 type Props = {
   searchParams: Promise<{
+    search?: string
     category?: string
     price?: string
     distance?: string
-    organic?: boolean
+    organic?: string
+    available?: string
     lat?: string
     lng?: string
   }>
@@ -20,12 +22,14 @@ export default async function HomePage({ searchParams }: Props) {
   const params = await searchParams
 
   const productsForFilter = await getProducts({
+    search: params.search,
     category: params.category,
     price: params.price,
     distance: params.distance,
     lat: params.lat,
     lng: params.lng,
-    organic: params.organic === 'true',
+    organic: params.organic,
+    available: params.available,
   })
 
   const [products, farms, user, categories] = await Promise.all([
@@ -35,13 +39,20 @@ export default async function HomePage({ searchParams }: Props) {
     getProductCategories(),
   ])
 
-  const farmIds = new Set(
+  // Farm IDs from products matching filters
+  const farmIdsFromProducts = new Set(
     productsForFilter.map((product: any) =>
       typeof product.farm === 'string' ? product.farm : product.farm?.id,
     ),
   )
 
-  const filteredFarms = farms.filter((farm: any) => farmIds.has(farm.id))
+  // Farm IDs from direct farm name/description search
+  const farmsFromNameSearch = params.search ? await getFarms({ search: params.search }) : []
+  const farmIdsFromSearch = new Set(farmsFromNameSearch.map((f: any) => f.id))
+
+  // Union: show farm if it has matching products OR its name matches the search
+  const allRelevantFarmIds = new Set([...farmIdsFromProducts, ...farmIdsFromSearch])
+  const filteredFarms = farms.filter((farm: any) => allRelevantFarmIds.has(farm.id))
 
   const favoriteFarmIds =
     user?.role === 'customer' ? new Set(await getFavoriteFarmIds(user.id)) : new Set()
@@ -65,6 +76,9 @@ export default async function HomePage({ searchParams }: Props) {
         farms={farmsWithFavorites}
         products={productsWithFavorites}
         categories={categories}
+        lat={params.lat}
+        lng={params.lng}
+        distance={params.distance}
       />
     </>
   )

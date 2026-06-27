@@ -3,11 +3,25 @@ import 'server-only'
 import { getPayload } from 'payload'
 import config from '@payload-config'
 
-export async function getFarms() {
+type FarmFilters = {
+  search?: string
+}
+
+export async function getFarms(filters: FarmFilters = {}) {
   const payload = await getPayload({ config })
+
+  const where = filters.search
+    ? {
+        or: [
+          { name: { like: filters.search } },
+          { description: { like: filters.search } },
+        ],
+      }
+    : undefined
 
   const farms = await payload.find({
     collection: 'farms',
+    where,
     depth: 2,
   })
 
