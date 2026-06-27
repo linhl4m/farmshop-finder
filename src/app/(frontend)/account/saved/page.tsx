@@ -35,7 +35,7 @@ export default async function SavedPage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border bg-card p-8 text-center">
+          <div className="p-8 text-center">
             <p className="text-secondary">You haven't saved any farms yet.</p>
           </div>
         )}
@@ -52,7 +52,7 @@ export default async function SavedPage() {
             ))}
           </div>
         ) : (
-          <div className="rounded-2xl border bg-card p-8 text-center">
+          <div className="p-8 text-center">
             <p className="text-secondary">You haven't saved any products yet.</p>
           </div>
         )}

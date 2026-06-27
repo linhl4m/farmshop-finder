@@ -1,12 +1,12 @@
 import type { CollectionConfig } from 'payload'
 import { slugField } from 'payload'
-import { anyone, isAdmin } from '@/access/roles'
+import { anyone } from '@/access/roles'
 
 export const Farms: CollectionConfig = {
   slug: 'farms',
   access: {
     read: anyone,
-    create: anyone,
+    create: ({ req: { user } }) => user?.role === 'farm' || user?.role === 'admin',
     update: ({ req: { user } }) => {
       if (user?.role === 'admin') return true
 

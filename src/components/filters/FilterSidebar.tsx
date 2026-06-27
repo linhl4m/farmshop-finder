@@ -53,10 +53,6 @@ export function FilterSidebar({
     'organic',
     parseAsBoolean.withDefault(false).withOptions(opts),
   )
-  const [available, setAvailable] = useQueryState(
-    'available',
-    parseAsBoolean.withDefault(false).withOptions(opts),
-  )
   const [distance, setDistance] = useQueryState(
     'distance',
     parseAsString.withDefault('').withOptions(opts),
@@ -74,7 +70,6 @@ export function FilterSidebar({
     (search ? 1 : 0) +
     activeCategories.length +
     (organic ? 1 : 0) +
-    (available ? 1 : 0) +
     (distance ? 1 : 0) +
     (price ? 1 : 0)
 
@@ -87,7 +82,6 @@ export function FilterSidebar({
     setSearch(null)
     setActiveCategories([])
     setOrganic(false)
-    setAvailable(false)
     setDistance('')
     setPrice('')
     setLat(null)
@@ -122,25 +116,6 @@ export function FilterSidebar({
         </span>
         <SearchInput placeholder={showGlobalFilters ? 'Search farms...' : 'Search products…'} />
       </div>
-
-      {/* Availability — only on product pages, not farm discovery */}
-      {!showGlobalFilters && (
-        <div>
-          <span className="mb-3 block text-xs font-semibold uppercase tracking-wider text-secondary">
-            Availability
-          </span>
-          <button
-            onClick={() => setAvailable(!available)}
-            className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
-              available
-                ? 'border-primary bg-[#bcf0ae]/30 text-primary'
-                : 'border-[#c2c9bb] text-secondary hover:bg-[#f3f4ed]'
-            }`}
-          >
-            Available only
-          </button>
-        </div>
-      )}
 
       {/* Farm Type */}
       <div>

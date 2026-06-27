@@ -19,7 +19,7 @@ export default async function OrderHistoryPage() {
       </div>
 
       {orders.length === 0 ? (
-        <div className="rounded-2xl border bg-card p-10 text-center shadow-sm">
+        <div className="p-10 text-center">
           <ShoppingBasket className="mx-auto mb-4 text-muted-foreground" size={42} />
 
           <h2 className="text-2xl font-semibold">No orders yet</h2>

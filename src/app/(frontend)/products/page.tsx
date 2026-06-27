@@ -12,7 +12,6 @@ type Props = {
     price?: string
     distance?: string
     organic?: string
-    available?: string
     lat?: string
     lng?: string
   }>
@@ -27,7 +26,6 @@ export default async function ProductsPage({ searchParams }: Props) {
     price: filters.price,
     distance: filters.distance,
     organic: filters.organic,
-    available: filters.available,
     lat: filters.lat,
     lng: filters.lng,
   })
@@ -50,6 +48,7 @@ export default async function ProductsPage({ searchParams }: Props) {
       description="Fresh products from all farms"
       products={productsWithFavorites}
       filters={<FilterSidebar categories={categories} sidebar showGlobalFilters={false} />}
+      showFavorite={user?.role === 'customer'}
     />
   )
 }

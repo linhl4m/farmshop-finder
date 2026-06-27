@@ -18,22 +18,39 @@ export function ProductListings({ products }: Props) {
         </Link>
       </div>
 
-      <div className="space-y-4">
-        {products.map((product) => (
-          <div
-            key={product.name}
-            className="flex items-center justify-between rounded-xl border p-4"
+      {products.length === 0 ? (
+        <div className="rounded-xl border border-dashed p-8 text-center">
+          <p className="font-semibold text-primary">No products yet</p>
+
+          <p className="mt-2 text-sm text-muted-foreground">
+            Add products to start selling from your farm.
+          </p>
+
+          <Link
+            href="/dashboard/products/new"
+            className="mt-5 inline-flex rounded-xl bg-primary px-4 py-2 font-semibold text-white"
           >
-            <div>
-              <p className="font-semibold">{product.name}</p>
+            Add Product
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-4">
+          {products.map((product) => (
+            <div
+              key={product.id}
+              className="flex items-center justify-between rounded-xl border p-4"
+            >
+              <div>
+                <p className="font-semibold">{product.name}</p>
 
-              <p className="text-sm text-muted-foreground">Stock: {product.stock}</p>
+                <p className="text-sm text-muted-foreground">Stock: {product.stock}</p>
+              </div>
+
+              <p className="font-semibold text-primary">€{product.price.toFixed(2)}</p>
             </div>
-
-            <p className="font-semibold text-primary">€{product.price.toFixed(2)}</p>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </section>
   )
 }

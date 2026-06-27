@@ -32,10 +32,20 @@ export function ReviewsSection({
             <p className="text-2xl font-bold text-primary">{ratingAverage.toFixed(1)}</p>
 
             <div>
-              <div className="flex text-yellow-500">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className="h-4 w-4 fill-current" />
-                ))}
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((star) => {
+                  const fill = Math.max(0, Math.min(1, ratingAverage - (star - 1)))
+
+                  return (
+                    <div key={star} className="relative h-4 w-4">
+                      <Star className="absolute h-4 w-4 text-gray-300" />
+
+                      <div className="absolute overflow-hidden" style={{ width: `${fill * 100}%` }}>
+                        <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
 
               <p className="text-xs text-secondary">Based on {ratingCount} ratings</p>

@@ -1,4 +1,3 @@
-import { redirect } from 'next/navigation'
 import { Check, PackageCheck, ShoppingBag, X } from 'lucide-react'
 import { requireUser } from '@/lib/auth'
 import { getFarmByOwnerId } from '@/lib/data/farms'
@@ -7,16 +6,7 @@ import { updateOrderStatusAction } from './actions'
 
 export default async function FarmOrdersPage() {
   const user = await requireUser()
-
-  if (user.role !== 'farm') {
-    redirect('/account')
-  }
-
-  const farm = await getFarmByOwnerId(user.id)
-
-  if (!farm) {
-    redirect('/dashboard')
-  }
+  const farm = (await getFarmByOwnerId(user.id))!
 
   const orders = await getOrdersByFarm(farm.id)
 
@@ -30,7 +20,7 @@ export default async function FarmOrdersPage() {
       </div>
 
       {orders.length === 0 ? (
-        <div className="rounded-2xl border bg-card p-10 text-center shadow-sm">
+        <div className="p-10 text-center">
           <ShoppingBag className="mx-auto mb-4 text-muted-foreground" size={42} />
           <h2 className="text-2xl font-semibold">No orders yet</h2>
           <p className="mt-2 text-sm text-muted-foreground">

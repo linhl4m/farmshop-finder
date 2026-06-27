@@ -16,6 +16,7 @@ type Props = {
   unit: string
   availability: string
   initialFavorited: boolean
+  showFavorite?: boolean
 }
 
 export function ProductQuantity({
@@ -27,6 +28,7 @@ export function ProductQuantity({
   unit,
   availability,
   initialFavorited,
+  showFavorite = true,
 }: Props) {
   const [quantity, setQuantity] = useState(1)
 
@@ -93,12 +95,14 @@ export function ProductQuantity({
             {disabled ? 'Not available' : 'Add to Cart'}
           </button>
         </form>
-        <FavoriteProductButton
-          productId={product.id}
-          productSlug={product.slug}
-          farmSlug={farmSlug}
-          initialFavorited={initialFavorited}
-        />
+        {showFavorite && (
+          <FavoriteProductButton
+            productId={product.id}
+            productSlug={product.slug}
+            farmSlug={farmSlug}
+            initialFavorited={initialFavorited}
+          />
+        )}
       </div>
     </div>
   )

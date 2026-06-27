@@ -5,9 +5,10 @@ type Props = {
   description?: string
   products: any[]
   filters?: React.ReactNode
+  showFavorite?: boolean
 }
 
-export function ProductListing({ title, description, products, filters }: Props) {
+export function ProductListing({ title, description, products, filters, showFavorite }: Props) {
   return (
     <main className="container-page">
       <div className="flex gap-8">
@@ -25,7 +26,7 @@ export function ProductListing({ title, description, products, filters }: Props)
           {products.length > 0 ? (
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} variant="market" />
+                <ProductCard key={product.id} product={product} variant="market" showFavorite={showFavorite} />
               ))}
             </div>
           ) : (

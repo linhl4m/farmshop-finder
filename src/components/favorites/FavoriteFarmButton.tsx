@@ -1,7 +1,7 @@
 'use client'
 
 import { Heart } from 'lucide-react'
-import { useActionState, useEffect } from 'react'
+import { useActionState } from 'react'
 import { toast } from 'sonner'
 import { toggleFavoriteFarmAction } from '@/app/(frontend)/favorites/actions'
 

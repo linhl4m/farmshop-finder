@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowLeft, Minus, Plus, Store, ShoppingBasket } from 'lucide-react'
+import { ArrowLeft, Plus, Store, ShoppingBasket } from 'lucide-react'
 import { getCartWithProducts } from '@/lib/data/cart'
 import { incrementCartItemAction } from './actions'
 import { RemoveCartButton } from '@/components/cart/RemoveCartButton'
@@ -66,7 +66,7 @@ export default async function CartPage() {
                     {group.items.map((item) => (
                       <div
                         key={item.productId}
-                        className="flex items-start gap-3 rounded-2xl border bg-card p-3 shadow-sm sm:gap-4 sm:p-4"
+                        className="flex items-start gap-3 p-3 sm:gap-4 sm:p-4"
                       >
                         <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-muted sm:h-32 sm:w-32">
                           {item.imageUrl ? (
@@ -86,9 +86,7 @@ export default async function CartPage() {
                             </span>
                           )}
 
-                          <h3 className="truncate text-sm sm:text-base">
-                            {item.name}
-                          </h3>
+                          <h3 className="truncate text-sm sm:text-base">{item.name}</h3>
 
                           <p className="text-xs text-muted-foreground sm:text-sm">
                             €{item.price.toFixed(2)} / {item.unit}

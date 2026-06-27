@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { Bell, ShoppingBasket, User } from 'lucide-react'
+import { Bell, User } from 'lucide-react'
 import { CartButton } from '@/components/cart/CartButton'
 import { getCurrentUser } from '@/lib/auth'
 
@@ -18,18 +18,29 @@ export async function Header({ cartCount = 0 }: Props) {
         </Link>
 
         <div className="flex items-center gap-2">
-          <button className="rounded-full p-2 text-primary transition hover:bg-primary/10">
-            <Bell size={22} />
-          </button>
-
           {user?.role !== 'farm' && <CartButton />}
 
-          <Link
-            href="/account"
-            className="rounded-full p-2 text-primary transition hover:bg-primary/10"
-          >
-            <User size={22} />
-          </Link>
+          {user ? (
+            <>
+              <button className="rounded-full p-2 text-primary transition hover:bg-primary/10">
+                <Bell size={22} />
+              </button>
+
+              <Link
+                href="/account"
+                className="rounded-full p-2 text-primary transition hover:bg-primary/10"
+              >
+                <User size={22} />
+              </Link>
+            </>
+          ) : (
+            <Link
+              href="/login"
+              className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary/90"
+            >
+              Sign In
+            </Link>
+          )}
         </div>
       </div>
     </header>

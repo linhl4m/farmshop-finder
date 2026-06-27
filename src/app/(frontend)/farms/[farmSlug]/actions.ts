@@ -27,7 +27,11 @@ export async function createReviewAction(prevState: any, formData: FormData) {
       user,
     })
 
-    revalidatePath(`/farms/${formData.get('farmSlug')}`)
+    const farmSlug = formData.get('farmSlug')
+    const productSlug = formData.get('productSlug')
+
+    revalidatePath(`/farms/${farmSlug}`)
+    if (productSlug) revalidatePath(`/farms/${farmSlug}/products/${productSlug}`)
 
     return {
       success: true,

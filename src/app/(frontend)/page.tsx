@@ -1,5 +1,5 @@
 import { getFarms } from '@/lib/data/farms'
-import { getProducts } from '@/lib/data/products'
+import { getProducts, getTrendingProducts } from '@/lib/data/products'
 import { HomeContent } from '@/components/home/HomeContent'
 import { getProductCategories } from '@/lib/data/productCategories'
 import { getCurrentUser } from '@/lib/auth'
@@ -12,7 +12,6 @@ type Props = {
     price?: string
     distance?: string
     organic?: string
-    available?: string
     lat?: string
     lng?: string
   }>
@@ -29,11 +28,10 @@ export default async function HomePage({ searchParams }: Props) {
     lat: params.lat,
     lng: params.lng,
     organic: params.organic,
-    available: params.available,
   })
 
   const [products, farms, user, categories] = await Promise.all([
-    getProducts(),
+    getTrendingProducts(),
     getFarms(),
     getCurrentUser(),
     getProductCategories(),
@@ -46,9 +44,19 @@ export default async function HomePage({ searchParams }: Props) {
     ),
   )
 
-  // Farm IDs from direct farm name/description search
-  const farmsFromNameSearch = params.search ? await getFarms({ search: params.search }) : []
-  const farmIdsFromSearch = new Set(farmsFromNameSearch.map((f: any) => f.id))
+  // Farm IDs from direct farm name/description match (JS filter on already-fetched farms)
+  const searchLower = params.search?.toLowerCase() ?? ''
+  const farmIdsFromSearch = new Set(
+    searchLower
+      ? farms
+          .filter(
+            (f: any) =>
+              f.name?.toLowerCase().includes(searchLower) ||
+              f.description?.toLowerCase().includes(searchLower),
+          )
+          .map((f: any) => f.id)
+      : [],
+  )
 
   // Union: show farm if it has matching products OR its name matches the search
   const allRelevantFarmIds = new Set([...farmIdsFromProducts, ...farmIdsFromSearch])
@@ -79,6 +87,7 @@ export default async function HomePage({ searchParams }: Props) {
         lat={params.lat}
         lng={params.lng}
         distance={params.distance}
+        showFavorite={user?.role === 'customer'}
       />
     </>
   )

@@ -7,9 +7,10 @@ import { FavoriteProductButton } from '@/components/favorites/FavoriteProductBut
 type Props = {
   product: any
   variant?: 'small' | 'large' | 'seasonal' | 'market'
+  showFavorite?: boolean
 }
 
-export function ProductCard({ product, variant = 'small' }: Props) {
+export function ProductCard({ product, variant = 'small', showFavorite = true }: Props) {
   const image = product.photos?.[0]
   const isLarge = variant === 'large'
   const isSeasonal = variant === 'seasonal'
@@ -96,14 +97,16 @@ export function ProductCard({ product, variant = 'small' }: Props) {
             </div>
           </Link>
 
-          <FavoriteProductButton
-            productId={product.id}
-            productSlug={product.slug}
-            farmSlug={farmSlug}
-            initialFavorited={product.isFavorited}
-            className="absolute right-3 top-3 z-20"
-            variant="floating"
-          />
+          {showFavorite && (
+            <FavoriteProductButton
+              productId={product.id}
+              productSlug={product.slug}
+              farmSlug={farmSlug}
+              initialFavorited={product.isFavorited}
+              className="absolute right-3 top-3 z-20"
+              variant="floating"
+            />
+          )}
         </div>
 
         <div className="flex flex-1 flex-col p-4">
@@ -158,14 +161,16 @@ export function ProductCard({ product, variant = 'small' }: Props) {
             )}
           </Link>
 
-          <FavoriteProductButton
-            productId={product.id}
-            productSlug={product.slug}
-            farmSlug={farmSlug}
-            initialFavorited={product.isFavorited}
-            className="absolute right-3 top-3 z-20"
-            variant="floating"
-          />
+          {showFavorite && (
+            <FavoriteProductButton
+              productId={product.id}
+              productSlug={product.slug}
+              farmSlug={farmSlug}
+              initialFavorited={product.isFavorited}
+              className="absolute right-3 top-3 z-20"
+              variant="floating"
+            />
+          )}
         </div>
 
         <div className="px-1">
@@ -215,14 +220,16 @@ export function ProductCard({ product, variant = 'small' }: Props) {
             </span>
           </div>
         </Link>
-        <FavoriteProductButton
-          productId={product.id}
-          productSlug={product.slug}
-          farmSlug={farmSlug}
-          initialFavorited={product.isFavorited}
-          className="absolute right-3 top-3 z-20"
-          variant="floating"
-        />
+        {showFavorite && (
+          <FavoriteProductButton
+            productId={product.id}
+            productSlug={product.slug}
+            farmSlug={farmSlug}
+            initialFavorited={product.isFavorited}
+            className="absolute right-3 top-3 z-20"
+            variant="floating"
+          />
+        )}
       </div>
 
       <div className="p-4">

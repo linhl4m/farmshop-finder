@@ -14,9 +14,10 @@ type Props = {
   lat?: string
   lng?: string
   distance?: string
+  showFavorite?: boolean
 }
 
-export function HomeContent({ farms, products, categories, lat, lng, distance }: Props) {
+export function HomeContent({ farms, products, categories, lat, lng, distance, showFavorite }: Props) {
   const [mapOpen, setMapOpen] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
 
@@ -27,7 +28,7 @@ export function HomeContent({ farms, products, categories, lat, lng, distance }:
 
   return (
     <main className="container-page">
-      <TrendingProducts products={products} />
+      <TrendingProducts products={products} showFavorite={showFavorite} />
 
       <section className="grid grid-cols-1 lg:grid-cols-12 lg:gap-12">
         {/* Desktop Sidebar */}
@@ -44,7 +45,7 @@ export function HomeContent({ farms, products, categories, lat, lng, distance }:
         </aside>
 
         <div className="lg:col-span-9">
-          {mapOpen ? <MapPanel farms={farms} center={mapCenter} distance={distance} /> : <FarmsFeed farms={farms} />}
+          {mapOpen ? <MapPanel farms={farms} center={mapCenter} distance={distance} /> : <FarmsFeed farms={farms} showFavorite={showFavorite} />}
         </div>
       </section>
 

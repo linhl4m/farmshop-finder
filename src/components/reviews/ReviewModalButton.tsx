@@ -9,9 +9,10 @@ type Props = {
   farmId: string
   farmSlug: string
   productId?: string
+  productSlug?: string
 }
 
-export function ReviewModalButton({ farmId, farmSlug, productId }: Props) {
+export function ReviewModalButton({ farmId, farmSlug, productId, productSlug }: Props) {
   const [open, setOpen] = useState(false)
   const [rating, setRating] = useState(5)
   const [state, formAction] = useActionState(createReviewAction, null)
@@ -53,6 +54,7 @@ export function ReviewModalButton({ farmId, farmSlug, productId }: Props) {
               <input type="hidden" name="farmSlug" value={farmSlug} />
               <input type="hidden" name="rating" value={rating} />
               {productId && <input type="hidden" name="productId" value={productId} />}
+              {productSlug && <input type="hidden" name="productSlug" value={productSlug} />}
 
               <div className="text-center">
                 <p className="mb-3 text-xs font-bold uppercase tracking-widest text-secondary">

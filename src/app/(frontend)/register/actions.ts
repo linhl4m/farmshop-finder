@@ -67,6 +67,7 @@ export async function registerFarmAction(
 
     await payload.create({
       collection: 'farms',
+      overrideAccess: true,
       data: {
         owner: user.id,
         name: farmName,

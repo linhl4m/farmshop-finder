@@ -2,9 +2,10 @@ import { FarmCard } from '@/components/ui/FarmCard'
 
 type Props = {
   farms: any[]
+  showFavorite?: boolean
 }
 
-export function FarmsFeed({ farms }: Props) {
+export function FarmsFeed({ farms, showFavorite }: Props) {
   if (farms.length === 0) {
     return (
       <div className="rounded-3xl border border-dashed border-[#c2c9bb] bg-[#f3f4ed] p-12 text-center">
@@ -22,7 +23,7 @@ export function FarmsFeed({ farms }: Props) {
       </div>
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {farms.map((farm) => (
-          <FarmCard key={farm.id} farm={farm} />
+          <FarmCard key={farm.id} farm={farm} showFavorite={showFavorite} />
         ))}
       </div>
     </>

@@ -5,9 +5,10 @@ import { ChevronRight } from 'lucide-react'
 
 type Props = {
   farm: any
+  showFavorite?: boolean
 }
 
-export function FarmCard({ farm }: Props) {
+export function FarmCard({ farm, showFavorite = true }: Props) {
   return (
     <div className="relative overflow-hidden rounded-2xl bg-white shadow-sm">
       <Link
@@ -63,12 +64,14 @@ export function FarmCard({ farm }: Props) {
           </div>
         </div>
       </Link>
-      <FavoriteFarmButton
-        farmId={farm.id}
-        farmSlug={farm.slug}
-        initialFavorited={farm.isFavorited}
-        className="absolute right-4 top-4 z-20"
-      />
+      {showFavorite && (
+        <FavoriteFarmButton
+          farmId={farm.id}
+          farmSlug={farm.slug}
+          initialFavorited={farm.isFavorited}
+          className="absolute right-4 top-4 z-20"
+        />
+      )}
     </div>
   )
 }

@@ -14,7 +14,6 @@ type Props = {
     search?: string
     category?: string | string[]
     price?: string
-    available?: string
   }>
 }
 
@@ -33,7 +32,6 @@ export default async function FarmProductsPage({ params, searchParams }: Props) 
     search: filters.search,
     category: filters.category,
     price: filters.price,
-    available: filters.available,
   })
 
   const categories = await getProductCategoriesByFarmId(farm.id)
@@ -52,6 +50,7 @@ export default async function FarmProductsPage({ params, searchParams }: Props) 
       description="Fresh products available from this farm."
       products={productsWithFavorites}
       filters={<FilterSidebar categories={categories} sidebar showGlobalFilters={false} showDistanceFilter={false} />}
+      showFavorite={user?.role === 'customer'}
     />
   )
 }

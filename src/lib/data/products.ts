@@ -12,7 +12,6 @@ type ProductFilters = {
   lat?: string
   lng?: string
   organic?: boolean | string
-  available?: boolean | string
 }
 
 export async function getProducts(filters: ProductFilters = {}) {
@@ -117,17 +116,30 @@ export async function getProducts(filters: ProductFilters = {}) {
     })
   }
 
-  if (filters.available === true || filters.available === 'true') {
-    where.and.push({
-      status: { equals: 'in_season' },
-    })
-  }
-
   const products = await payload.find({
     collection: 'products',
     where: where.and.length > 0 ? where : undefined,
     depth: 2,
     limit: 100,
   })
+  return products.docs
+}
+
+export async function getTrendingProducts() {
+  const payload = await getPayload({ config })
+
+  const products = await payload.find({
+    collection: 'products',
+    where: {
+      and: [
+        { status: { equals: 'in_season' } },
+        { stock: { greater_than: 0 } },
+      ],
+    },
+    sort: '-ratingAverage',
+    depth: 2,
+    limit: 7,
+  })
+
   return products.docs
 }

@@ -6,7 +6,7 @@ import {
   getSeasonalProductsByFarmId,
   getReviewsByFarmId,
 } from '@/lib/data/farmDetails'
-import { Star, Leaf, MapPin, ShieldCheck, ArrowRight } from 'lucide-react'
+import { Leaf, MapPin, ShieldCheck, ArrowRight } from 'lucide-react'
 import { ProductCard } from '@/components/products/ProductCard'
 import Link from 'next/link'
 import { ReviewsSection } from '@/components/reviews/ReviewsSection'
@@ -70,12 +70,14 @@ export default async function FarmPage({ params }: Props) {
 
           <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
 
-          <FavoriteFarmButton
-            farmId={farm.id}
-            farmSlug={farm.slug}
-            initialFavorited={isFavorited}
-            className="absolute right-6 top-6 z-20"
-          />
+          {user?.role === 'customer' && (
+            <FavoriteFarmButton
+              farmId={farm.id}
+              farmSlug={farm.slug}
+              initialFavorited={isFavorited}
+              className="absolute right-6 top-6 z-20"
+            />
+          )}
 
           <div className="absolute bottom-8 left-8 z-10 text-white">
             <h1 className="mb-4 text-white md:text-4xl lg:text-5xl">{farm.name}</h1>
@@ -158,7 +160,7 @@ export default async function FarmPage({ params }: Props) {
         {availableProductsWithFavorites.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {availableProductsWithFavorites.slice(0, 4).map((product: any) => (
-              <ProductCard key={product.id} product={product} variant="large" />
+              <ProductCard key={product.id} product={product} variant="large" showFavorite={user?.role === 'customer'} />
             ))}
           </div>
         ) : (

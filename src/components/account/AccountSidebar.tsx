@@ -66,14 +66,6 @@ export function AccountSidebar({ email }: Props) {
       </nav>
 
       <div className="border-t pt-4">
-        <Link
-          href="#"
-          className="flex items-center gap-3 rounded-xl px-4 py-3 text-muted-foreground hover:bg-muted"
-        >
-          <Settings size={20} />
-          Settings
-        </Link>
-
         <form action={logoutAction}>
           <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-destructive hover:bg-destructive/10">
             <LogOut size={20} />

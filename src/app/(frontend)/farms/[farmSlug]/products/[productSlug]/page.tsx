@@ -179,6 +179,7 @@ export default async function ProductDetailPage({ params }: Props) {
             unit={product.unit}
             availability={availability}
             initialFavorited={isFavorited}
+            showFavorite={user?.role === 'customer'}
           />
         </div>
       </section>
@@ -188,7 +189,7 @@ export default async function ProductDetailPage({ params }: Props) {
         ratingCount={product.ratingCount ?? 0}
         canWriteReview={canWriteReview}
         reviewButton={
-          <ReviewModalButton farmId={farm.id} farmSlug={farm.slug} productId={product.id} />
+          <ReviewModalButton farmId={farm.id} farmSlug={farm.slug} productId={product.id} productSlug={product.slug} />
         }
         viewAllHref={`/farms/${farm.slug}/products/${product.slug}/reviews`}
       />

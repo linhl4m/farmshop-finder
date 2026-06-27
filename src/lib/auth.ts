@@ -1,4 +1,5 @@
 import 'server-only'
+import { cache } from 'react'
 import config from '@payload-config'
 import { redirect } from 'next/navigation'
 import { getPayload } from 'payload'
@@ -28,14 +29,14 @@ export async function loginUser(email: string, password: string) {
   return result
 }
 
-export async function getCurrentUser() {
+export const getCurrentUser = cache(async function getCurrentUser() {
   const payload = await getPayload({ config })
   const headers = await getHeaders()
 
   const { user } = await payload.auth({ headers })
 
   return user
-}
+})
 
 export async function requireUser() {
   const user = await getCurrentUser()

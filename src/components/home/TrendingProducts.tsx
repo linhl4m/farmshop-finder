@@ -5,9 +5,10 @@ import { HorizontalScroll } from '@/components/ui/HorizontalScroll'
 
 type Props = {
   products: any[]
+  showFavorite?: boolean
 }
 
-export function TrendingProducts({ products }: Props) {
+export function TrendingProducts({ products, showFavorite }: Props) {
   return (
     <section className="mb-12">
       <div className="mb-6 flex items-end justify-between">
@@ -25,9 +26,7 @@ export function TrendingProducts({ products }: Props) {
 
       <HorizontalScroll>
         {products.length > 0 ? (
-          products
-            .slice(0, 7)
-            .map((product) => <ProductCard key={product.id} product={product} variant="small" />)
+          products.map((product) => <ProductCard key={product.id} product={product} variant="small" showFavorite={showFavorite} />)
         ) : (
           <div className="flex w-full justify-center">
             <p className="p-6 text-sm text-muted-foreground">No products found.</p>

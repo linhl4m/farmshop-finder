@@ -32,11 +32,6 @@ export function AccountBottomNav() {
         <span>Saved</span>
       </Link>
 
-      <Link href="#" className={linkClass('#')}>
-        <Settings size={22} />
-        <span>Settings</span>
-      </Link>
-
       <form action={logoutAction} className="flex flex-1">
         <button className="flex flex-1 flex-col items-center gap-1 py-2 text-xs font-medium text-destructive transition hover:opacity-70">
           <LogOut size={22} />
