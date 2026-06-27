@@ -6,7 +6,7 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-6 py-12 lg:px-16">
         <div className="grid gap-10 md:grid-cols-3">
           <div>
-            <h3 className="font-serif text-2xl font-bold text-primary">Farmshop Finder</h3>
+            <h3 className="text-2xl font-bold text-primary">Farmshop Finder</h3>
 
             <p className="mt-3 max-w-sm text-sm text-secondary">
               Discover local farms, support sustainable agriculture, and buy fresh products directly
@@ -27,10 +27,10 @@ export function Footer() {
             <h4 className="mb-4 font-semibold text-primary">More</h4>
 
             <div className="flex flex-col gap-2 text-sm text-secondary">
-              <Link href="/about">About Us</Link>
-              <Link href="/imprint">Imprint</Link>
-              <Link href="/privacy">Privacy Policy</Link>
-              <Link href="/terms">Terms & Conditions</Link>
+              <Link href="#">About Us</Link>
+              <Link href="#">Imprint</Link>
+              <Link href="#">Privacy Policy</Link>
+              <Link href="#">Terms & Conditions</Link>
             </div>
           </div>
         </div>

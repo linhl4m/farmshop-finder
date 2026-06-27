@@ -896,7 +896,7 @@ export interface Order {
     id?: string | null;
   }[];
   total: number;
-  status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  status: 'pending' | 'confirmed' | 'cancelled' | 'shipped' | 'completed';
   note?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -908,7 +908,8 @@ export interface Order {
 export interface Favorite {
   id: string;
   customer: string | User;
-  farm: string | Farm;
+  farm?: (string | null) | Farm;
+  product?: (string | null) | Product;
   updatedAt: string;
   createdAt: string;
 }
@@ -1616,6 +1617,7 @@ export interface ProductCategoriesSelect<T extends boolean = true> {
 export interface FavoritesSelect<T extends boolean = true> {
   customer?: T;
   farm?: T;
+  product?: T;
   updatedAt?: T;
   createdAt?: T;
 }

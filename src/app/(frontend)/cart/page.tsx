@@ -24,12 +24,12 @@ export default async function CartPage() {
   const total = subtotal + deliveryFee + serviceFee
 
   return (
-    <main className="min-h-screen bg-background pb-24">
+    <main className="bg-background pb-10 md:pb-24">
       <section className="mx-auto max-w-7xl px-4 py-8 md:px-12 md:py-12">
         <div className="flex flex-col gap-8 lg:flex-row">
           <div className="flex-1 space-y-8">
             <div className="flex items-center justify-between gap-4">
-              <h1 className="text-4xl font-bold tracking-tight text-primary">Your Cart</h1>
+              <h1 className="text-primary md:text-4xl">Your Cart</h1>
 
               <Link
                 href="/"
@@ -43,7 +43,7 @@ export default async function CartPage() {
             {cartGroups.length === 0 ? (
               <div className="p-10 text-center">
                 <ShoppingBasket className="mx-auto mb-4 text-muted-foreground" size={42} />
-                <h2 className="text-2xl font-semibold">Your cart is empty</h2>
+                <h2 className="md:text-2xl">Your cart is empty</h2>
                 <p className="mt-2 text-muted-foreground">
                   Browse farms and add fresh products to your cart.
                 </p>
@@ -59,16 +59,16 @@ export default async function CartPage() {
                 <section key={group.farm.id} className="space-y-4">
                   <div className="flex items-center gap-2 border-b pb-3">
                     <Store className="text-primary" size={22} />
-                    <h2 className="text-2xl font-semibold">{group.farm.name}</h2>
+                    <h2 className="md:text-2xl">{group.farm.name}</h2>
                   </div>
 
                   <div className="space-y-4">
                     {group.items.map((item) => (
                       <div
                         key={item.productId}
-                        className="flex flex-col items-center gap-4 rounded-2xl border bg-card p-4 shadow-sm sm:flex-row"
+                        className="flex items-start gap-3 rounded-2xl border bg-card p-3 shadow-sm sm:gap-4 sm:p-4"
                       >
-                        <div className="relative h-32 w-full shrink-0 overflow-hidden rounded-xl bg-muted sm:w-32">
+                        <div className="relative h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-muted sm:h-32 sm:w-32">
                           {item.imageUrl ? (
                             <Image
                               src={item.imageUrl}
@@ -79,44 +79,48 @@ export default async function CartPage() {
                           ) : null}
                         </div>
 
-                        <div className="flex-1 space-y-1 text-center sm:text-left">
+                        <div className="min-w-0 flex-1">
                           {item.organic && (
-                            <span className="rounded-full bg-primary/10 px-2 py-1 text-xs font-bold text-primary">
+                            <span className="mb-1 inline-block rounded-full bg-primary/10 px-2 py-1 text-[10px] font-bold text-primary sm:text-xs">
                               Organic
                             </span>
                           )}
 
-                          <h3 className="text-xl font-semibold">{item.name}</h3>
+                          <h3 className="truncate text-sm sm:text-base">
+                            {item.name}
+                          </h3>
 
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-xs text-muted-foreground sm:text-sm">
                             €{item.price.toFixed(2)} / {item.unit}
                           </p>
-                        </div>
 
-                        <div className="flex flex-col items-center gap-2 sm:items-end">
-                          <div className="flex items-center rounded-full border bg-muted/40 p-1">
-                            <DecrementCartButton
-                              productId={item.productId}
-                              quantity={item.quantity}
-                            />
+                          <div className="mt-3 flex items-center justify-between gap-2">
+                            <div className="flex items-center rounded-full border bg-muted/40 p-1">
+                              <DecrementCartButton
+                                productId={item.productId}
+                                quantity={item.quantity}
+                              />
 
-                            <span className="min-w-10 px-3 text-center font-semibold">
-                              {item.quantity}
-                            </span>
+                              <span className="min-w-8 px-2 text-center text-sm font-semibold sm:min-w-10 sm:px-3">
+                                {item.quantity}
+                              </span>
 
-                            <form action={incrementCartItemAction}>
-                              <input type="hidden" name="productId" value={item.productId} />
-                              <button className="flex h-8 w-8 items-center justify-center rounded-full text-primary hover:bg-primary/10">
-                                <Plus size={16} />
-                              </button>
-                            </form>
+                              <form action={incrementCartItemAction}>
+                                <input type="hidden" name="productId" value={item.productId} />
+                                <button className="flex h-8 w-8 items-center justify-center rounded-full text-primary hover:bg-primary/10">
+                                  <Plus size={16} />
+                                </button>
+                              </form>
+                            </div>
+
+                            <p className="shrink-0 font-semibold text-primary">
+                              €{(item.price * item.quantity).toFixed(2)}
+                            </p>
                           </div>
 
-                          <p className="font-semibold text-primary">
-                            €{(item.price * item.quantity).toFixed(2)}
-                          </p>
-
-                          <RemoveCartButton productId={item.productId} />
+                          <div className="flex justify-end mt-2">
+                            <RemoveCartButton productId={item.productId} />
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -128,7 +132,7 @@ export default async function CartPage() {
 
           <aside className="w-full lg:w-96">
             <div className="sticky top-24 rounded-2xl border bg-card p-6 shadow-sm">
-              <h2 className="border-b pb-4 text-2xl font-semibold text-primary">Order Summary</h2>
+              <h2 className="border-b pb-4 text-primary md:text-2xl">Order Summary</h2>
 
               <div className="mt-4 space-y-3">
                 <div className="flex justify-between text-muted-foreground">

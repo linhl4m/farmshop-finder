@@ -21,11 +21,11 @@ export function RegisterForm({ isFarm }: Props) {
   return (
     <form action={formAction} className="space-y-6">
       <div className="space-y-2">
-        <h1 className="text-4xl font-bold tracking-tight">
+        <h1 className="md:text-4xl">
           {isFarm ? 'Create your farm account' : 'Create an account'}
         </h1>
 
-        <p className="text-lg text-muted-foreground">
+        <p className="text-base text-muted-foreground md:text-lg">
           {isFarm
             ? 'Set up your farm profile and start listing fresh products.'
             : 'Discover local farms, browse fresh products, and place orders directly.'}

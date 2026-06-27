@@ -32,20 +32,20 @@ export function DashboardStats() {
     <section>
       <h2 className="mb-4 text-2xl font-semibold text-primary">Overview</h2>
 
-      <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-2 xl:grid-cols-4">
         {stats.map((stat) => (
-          <div key={stat.label} className={`rounded-2xl bg-card p-5 shadow-sm transition`}>
+          <div key={stat.label} className="rounded-2xl bg-card p-4 shadow-sm transition sm:p-5">
             <div
-              className={`mb-4 flex h-12 w-12 items-center justify-center rounded-xl ${stat.color}`}
+              className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl sm:mb-4 sm:h-12 sm:w-12 ${stat.color}`}
             >
-              <stat.icon size={24} />
+              <stat.icon size={20} className="sm:h-6 sm:w-6" />
             </div>
 
-            <p className="text-sm text-muted-foreground">{stat.label}</p>
+            <p className="text-xs text-muted-foreground sm:text-sm">{stat.label}</p>
 
-            <p className="mt-1 text-3xl font-bold">{stat.value}</p>
+            <p className="mt-1 text-xl font-bold sm:text-3xl">{stat.value}</p>
 
-            <div className="mt-4 h-1 w-full rounded-full bg-muted">
+            <div className="mt-3 h-1 w-full rounded-full bg-muted sm:mt-4">
               <div
                 className={`h-1 rounded-full ${
                   stat.label === 'Revenue'

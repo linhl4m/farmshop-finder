@@ -35,7 +35,7 @@ export function FarmCard({ farm }: Props) {
         </div>
         <div className="p-6">
           <div className="mb-2 flex items-start justify-between">
-            <h3 className="font-serif text-xl font-semibold text-primary">{farm.name}</h3>
+            <h3 className="text-xl text-primary">{farm.name}</h3>
             <div className="flex items-center gap-1 text-primary">
               <span className="text-base">★</span>
               <span className="text-sm font-semibold">{farm.ratingAverage.toFixed(1) ?? 0}</span>

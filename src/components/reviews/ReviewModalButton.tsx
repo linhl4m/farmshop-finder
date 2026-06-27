@@ -41,7 +41,7 @@ export function ReviewModalButton({ farmId, farmSlug, productId }: Props) {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4 backdrop-blur-sm">
           <div className="w-full max-w-xl overflow-hidden rounded-xl bg-background shadow-xl">
             <div className="flex items-center justify-between border-b bg-muted/40 px-6 py-4">
-              <h2 className="font-serif text-2xl font-semibold text-primary">Write a Review</h2>
+              <h2 className="text-primary">Write a Review</h2>
 
               <button onClick={() => setOpen(false)} className="rounded-full p-2 hover:bg-muted">
                 <X size={20} />

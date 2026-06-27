@@ -34,7 +34,8 @@ export function DashboardProductsList({ products }: Props) {
 
   return (
     <div className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-      <div className="grid grid-cols-[1.5fr_1fr_1fr_1fr_6rem] gap-4 border-b bg-muted/40 px-5 py-3 text-sm font-semibold text-muted-foreground">
+      {/* Desktop Header */}
+      <div className="hidden grid-cols-[1.5fr_1fr_1fr_1fr_6rem] gap-4 border-b bg-muted/40 px-5 py-3 text-sm font-semibold text-muted-foreground md:grid">
         <span>Product</span>
         <span>Category</span>
         <span>Price</span>
@@ -53,53 +54,70 @@ export function DashboardProductsList({ products }: Props) {
           return (
             <div
               key={product.id}
-              className="grid grid-cols-[1.5fr_1fr_1fr_1fr_6rem] items-center gap-4 px-5 py-4"
+              className="flex flex-col gap-4 p-4 md:grid md:grid-cols-[1.5fr_1fr_1fr_1fr_6rem] md:items-center md:gap-4 md:px-5 md:py-4"
             >
-              <div className="flex items-center gap-4">
-                <div className="relative h-16 w-16 overflow-hidden rounded-xl bg-muted">
+              <div className="flex min-w-0 items-center gap-4">
+                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-muted">
                   {image && typeof image === 'object' && image.url ? (
                     <Image src={image.url} alt={product.name} fill className="object-cover" />
                   ) : null}
                 </div>
 
-                <div>
-                  <p className="font-semibold text-primary">{product.name}</p>
+                <div className="min-w-0">
+                  <p className="truncate font-semibold text-primary">{product.name}</p>
                   <p className="text-sm text-muted-foreground">Stock: {product.stock ?? 0}</p>
                 </div>
               </div>
 
-              <p className="text-sm">{category}</p>
+              <div className="grid grid-cols-2 gap-3 text-sm md:contents">
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase text-muted-foreground md:hidden">
+                    Category
+                  </p>
+                  <p>{category}</p>
+                </div>
 
-              <p className="font-semibold">
-                €{Number(product.price).toFixed(2)} / {product.unit}
-              </p>
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase text-muted-foreground md:hidden">
+                    Price
+                  </p>
+                  <p className="font-semibold">
+                    €{Number(product.price).toFixed(2)} / {product.unit}
+                  </p>
+                </div>
 
-              <span
-                className={`w-fit rounded-full px-3 py-1 text-xs font-semibold ${getStatusClass(
-                  product.status,
-                )}`}
-              >
-                {getStatusLabel(product.status)}
-              </span>
-
-              <div className="flex items-center gap-2">
-                <Link
-                  href={`/dashboard/products/${product.id}/edit`}
-                  className="flex h-10 w-10 items-center justify-center rounded-xl text-primary hover:bg-primary/10"
-                >
-                  <Pencil size={18} />
-                </Link>
-
-                <form action={deleteProductAction}>
-                  <input type="hidden" name="productId" value={product.id} />
-
-                  <button
-                    type="submit"
-                    className="flex h-10 w-10 items-center justify-center rounded-xl text-red-600 hover:bg-red-50"
+                <div>
+                  <p className="mb-1 text-xs font-semibold uppercase text-muted-foreground md:hidden">
+                    Status
+                  </p>
+                  <span
+                    className={`inline-flex w-fit rounded-full px-3 py-1 text-xs font-semibold ${getStatusClass(
+                      product.status,
+                    )}`}
                   >
-                    <Trash2 size={18} />
-                  </button>
-                </form>
+                    {getStatusLabel(product.status)}
+                  </span>
+                </div>
+
+                <div className="flex items-end justify-end gap-2 md:items-center">
+                  <Link
+                    href={`/dashboard/products/${product.id}/edit`}
+                    className="flex h-10 w-10 items-center justify-center rounded-xl text-primary hover:bg-primary/10"
+                  >
+                    <Pencil size={18} />
+                  </Link>
+
+                  <form action={deleteProductAction}>
+                    <input type="hidden" name="productId" value={product.id} />
+
+                    <button
+                      type="submit"
+                      className="flex h-10 w-10 items-center justify-center rounded-xl text-red-600 hover:bg-red-50"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </form>
+                </div>
               </div>
             </div>
           )

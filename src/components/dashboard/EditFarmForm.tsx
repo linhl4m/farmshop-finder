@@ -22,13 +22,14 @@ export function EditFarmForm({ farm }: Props) {
             className="mb-4 h-64 w-full rounded-xl object-cover"
           />
         ) : null}
-        <div className="flex gap-2 items-center">
-          <Upload size={20} />
+        <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
+          <Upload className="hidden shrink-0 sm:block" size={20} />
+
           <input
             type="file"
             name="coverImage"
             accept="image/*"
-            className="border rounded-xl px-4 py-2 cursor-pointer"
+            className="w-full min-w-0 max-w-full cursor-pointer rounded-xl border px-3 py-2 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white"
           />
         </div>
       </div>
@@ -79,7 +80,7 @@ export function EditFarmForm({ farm }: Props) {
         </div>
       </div>
 
-      <label className="flex items-center gap-3 py-4">
+      <label className="flex items-center gap-3">
         <input name="organic" type="checkbox" defaultChecked={Boolean(farm.organic)} />
         <span className="font-semibold text-primary">Organic farm</span>
       </label>

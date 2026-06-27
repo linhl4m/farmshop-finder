@@ -2,7 +2,7 @@ import { redirect } from 'next/navigation'
 import { requireUser } from '@/lib/auth'
 import { getFarmByOwnerId } from '@/lib/data/farms'
 import { DashboardSidebar } from '@/components/dashboard/DashboardSidebar'
-import { DashboardMobileHeader } from '@/components/dashboard/DashboardMobileHeader'
+import { DashboardBottomNav } from '@/components/dashboard/DashboardBottomNav'
 
 export default async function DashboardLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser()
@@ -21,11 +21,9 @@ export default async function DashboardLayout({ children }: { children: React.Re
     <main className="flex min-h-screen bg-background">
       <DashboardSidebar farmName={farm.name} farmSlug={farm.slug} />
 
-      <div className="flex-1">
-        <DashboardMobileHeader farmName={farm.name} />
+      <div className="flex-1 pb-10 md:pb-0">{children}</div>
 
-        {children}
-      </div>
+      <DashboardBottomNav />
     </main>
   )
 }

@@ -115,6 +115,7 @@ export const Orders: CollectionConfig = {
         { label: 'Pending', value: 'pending' },
         { label: 'Confirmed', value: 'confirmed' },
         { label: 'Cancelled', value: 'cancelled' },
+        { label: 'Shipped', value: 'shipped' },
         { label: 'Completed', value: 'completed' },
       ],
     },

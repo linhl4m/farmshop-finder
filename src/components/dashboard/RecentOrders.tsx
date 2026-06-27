@@ -27,13 +27,17 @@ export function RecentOrders({ orders }: Props) {
 
   return (
     <section className="rounded-2xl border bg-card p-6 shadow-sm">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
+      <div className="mb-6 flex items-center justify-between gap-4">
+        <div className="min-w-0">
           <h2 className="text-2xl font-semibold text-primary">Recent Orders</h2>
 
           <p className="text-sm text-muted-foreground">Latest purchases from your customers</p>
         </div>
-        <Link href="#" className="text-sm font-semibold text-primary hover:underline">
+
+        <Link
+          href="#"
+          className="shrink-0 whitespace-nowrap text-sm font-semibold text-primary hover:underline"
+        >
           View All
         </Link>
       </div>

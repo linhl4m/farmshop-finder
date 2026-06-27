@@ -4,7 +4,6 @@ import { redirect } from 'next/navigation'
 import { getPayload } from 'payload'
 import { headers as getHeaders } from 'next/headers'
 import { cookies } from 'next/headers'
-import { revalidatePath } from 'next/cache'
 
 export async function loginUser(email: string, password: string) {
   const payload = await getPayload({ config })
@@ -56,14 +55,3 @@ export function redirectByRole(role?: string) {
   redirect('/')
 }
 
-export async function logoutAction() {
-  'use server'
-  const cookieStore = await cookies()
-
-  cookieStore.delete('payload-token')
-  cookieStore.delete('farmshop-cart')
-
-  revalidatePath('/', 'layout')
-
-  redirect('/login')
-}

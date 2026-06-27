@@ -26,10 +26,10 @@ export function ReviewsSection({
     <section className="mb-12 border-t border-[#c2c9bb]/30 pt-10">
       <div className="mb-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
-          <h2 className="font-serif text-2xl font-semibold text-primary">{title}</h2>
+          <h2 className="text-primary md:text-2xl">{title}</h2>
 
           <div className="mt-3 flex items-center gap-3">
-            <p className="text-3xl font-bold text-primary">{ratingAverage.toFixed(1)}</p>
+            <p className="text-2xl font-bold text-primary">{ratingAverage.toFixed(1)}</p>
 
             <div>
               <div className="flex text-yellow-500">

@@ -14,7 +14,7 @@ import { getCurrentUser } from '@/lib/auth'
 import { customerHasOrderFromFarm } from '@/lib/data/orders'
 import { ReviewModalButton } from '@/components/reviews/ReviewModalButton'
 import { FavoriteFarmButton } from '@/components/favorites/FavoriteFarmButton'
-import { getIsFarmFavorited } from '@/lib/data/favorites'
+import { getIsFarmFavorited, getFavoriteProductIds } from '@/lib/data/favorites'
 
 type Props = {
   params: Promise<{
@@ -34,10 +34,18 @@ export default async function FarmPage({ params }: Props) {
   const canWriteReview =
     user?.role === 'customer' ? await customerHasOrderFromFarm(user.id, farm.id) : false
 
-  const isFavorited =
-    user?.role === 'customer' ? await getIsFarmFavorited(user.id, farm.id) : false
+  const isFavorited = user?.role === 'customer' ? await getIsFarmFavorited(user.id, farm.id) : false
+
+  const favoriteProductIds =
+    user?.role === 'customer' ? new Set(await getFavoriteProductIds(user.id)) : new Set()
 
   const availableProducts = await getAvailableProductsByFarmId(farm.id)
+
+  const availableProductsWithFavorites = availableProducts.map((product: any) => ({
+    ...product,
+    isFavorited: favoriteProductIds.has(product.id),
+  }))
+
   const seasonalProducts = await getSeasonalProductsByFarmId(farm.id)
   const reviews = await getReviewsByFarmId(farm.id)
 
@@ -70,7 +78,7 @@ export default async function FarmPage({ params }: Props) {
           />
 
           <div className="absolute bottom-8 left-8 z-10 text-white">
-            <h1 className="mb-4 font-serif text-4xl font-bold md:text-5xl">{farm.name}</h1>
+            <h1 className="mb-4 text-white md:text-4xl lg:text-5xl">{farm.name}</h1>
 
             <div className="flex flex-wrap gap-2">
               {farm.organic && (
@@ -98,9 +106,11 @@ export default async function FarmPage({ params }: Props) {
 
         <div className="grid gap-8 md:grid-cols-12">
           <div className="md:col-span-8">
-            <h2 className="mb-4 font-serif text-2xl font-semibold text-primary">Our Story</h2>
+            <h2 className="mb-4 text-primary md:text-2xl">Our Story</h2>
 
-            <p className="text-lg leading-relaxed text-secondary">{farm.description}</p>
+            <p className="text-base leading-relaxed text-secondary md:text-lg">
+              {farm.description}
+            </p>
           </div>
 
           <aside className="rounded-xl border border-[#c2c9bb]/30 bg-[#f3f4ed] p-6 md:col-span-4">
@@ -117,7 +127,7 @@ export default async function FarmPage({ params }: Props) {
               <div className="flex justify-between">
                 <span className="text-secondary">Rating</span>
                 <span className="font-semibold text-primary">
-                  {farm.ratingAverage ?? 0} ({farm.ratingCount ?? 0} reviews)
+                  {farm.ratingAverage?.toFixed(1) ?? 0} ({farm.ratingCount ?? 0} reviews)
                 </span>
               </div>
 
@@ -134,7 +144,7 @@ export default async function FarmPage({ params }: Props) {
       <section className="mb-12">
         <div className="mb-6 flex items-end justify-between">
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-primary">Available Now</h2>
+            <h2 className="text-primary md:text-2xl">Available Now</h2>
             <p className="text-secondary">Fresh products from this farm</p>
           </div>
           <Link
@@ -145,9 +155,9 @@ export default async function FarmPage({ params }: Props) {
           </Link>
         </div>
 
-        {availableProducts.length > 0 ? (
+        {availableProductsWithFavorites.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
-            {availableProducts.slice(0, 4).map((product: any) => (
+            {availableProductsWithFavorites.slice(0, 4).map((product: any) => (
               <ProductCard key={product.id} product={product} variant="large" />
             ))}
           </div>
@@ -162,7 +172,7 @@ export default async function FarmPage({ params }: Props) {
       <section className="mb-12">
         <div className="mb-6 flex items-end justify-between">
           <div>
-            <h2 className="font-serif text-2xl font-semibold text-primary">Seasonal Favorites</h2>
+            <h2 className="text-primary md:text-2xl">Seasonal Favorites</h2>
           </div>
         </div>
 

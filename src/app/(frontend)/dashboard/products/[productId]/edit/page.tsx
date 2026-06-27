@@ -41,7 +41,7 @@ export default async function EditProductPage({ params }: Props) {
       <div className="flex-1">
         <section className="max-w-4xl px-6 py-8 md:px-12">
           <div className="mb-8">
-            <h1 className="text-4xl font-bold text-primary">Edit Product</h1>
+            <h1 className="text-primary md:text-4xl">Edit Product</h1>
             <p className="mt-2 text-muted-foreground">
               Update product details, price, stock and availability.
             </p>

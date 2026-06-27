@@ -12,7 +12,7 @@ export function TrendingProducts({ products }: Props) {
     <section className="mb-12">
       <div className="mb-6 flex items-end justify-between">
         <div>
-          <h2 className="font-serif text-3xl font-semibold text-primary">Trending Products</h2>
+          <h2 className="text-primary md:text-2xl">Trending Products</h2>
           <p className="mt-1 text-sm text-secondary">Freshly harvested from your neighbors.</p>
         </div>
         <Link

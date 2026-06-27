@@ -15,7 +15,7 @@ export function ProductListing({ title, description, products, filters }: Props)
 
         <section className="flex-1">
           <div className="mb-6 border-b border-border pb-4">
-            <h1 className="font-serif text-4xl font-bold text-primary">{title}</h1>
+            <h1 className="text-primary md:text-4xl">{title}</h1>
 
             {description && <p className="mt-2 text-secondary">{description}</p>}
 

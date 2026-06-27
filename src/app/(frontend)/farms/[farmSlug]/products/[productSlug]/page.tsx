@@ -9,6 +9,7 @@ import { getCurrentUser } from '@/lib/auth'
 import { customerHasOrderedProduct } from '@/lib/data/orders'
 import { ReviewModalButton } from '@/components/reviews/ReviewModalButton'
 import { getProductBySlugAndFarmId, getReviewsByProductId } from '@/lib/data/productDetails'
+import { getIsProductFavorited } from '@/lib/data/favorites'
 
 type Props = {
   params: Promise<{
@@ -36,6 +37,9 @@ export default async function ProductDetailPage({ params }: Props) {
 
   const user = await getCurrentUser()
 
+  const isFavorited =
+    user?.role === 'customer' ? await getIsProductFavorited(user.id, product.id) : false
+
   const canWriteReview =
     user?.role === 'customer' ? await customerHasOrderedProduct(user.id, product.id) : false
 
@@ -46,7 +50,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const canBuy = availability === 'Available'
   return (
     <main className="container-page space-y-16">
-      <section className="grid grid-cols-1 items-start gap-12 lg:grid-cols-12">
+      <section className="grid grid-cols-1 items-start gap-6 xl:gap-12 lg:grid-cols-12">
         <div className="lg:col-span-7">
           <div className="group relative aspect-[4/3] overflow-hidden rounded-xl bg-white shadow-sm">
             {image?.url ? (
@@ -101,9 +105,7 @@ export default async function ProductDetailPage({ params }: Props) {
               {farm.name}
             </Link>
 
-            <h1 className="font-serif text-4xl font-bold leading-tight text-primary md:text-5xl">
-              {product.name}
-            </h1>
+            <h1 className="text-primary md:text-4xl lg:text-5xl">{product.name}</h1>
 
             <div className="mt-4 flex items-center gap-2">
               <div className="flex text-[#5a2e00]">
@@ -117,20 +119,24 @@ export default async function ProductDetailPage({ params }: Props) {
               </span>
             </div>
 
-            <p className="mt-6 text-2xl font-bold text-primary">
+            <p className="mt-6 text-xl font-bold text-primary md:text-2xl">
               €{Number(product.price).toFixed(2)}{' '}
-              <span className="text-base font-normal text-secondary">/ {product.unit}</span>
+              <span className="text-sm font-normal text-secondary md:text-base">
+                / {product.unit}
+              </span>
             </p>
           </div>
 
-          <p className="text-lg leading-relaxed text-secondary">{product.description}</p>
+          <p className="text-base leading-relaxed text-secondary md:text-lg">
+            {product.description}
+          </p>
 
           <div className="rounded-xl border border-[#c2c9bb]/30 bg-[#f3f4ed] p-5">
             <h4 className="mb-3 text-xs font-bold uppercase tracking-wide text-primary">
               Product Info
             </h4>
 
-            <div className="grid grid-cols-2 gap-4 text-sm">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 text-sm">
               <div className="flex justify-between border-b border-[#c2c9bb]/30 pb-2">
                 <span className="text-secondary">Stock</span>
                 <span className="font-bold text-primary">{product.stock ?? 0}</span>
@@ -165,12 +171,14 @@ export default async function ProductDetailPage({ params }: Props) {
           </div>
 
           <ProductQuantity
-            productId={product.id}
+            product={product}
             farmId={farm.id}
+            farmSlug={farmSlug}
             disabled={!canBuy}
             stock={product.stock}
             unit={product.unit}
             availability={availability}
+            initialFavorited={isFavorited}
           />
         </div>
       </section>

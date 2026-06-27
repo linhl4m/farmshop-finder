@@ -18,6 +18,7 @@ import { getServerSideURL } from '@/utilities/getURL'
 import 'mapbox-gl/dist/mapbox-gl.css'
 import { CartProvider } from '@/components/cart/CartProvider'
 import { getCart } from '@/lib/data/cart'
+import { NuqsAdapter } from 'nuqs/adapters/next/app'
 
 const bodyFont = Be_Vietnam_Pro({
   subsets: ['latin'],
@@ -49,14 +50,21 @@ export default async function RootLayout({ children }: { children: React.ReactNo
         <link href="/favicon.svg" rel="icon" type="image/svg+xml" />
       </head>
       <body>
-        <Providers>
-          <CartProvider initialCount={cartCount}>
-            <Header />
-            {children}
-            <Toaster richColors />
-          </CartProvider>
-        </Providers>
-        <Footer />
+        <NuqsAdapter>
+          <Providers>
+            <CartProvider initialCount={cartCount}>
+              <div className="flex min-h-screen flex-col">
+                <Header />
+
+                <div className="flex-1">{children}</div>
+
+                <Footer />
+              </div>
+
+              <Toaster richColors />
+            </CartProvider>
+          </Providers>
+        </NuqsAdapter>
       </body>
     </html>
   )

@@ -8,7 +8,7 @@ export default function CheckoutSuccessPage() {
         <CheckCircle size={42} />
       </div>
 
-      <h1 className="text-4xl font-bold text-primary">Order placed</h1>
+      <h1 className="text-primary md:text-4xl">Order placed</h1>
 
       <p className="mt-4 text-lg text-muted-foreground">
         Your order has been sent to the farm. You can track it from your account.

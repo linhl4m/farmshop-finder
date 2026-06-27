@@ -5,17 +5,29 @@ import { addToCartAction } from '@/app/(frontend)/cart/actions'
 import { useState } from 'react'
 import { useCart } from '@/components/cart/CartProvider'
 import { toast } from 'sonner'
+import { FavoriteProductButton } from '@/components/favorites/FavoriteProductButton'
 
 type Props = {
-  productId: string
+  product: any
   farmId: string
+  farmSlug: string
   disabled?: boolean
   stock: number
   unit: string
   availability: string
+  initialFavorited: boolean
 }
 
-export function ProductQuantity({ productId, farmId, disabled, stock, unit, availability }: Props) {
+export function ProductQuantity({
+  product,
+  farmId,
+  farmSlug,
+  disabled,
+  stock,
+  unit,
+  availability,
+  initialFavorited,
+}: Props) {
   const [quantity, setQuantity] = useState(1)
 
   const { increaseCount } = useCart()
@@ -69,7 +81,7 @@ export function ProductQuantity({ productId, farmId, disabled, stock, unit, avai
 
       <div className="flex gap-4">
         <form action={handleAddToCart} className="flex w-full">
-          <input type="hidden" name="productId" value={productId} />
+          <input type="hidden" name="productId" value={product.id} />
           <input type="hidden" name="farmId" value={farmId} />
           <input type="hidden" name="quantity" value={quantity} />
 
@@ -81,6 +93,12 @@ export function ProductQuantity({ productId, farmId, disabled, stock, unit, avai
             {disabled ? 'Not available' : 'Add to Cart'}
           </button>
         </form>
+        <FavoriteProductButton
+          productId={product.id}
+          productSlug={product.slug}
+          farmSlug={farmSlug}
+          initialFavorited={initialFavorited}
+        />
       </div>
     </div>
   )

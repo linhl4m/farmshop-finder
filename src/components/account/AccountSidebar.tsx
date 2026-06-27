@@ -1,12 +1,19 @@
+'use client'
 import Link from 'next/link'
 import { Heart, LogOut, ReceiptText, Settings, User } from 'lucide-react'
-import { logoutAction } from '@/lib/auth'
+import { logoutAction } from '@/app/(frontend)/account/actions'
+import { usePathname } from 'next/navigation'
 
 type Props = {
   email?: string | null
 }
 
 export function AccountSidebar({ email }: Props) {
+  const pathname = usePathname()
+
+  const isActive = (href: string) =>
+    href === '/account' ? pathname === href : pathname.startsWith(href)
+
   return (
     <aside className="left-0 hidden w-64 flex-col border-r bg-muted/40 p-4 md:flex">
       <div className="mb-8 flex items-center gap-3">
@@ -23,7 +30,23 @@ export function AccountSidebar({ email }: Props) {
       <nav className="flex flex-col gap-2">
         <Link
           href="/account"
-          className="flex items-center gap-3 rounded-xl bg-primary/10 px-4 py-3 font-semibold text-primary"
+          className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
+            isActive('/account')
+              ? 'bg-primary/10 font-semibold text-primary'
+              : 'text-muted-foreground hover:bg-muted'
+          }`}
+        >
+          <ReceiptText size={20} />
+          Dashboard
+        </Link>
+
+        <Link
+          href="/account/orders"
+          className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
+            isActive('/account/orders')
+              ? 'bg-primary/10 font-semibold text-primary'
+              : 'text-muted-foreground hover:bg-muted'
+          }`}
         >
           <ReceiptText size={20} />
           My Orders
@@ -31,7 +54,11 @@ export function AccountSidebar({ email }: Props) {
 
         <Link
           href="/account/saved"
-          className="flex items-center gap-3 rounded-xl px-4 py-3 text-muted-foreground hover:bg-muted"
+          className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
+            isActive('/account/saved')
+              ? 'bg-primary/10 font-semibold text-primary'
+              : 'text-muted-foreground hover:bg-muted'
+          }`}
         >
           <Heart size={20} />
           Saved Farms

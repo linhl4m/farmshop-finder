@@ -47,7 +47,9 @@ export async function getProducts(filters: ProductFilters = {}) {
   }
 
   if (filters.category) {
-    const categorySlugs = Array.isArray(filters.category) ? filters.category : [filters.category]
+    const categorySlugs = Array.isArray(filters.category)
+      ? filters.category
+      : filters.category.split(',').filter(Boolean)
 
     const categoryDocs = await payload.find({
       collection: 'product-categories',

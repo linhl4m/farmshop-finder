@@ -15,8 +15,8 @@ export default async function AccountPage() {
   return (
     <section className="mx-auto max-w-7xl px-6 py-10 md:px-12">
       <div className="mb-10">
-        <h1 className="text-4xl font-bold tracking-tight text-primary md:text-5xl">My Dashboard</h1>
-        <p className="mt-2 text-lg text-muted-foreground">
+        <h1 className="text-primary md:text-4xl lg:text-5xl">My Dashboard</h1>
+        <p className="mt-2 text-base text-muted-foreground md:text-lg">
           Track your orders, saved farms, and recent activity.
         </p>
       </div>
@@ -24,7 +24,7 @@ export default async function AccountPage() {
       <div className="grid gap-6 lg:grid-cols-12">
         <section className="space-y-6 lg:col-span-8">
           <div className="flex items-end justify-between">
-            <h2 className="text-2xl font-semibold">Active Orders</h2>
+            <h2 className="md:text-2xl">Active Orders</h2>
             <Link href="#" className="text-sm font-medium text-primary hover:underline">
               View all
             </Link>

@@ -1,62 +1,62 @@
 import { redirect } from 'next/navigation'
-import { getPayload } from 'payload'
-import config from '@payload-config'
 import { getCurrentUser } from '@/lib/auth'
+import { getFavoriteFarms, getFavoriteProducts } from '@/lib/data/favorites'
 import { FarmCard } from '@/components/ui/FarmCard'
+import { ProductCard } from '@/components/products/ProductCard'
 
-export default async function SavedFarmsPage() {
+export default async function SavedPage() {
   const user = await getCurrentUser()
 
-  if (!user) {
-    redirect('/login')
-  }
+  if (!user) redirect('/login')
+  if (user.role !== 'customer') redirect('/account')
 
-  if (user.role !== 'customer') {
-    redirect('/account')
-  }
-
-  const payload = await getPayload({ config })
-
-  const favorites = await payload.find({
-    collection: 'favorites',
-    where: {
-      customer: {
-        equals: user.id,
-      },
-    },
-    depth: 2,
-    limit: 100,
-    overrideAccess: false,
-    user,
-  })
-
-  const farms = favorites.docs
-    .map((favorite: any) => favorite.farm)
-    .filter(Boolean)
-    .map((farm: any) => ({
-      ...farm,
-      isFavorited: true,
-    }))
+  const [farms, products] = await Promise.all([
+    getFavoriteFarms(user.id, user),
+    getFavoriteProducts(user.id, user),
+  ])
 
   return (
     <main className="container-page py-10">
-      <div className="mb-8">
-        <h1 className="font-serif text-4xl font-bold text-primary">Saved Farms</h1>
-        <p className="mt-2 text-secondary">Your favorite farms in one place.</p>
+      <div className="mb-12">
+        <h1 className="text-primary md:text-4xl lg:text-5xl">Saved</h1>
+        <p className="mt-2 text-base text-muted-foreground md:text-lg">
+          Farms and products you want to come back to.
+        </p>
       </div>
 
-      {farms.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {farms.map((farm: any) => (
-            <FarmCard key={farm.id} farm={farm} />
-          ))}
-        </div>
-      ) : (
-        <div className="rounded-2xl border border-[#c2c9bb]/30 bg-[#f3f4ed] p-10 text-center">
-          <h2 className="font-serif text-2xl font-semibold text-primary">No saved farms yet</h2>
-          <p className="mt-2 text-secondary">Save farms by clicking the heart icon.</p>
-        </div>
-      )}
+      {/* Saved Farms */}
+      <section className="mb-14">
+        <h2 className="mb-6 text-primary md:text-2xl">Saved Farms</h2>
+
+        {farms.length > 0 ? (
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {farms.map((farm: any) => (
+              <FarmCard key={farm.id} farm={farm} />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border bg-card p-8 text-center">
+            <p className="text-secondary">You haven't saved any farms yet.</p>
+          </div>
+        )}
+      </section>
+
+      {/* Saved Products */}
+      <section>
+        <h2 className="mb-6 text-primary md:text-2xl">Saved Products</h2>
+
+        {products.length > 0 ? (
+          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            {products.map((product: any) => (
+              <ProductCard key={product.id} product={product} variant="large" />
+            ))}
+          </div>
+        ) : (
+          <div className="rounded-2xl border bg-card p-8 text-center">
+            <p className="text-secondary">You haven't saved any products yet.</p>
+          </div>
+        )}
+      </section>
     </main>
   )
 }

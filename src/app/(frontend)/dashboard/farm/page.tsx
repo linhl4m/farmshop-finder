@@ -21,7 +21,7 @@ export default async function EditFarmPage() {
       <div className="flex-1">
         <section className="max-w-4xl px-6 py-8 md:px-12">
           <div>
-            <h1 className="text-4xl font-bold text-primary">Edit Farm Page</h1>
+            <h1 className="text-primary md:text-4xl">Edit Farm Page</h1>
             <p className="mt-2 text-muted-foreground">
               Update how your farm appears in the marketplace.
             </p>

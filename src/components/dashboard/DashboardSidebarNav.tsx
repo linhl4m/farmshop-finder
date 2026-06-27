@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Package, ReceiptText, Store } from 'lucide-react'
+import { LayoutDashboard, Package, ReceiptText, Store, LogOut } from 'lucide-react'
+import { logoutAction } from '@/app/(frontend)/account/actions'
 
 export function DashboardSidebarNav() {
   const pathname = usePathname()
@@ -27,7 +28,7 @@ export function DashboardSidebarNav() {
         Edit Farm Page
       </Link>
 
-      <Link href="#" className={getLinkClasses('#')}>
+      <Link href="/dashboard/orders" className={getLinkClasses('/dashboard/orders')}>
         <ReceiptText size={20} />
         Orders
       </Link>
@@ -36,6 +37,13 @@ export function DashboardSidebarNav() {
         <Package size={20} />
         Products
       </Link>
+
+      <form action={logoutAction}>
+        <button className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-destructive hover:bg-destructive/10">
+          <LogOut size={20} />
+          Logout
+        </button>
+      </form>
     </nav>
   )
 }

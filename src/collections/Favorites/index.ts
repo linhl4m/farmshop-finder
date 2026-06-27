@@ -36,7 +36,11 @@ export const Favorites: CollectionConfig = {
       name: 'farm',
       type: 'relationship',
       relationTo: 'farms',
-      required: true,
+    },
+    {
+      name: 'product',
+      type: 'relationship',
+      relationTo: 'products',
     },
   ],
 }

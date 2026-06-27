@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation'
 import { requireUser } from '@/lib/auth'
 import { AccountSidebar } from '@/components/account/AccountSidebar'
-import { AccountMobileHeader } from '@/components/account/AccountMobileHeader'
+import { AccountBottomNav } from '@/components/account/AccountBottomNav'
 
 export default async function AccountLayout({ children }: { children: React.ReactNode }) {
   const user = await requireUser()
@@ -11,14 +11,12 @@ export default async function AccountLayout({ children }: { children: React.Reac
   }
 
   return (
-    <main className="flex min-h-screen bg-background">
+    <main className="flex bg-background">
       <AccountSidebar email={user.email} />
 
-      <div className="flex-1">
-        <AccountMobileHeader />
+      <div className="flex-1 pb-10 md:pb-0">{children}</div>
 
-        {children}
-      </div>
+      <AccountBottomNav />
     </main>
   )
 }

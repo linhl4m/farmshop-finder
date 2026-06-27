@@ -13,9 +13,9 @@ export default async function LoginPage() {
     <main className="mx-auto max-w-2xl px-6 py-16">
       <div className="space-y-6">
         <div className="space-y-2">
-          <h1 className="text-4xl font-bold tracking-tight">Sign in</h1>
+          <h1 className="md:text-4xl">Sign in</h1>
 
-          <p className="text-lg text-muted-foreground">
+          <p className="text-base text-muted-foreground md:text-lg">
             Welcome back. Sign in to manage your account, orders, or farm profile.
           </p>
         </div>

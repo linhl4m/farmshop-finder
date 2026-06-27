@@ -1,6 +1,6 @@
 'use client'
 
-import { useRouter, useSearchParams, usePathname } from 'next/navigation'
+import { parseAsArrayOf, parseAsBoolean, parseAsString, useQueryState } from 'nuqs'
 import { SearchInput } from '@/components/products/SearchInput'
 import { ChevronDown } from 'lucide-react'
 
@@ -15,56 +15,51 @@ type Props = {
   showGlobalFilters: boolean
 }
 
+const opts = { shallow: false } as const
+
 export function ProductFilters({ categories, showGlobalFilters = true }: Props) {
-  const router = useRouter()
-  const pathname = usePathname()
-  const searchParams = useSearchParams()
-
-  const updateParam = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString())
-
-    if (!value) {
-      params.delete(key)
-    } else {
-      params.set(key, value)
-    }
-
-    router.push(`${pathname}?${params.toString()}`)
-  }
+  const [activeCategories, setActiveCategories] = useQueryState(
+    'category',
+    parseAsArrayOf(parseAsString).withDefault([]).withOptions(opts),
+  )
+  const [price, setPrice] = useQueryState(
+    'price',
+    parseAsString.withDefault('').withOptions(opts),
+  )
+  const [organic, setOrganic] = useQueryState(
+    'organic',
+    parseAsBoolean.withDefault(false).withOptions(opts),
+  )
+  const [distance, setDistance] = useQueryState(
+    'distance',
+    parseAsString.withDefault('').withOptions(opts),
+  )
 
   return (
-    <aside className="hidden w-64 flex-shrink-0 md:block">
+    <aside className="hidden w-64 shrink-0 md:block">
       <div className="top-28 space-y-8">
         <div>
-          <h3 className="mb-4 font-serif text-2xl font-semibold text-primary">Search</h3>
+          <h3 className="mb-4 text-xl text-primary">Search</h3>
           <SearchInput />
         </div>
 
         <div>
-          <h3 className="mb-4 font-serif text-2xl font-semibold text-primary">Categories</h3>
+          <h3 className="mb-4 text-xl text-primary">Categories</h3>
 
           <div className="flex flex-col gap-2">
             {categories.map((category) => (
               <label key={category.id} className="flex items-center gap-2 text-secondary">
                 <input
                   type="checkbox"
-                  checked={searchParams.getAll('category').includes(category.slug)}
-                  onChange={() => {
-                    const params = new URLSearchParams(searchParams.toString())
-                    const current = params.getAll('category')
-
-                    params.delete('category')
-
-                    const next = current.includes(category.slug)
-                      ? current.filter((slug) => slug !== category.slug)
-                      : [...current, category.slug]
-
-                    next.forEach((slug) => params.append('category', slug))
-
-                    router.push(`${pathname}?${params.toString()}`)
-                  }}
+                  checked={activeCategories.includes(category.slug)}
+                  onChange={() =>
+                    setActiveCategories((prev) =>
+                      prev.includes(category.slug)
+                        ? prev.filter((s) => s !== category.slug)
+                        : [...prev, category.slug],
+                    )
+                  }
                 />
-
                 {category.name}
               </label>
             ))}
@@ -72,11 +67,11 @@ export function ProductFilters({ categories, showGlobalFilters = true }: Props) 
         </div>
 
         <div>
-          <h3 className="mb-4 font-serif text-2xl font-semibold text-primary">Price</h3>
+          <h3 className="mb-4 text-xl text-primary">Price</h3>
           <div className="relative w-full">
             <select
-              value={searchParams.get('price') ?? ''}
-              onChange={(e) => updateParam('price', e.target.value)}
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
               className="w-full appearance-none rounded-full border border-[#c2c9bb]/40 bg-white py-2 pl-4 pr-10 text-sm"
             >
               <option value="">Any price</option>
@@ -90,11 +85,11 @@ export function ProductFilters({ categories, showGlobalFilters = true }: Props) 
 
         {showGlobalFilters && (
           <div>
-            <h3 className="mb-4 font-serif text-2xl font-semibold text-primary">Farm Filter</h3>
+            <h3 className="mb-4 text-xl text-primary">Farm Filter</h3>
             <div className="flex gap-2">
               <input
-                checked={searchParams.get('organic') === 'true'}
-                onChange={(e) => updateParam('organic', e.target.checked ? 'true' : '')}
+                checked={organic}
+                onChange={(e) => setOrganic(e.target.checked)}
                 type="checkbox"
               />
               <label>Organic Farms</label>
@@ -104,11 +99,11 @@ export function ProductFilters({ categories, showGlobalFilters = true }: Props) 
 
         {showGlobalFilters && (
           <div>
-            <h3 className="mb-4 font-serif text-2xl font-semibold text-primary">Distance</h3>
+            <h3 className="mb-4 text-xl text-primary">Distance</h3>
             <div className="relative w-full">
               <select
-                value={searchParams.get('distance') ?? ''}
-                onChange={(e) => updateParam('distance', e.target.value)}
+                value={distance}
+                onChange={(e) => setDistance(e.target.value)}
                 className="w-full appearance-none rounded-full border border-[#c2c9bb]/40 bg-white py-2 pl-4 pr-10 text-sm"
               >
                 <option value="">Any distance</option>

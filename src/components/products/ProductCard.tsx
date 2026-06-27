@@ -2,6 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { AddToCartButton } from '@/components/cart/AddToCartButton'
 import { Plus } from 'lucide-react'
+import { FavoriteProductButton } from '@/components/favorites/FavoriteProductButton'
 
 type Props = {
   product: any
@@ -15,6 +16,8 @@ export function ProductCard({ product, variant = 'small' }: Props) {
   const isMarket = variant === 'market'
 
   const farmId = typeof product.farm === 'object' ? product.farm.id : product.farm
+
+  const farmSlug = typeof product.farm === 'object' ? product.farm.slug : ''
 
   const categoryName =
     typeof product.productCategory === 'object' ? product.productCategory.name : ''
@@ -50,7 +53,7 @@ export function ProductCard({ product, variant = 'small' }: Props) {
               {categoryName || 'Seasonal'}
             </span>
 
-            <h3 className="font-serif text-xl font-semibold text-white">{product.name}</h3>
+            <h3 className="text-xl text-white">{product.name}</h3>
 
             <p className="text-sm font-semibold text-[#bcf0ae]">
               €{product.price.toFixed(2)} / {product.unit}
@@ -64,8 +67,8 @@ export function ProductCard({ product, variant = 'small' }: Props) {
   if (isMarket) {
     return (
       <div className="group flex h-full flex-col overflow-hidden rounded-xl bg-white shadow-sm transition">
-        <Link href={`/farms/${product.farm.slug}/products/${product.slug}`}>
-          <div className="relative aspect-square overflow-hidden bg-[#e2e3dc]">
+        <div className="relative aspect-square overflow-hidden bg-[#e2e3dc]">
+          <Link href={`/farms/${product.farm.slug}/products/${product.slug}`}>
             {image?.url ? (
               <Image
                 src={image.url}
@@ -91,11 +94,20 @@ export function ProductCard({ product, variant = 'small' }: Props) {
                 </span>
               )}
             </div>
-          </div>
-        </Link>
+          </Link>
+
+          <FavoriteProductButton
+            productId={product.id}
+            productSlug={product.slug}
+            farmSlug={farmSlug}
+            initialFavorited={product.isFavorited}
+            className="absolute right-3 top-3 z-20"
+            variant="floating"
+          />
+        </div>
 
         <div className="flex flex-1 flex-col p-4">
-          <h3 className="mb-1 font-serif text-xl font-semibold text-primary">{product.name}</h3>
+          <h3 className="mb-1 text-xl text-primary">{product.name}</h3>
 
           <p className="mb-4 text-sm text-secondary">
             {typeof product.farm === 'object' ? product.farm.name : ''}
@@ -103,13 +115,15 @@ export function ProductCard({ product, variant = 'small' }: Props) {
 
           <div className="mt-auto flex items-center justify-between gap-4">
             <div>
-              <p className="text-2xl font-bold text-primary">€{product.price.toFixed(2)}</p>
+              <p className="text-xl font-bold text-primary md:text-2xl">
+                €{product.price.toFixed(2)}
+              </p>
 
               <p className="text-xs text-secondary">per {product.unit}</p>
             </div>
 
             {disabled ? (
-              <p className="rounded-lg bg-red-50 px-3 py-2 text-sm font-semibold text-destructive">
+              <p className="rounded-lg bg-red-50 px-3 py-2 text-xs font-semibold text-destructive md:text-sm">
                 {getProductAvailability(product)}
               </p>
             ) : (
@@ -129,8 +143,8 @@ export function ProductCard({ product, variant = 'small' }: Props) {
   if (!isLarge) {
     return (
       <div className="min-w-[260px] flex-shrink-0 snap-start group cursor-pointer">
-        <Link href={`/farms/${product.farm.slug}/products/${product.slug}`}>
-          <div className="relative mb-3 h-56 overflow-hidden rounded-xl">
+        <div className="relative mb-3 h-56 overflow-hidden rounded-xl">
+          <Link href={`/farms/${product.farm.slug}/products/${product.slug}`}>
             {image?.url ? (
               <Image
                 src={image.url}
@@ -142,16 +156,27 @@ export function ProductCard({ product, variant = 'small' }: Props) {
             ) : (
               <div className="h-full bg-[#e2e3dc]" />
             )}
-          </div>
-        </Link>
+          </Link>
+
+          <FavoriteProductButton
+            productId={product.id}
+            productSlug={product.slug}
+            farmSlug={farmSlug}
+            initialFavorited={product.isFavorited}
+            className="absolute right-3 top-3 z-20"
+            variant="floating"
+          />
+        </div>
 
         <div className="px-1">
-          <p className="font-serif text-lg font-semibold text-primary">{product.name}</p>
-          <p className="mb-3 text-sm text-secondary">
+          <p className="font-serif text-base font-semibold text-primary md:text-lg">
+            {product.name}
+          </p>
+          <p className="mb-3 text-xs text-secondary md:text-sm">
             {typeof product.farm === 'object' ? product.farm.name : ''}
           </p>
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-primary">
+            <span className="font-semibold text-primary text-base">
               €{product.price.toFixed(2)} / {product.unit}
             </span>
             <AddToCartButton
@@ -170,8 +195,8 @@ export function ProductCard({ product, variant = 'small' }: Props) {
 
   return (
     <div className="overflow-hidden rounded-xl bg-white shadow-sm">
-      <Link href={`/farms/${product.farm.slug}/products/${product.slug}`}>
-        <div className="relative h-56">
+      <div className="relative h-56">
+        <Link href={`/farms/${product.farm.slug}/products/${product.slug}`}>
           {image?.url ? (
             <Image src={image.url} alt={product.name} fill className="object-cover" sizes="300px" />
           ) : (
@@ -189,11 +214,21 @@ export function ProductCard({ product, variant = 'small' }: Props) {
               {getProductAvailability(product)}
             </span>
           </div>
-        </div>
-      </Link>
+        </Link>
+        <FavoriteProductButton
+          productId={product.id}
+          productSlug={product.slug}
+          farmSlug={farmSlug}
+          initialFavorited={product.isFavorited}
+          className="absolute right-3 top-3 z-20"
+          variant="floating"
+        />
+      </div>
 
       <div className="p-4">
-        <p className="mb-1 font-serif text-lg font-semibold text-primary">{product.name}</p>
+        <p className="mb-1 font-serif text-lg font-semibold text-primary md:text-xl">
+          {product.name}
+        </p>
 
         <p className="text-xs text-secondary">
           {typeof product.farm === 'object' ? product.farm.name : ''}
