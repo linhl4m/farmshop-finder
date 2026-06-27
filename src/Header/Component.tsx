@@ -12,10 +12,37 @@ export async function Header({ cartCount = 0 }: Props) {
 
   return (
     <header className="sticky top-0 z-50 border-b border-[#c2c9bb]/20 bg-[#f9faf2]/90 backdrop-blur">
-      <div className="flex items-center justify-between px-6 py-4 lg:px-16">
-        <Link href="/" className="font-serif text-3xl font-bold">
+      <div className="flex items-center justify-between px-5 py-4 sm:px-7 lg:px-9">
+        <Link href="/" className="font-serif text-3xl font-bold shrink-0">
           Farmshop Finder
         </Link>
+
+        <nav className="hidden md:flex items-center gap-7">
+          <Link
+            href="/"
+            className="text-sm font-semibold text-secondary hover:text-primary transition-colors"
+          >
+            Farms
+          </Link>
+          <Link
+            href="/products"
+            className="text-sm font-semibold text-secondary hover:text-primary transition-colors"
+          >
+            Products
+          </Link>
+          <Link
+            href="#"
+            className="text-sm font-semibold text-secondary hover:text-primary transition-colors"
+          >
+            Trending
+          </Link>
+          <Link
+            href="#"
+            className="text-sm font-semibold text-secondary hover:text-primary transition-colors"
+          >
+            Seasonal
+          </Link>
+        </nav>
 
         <div className="flex items-center gap-2">
           {user?.role !== 'farm' && <CartButton />}

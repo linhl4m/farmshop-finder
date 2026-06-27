@@ -43,12 +43,14 @@ export default async function ProductsPage({ searchParams }: Props) {
   }))
 
   return (
-    <ProductListing
-      title="All Products"
-      description="Fresh products from all farms"
-      products={productsWithFavorites}
-      filters={<FilterSidebar categories={categories} sidebar showGlobalFilters={false} />}
-      showFavorite={user?.role === 'customer'}
-    />
+    <>
+      <ProductListing
+        title="All Products"
+        description="Fresh products from all farms"
+        products={productsWithFavorites}
+        filters={<FilterSidebar categories={categories} sidebar showGlobalFilters={false} />}
+        showFavorite={user?.role === 'customer'}
+      />
+    </>
   )
 }

@@ -49,7 +49,7 @@ export default async function FarmPage({ params }: Props) {
   const seasonalProducts = await getSeasonalProductsByFarmId(farm.id)
   const reviews = await getReviewsByFarmId(farm.id)
 
-  const heroImage = farm.coverImage?.url
+  const heroImage = typeof farm.coverImage === 'object' ? farm.coverImage?.url : undefined
 
   return (
     <main className="container-page">
@@ -194,8 +194,8 @@ export default async function FarmPage({ params }: Props) {
       {/* Customer Reviews */}
       <ReviewsSection
         reviews={reviews}
-        ratingAverage={farm.ratingAverage}
-        ratingCount={farm.ratingCount}
+        ratingAverage={farm.ratingAverage ?? 0}
+        ratingCount={farm.ratingCount ?? 0}
         canWriteReview={canWriteReview}
         reviewButton={<ReviewModalButton farmId={farm.id} farmSlug={farm.slug} />}
         viewAllHref="#"

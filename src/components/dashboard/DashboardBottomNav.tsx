@@ -2,7 +2,8 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Package, ReceiptText, Store } from 'lucide-react'
+import { LayoutDashboard, Package, ReceiptText, Store, LogOut } from 'lucide-react'
+import { logoutAction } from '@/app/(frontend)/account/actions'
 
 export function DashboardBottomNav() {
   const pathname = usePathname()
@@ -35,6 +36,16 @@ export function DashboardBottomNav() {
         <Package size={22} />
         <span>Products</span>
       </Link>
+
+      <form
+        action={logoutAction}
+        className="flex flex-1 flex-col items-center gap-1 py-2 text-xs font-medium transition text-destructive"
+      >
+        <button>
+          <LogOut size={22} />
+          <span>Logout</span>
+        </button>
+      </form>
     </nav>
   )
 }

@@ -17,7 +17,15 @@ type Props = {
   showFavorite?: boolean
 }
 
-export function HomeContent({ farms, products, categories, lat, lng, distance, showFavorite }: Props) {
+export function HomeContent({
+  farms,
+  products,
+  categories,
+  lat,
+  lng,
+  distance,
+  showFavorite,
+}: Props) {
   const [mapOpen, setMapOpen] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
 
@@ -27,12 +35,13 @@ export function HomeContent({ farms, products, categories, lat, lng, distance, s
   )
 
   return (
-    <main className="container-page">
-      <TrendingProducts products={products} showFavorite={showFavorite} />
+    <main className="container-page pb-24 lg:pb-12">
+      <section className="mb-6">
+        <TrendingProducts products={products} showFavorite={showFavorite} />
+      </section>
 
-      <section className="grid grid-cols-1 lg:grid-cols-12 lg:gap-12">
-        {/* Desktop Sidebar */}
-        <aside className="lg:col-span-3">
+      <section className="grid grid-cols-1 lg:grid-cols-[16rem_1fr] lg:gap-6">
+        <aside>
           <FilterSidebar
             sidebar
             mapOpen={mapOpen}
@@ -44,12 +53,16 @@ export function HomeContent({ farms, products, categories, lat, lng, distance, s
           />
         </aside>
 
-        <div className="lg:col-span-9">
-          {mapOpen ? <MapPanel farms={farms} center={mapCenter} distance={distance} /> : <FarmsFeed farms={farms} showFavorite={showFavorite} />}
+        <div>
+          {mapOpen ? (
+            <MapPanel farms={farms} center={mapCenter} distance={distance} />
+          ) : (
+            <FarmsFeed farms={farms} showFavorite={showFavorite} />
+          )}
         </div>
       </section>
 
-      {/* Floating Buttons */}
+      {/* Mobile Floating Buttons */}
       <div className="fixed bottom-10 left-6 right-6 z-40 flex justify-between lg:hidden">
         <button
           onClick={() => setFiltersOpen(true)}

@@ -43,7 +43,8 @@ export default async function ProductDetailPage({ params }: Props) {
   const canWriteReview =
     user?.role === 'customer' ? await customerHasOrderedProduct(user.id, product.id) : false
 
-  const image = product.photos?.[0]
+  const rawPhoto = product.photos?.[0]
+  const image = typeof rawPhoto === 'object' ? rawPhoto : null
   const category = typeof product.productCategory === 'object' ? product.productCategory.name : null
 
   const availability = getAvailability(product)
@@ -81,7 +82,7 @@ export default async function ProductDetailPage({ params }: Props) {
             </div>
           </div>
 
-          {product.photos?.length > 1 && (
+          {product.photos && product.photos.length > 1 && (
             <div className="mt-4 flex gap-4">
               {product.photos.slice(0, 3).map((photo: any, index: number) => (
                 <div
@@ -175,7 +176,7 @@ export default async function ProductDetailPage({ params }: Props) {
             farmId={farm.id}
             farmSlug={farmSlug}
             disabled={!canBuy}
-            stock={product.stock}
+            stock={product.stock ?? 0}
             unit={product.unit}
             availability={availability}
             initialFavorited={isFavorited}

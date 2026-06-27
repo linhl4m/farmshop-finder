@@ -9,7 +9,9 @@ type Props = {
 export function SearchInput({ placeholder = 'Search…' }: Props) {
   const [search, setSearch] = useQueryState(
     'search',
-    parseAsString.withDefault('').withOptions({ shallow: false, history: 'replace', throttleMs: 500 }),
+    parseAsString
+      .withDefault('')
+      .withOptions({ shallow: false, history: 'replace', throttleMs: 500 }),
   )
 
   return (
@@ -17,7 +19,7 @@ export function SearchInput({ placeholder = 'Search…' }: Props) {
       value={search}
       onChange={(e) => setSearch(e.target.value || null)}
       placeholder={placeholder}
-      className="w-full rounded-full border border-border bg-white px-4 py-2 text-sm"
+      className="w-full rounded-full border border-border px-4 py-2 text-sm"
     />
   )
 }

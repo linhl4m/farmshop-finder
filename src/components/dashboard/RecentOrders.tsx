@@ -11,7 +11,7 @@ export function RecentOrders({ orders }: Props) {
       case 'pending':
         return 'bg-amber-100 text-amber-700'
 
-      case 'processing':
+      case 'shipped':
         return 'bg-blue-100 text-blue-700'
 
       case 'completed':
@@ -20,13 +20,16 @@ export function RecentOrders({ orders }: Props) {
       case 'cancelled':
         return 'bg-red-100 text-red-700'
 
+      case 'confirmed':
+        return 'bg-green-100 text-green-700'
+
       default:
         return 'bg-muted text-muted-foreground'
     }
   }
 
   return (
-    <section className="rounded-2xl border bg-card p-6 shadow-sm">
+    <section className="max-w-3xl rounded-2xl border bg-card p-6 shadow-sm">
       <div className="mb-6 flex items-center justify-between gap-4">
         <div className="min-w-0">
           <h2 className="text-2xl font-semibold text-primary">Recent Orders</h2>

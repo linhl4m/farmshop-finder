@@ -12,12 +12,12 @@ export async function getFarms(filters: FarmFilters = {}) {
   const payload = await getPayload({ config })
 
   const where = filters.search
-    ? {
+    ? ({
         or: [
           { name: { like: filters.search } },
           { description: { like: filters.search } },
         ],
-      }
+      } as any)
     : undefined
 
   const farms = await payload.find({

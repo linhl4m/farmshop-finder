@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 
 type CartContextValue = {
   count: number
@@ -20,6 +20,10 @@ export function CartProvider({
   children: React.ReactNode
 }) {
   const [count, setCount] = useState(initialCount)
+
+  useEffect(() => {
+    setCount(initialCount)
+  }, [initialCount])
 
   function increaseCount(amount: number) {
     setCount((prev) => prev + amount)

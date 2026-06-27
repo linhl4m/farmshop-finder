@@ -6,7 +6,7 @@ type Props = {
 
 export function ProductListings({ products }: Props) {
   return (
-    <section className="rounded-2xl border bg-card p-6 shadow-sm">
+    <section className="max-w-3xl rounded-2xl border bg-card p-6 shadow-sm">
       <div className="mb-6 flex items-center justify-between">
         <h2 className="text-2xl font-semibold text-primary">Product Listings</h2>
 

@@ -21,7 +21,7 @@ export function FarmsFeed({ farms, showFavorite }: Props) {
         <h3 className="text-xl text-primary md:text-2xl">Discover Local Farms</h3>
         <p className="mt-1 mb-6 text-sm text-secondary">Find the best producers within 50 km</p>
       </div>
-      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+      <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
         {farms.map((farm) => (
           <FarmCard key={farm.id} farm={farm} showFavorite={showFavorite} />
         ))}

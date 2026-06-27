@@ -151,6 +151,7 @@ async function seed() {
 
   await payload.create({
     collection: 'users',
+    draft: false,
     data: {
       email: 'admin@farmshop.com',
       password: 'admin',
@@ -175,6 +176,7 @@ async function seed() {
       existingUser.docs[0] ??
       (await payload.create({
         collection: 'users',
+        draft: false,
         data: {
           email,
           password,
@@ -190,10 +192,8 @@ async function seed() {
   for (const category of productCategories) {
     const createdCategory = await payload.create({
       collection: 'product-categories',
-      data: {
-        name: category.name,
-        value: category.value,
-      },
+      draft: false,
+      data: { name: category.name } as any,
     })
 
     categoryMap.set(category.value, createdCategory.id)
@@ -214,6 +214,7 @@ async function seed() {
       existingFarmUser.docs[0] ??
       (await payload.create({
         collection: 'users',
+        draft: false,
         data: {
           email: farmData.email,
           password,
@@ -235,6 +236,7 @@ async function seed() {
       existingFarm.docs[0] ??
       (await payload.create({
         collection: 'farms',
+        draft: false,
         data: {
           owner: farmUser.id,
           name: farmData.name,
@@ -248,7 +250,7 @@ async function seed() {
             latitude: farmData.latitude,
             longitude: farmData.longitude,
           },
-        },
+        } as any,
       }))
 
     const productDocs = []
@@ -257,6 +259,7 @@ async function seed() {
       const categoryId = categoryMap.get(category)
       const product = await payload.create({
         collection: 'products',
+        draft: false,
         data: {
           farm: farm.id,
           name,
@@ -266,7 +269,7 @@ async function seed() {
           unit,
           stock,
           status: 'in_season',
-        },
+        } as any,
       })
 
       productDocs.push(product)

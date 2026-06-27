@@ -19,7 +19,7 @@ export async function loginUser(email: string, password: string) {
 
   const cookieStore = await cookies()
 
-  cookieStore.set('payload-token', result.token, {
+  cookieStore.set('payload-token', result.token ?? '', {
     httpOnly: true,
     sameSite: 'lax',
     path: '/',

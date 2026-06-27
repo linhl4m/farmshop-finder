@@ -45,7 +45,7 @@
   }
 
   .container-page {
-    @apply mx-auto w-full max-w-7xl px-6 py-8;
+    @apply w-full px-5 py-8 sm:px-7 lg:px-9;
   }
 
   @variant sm {
@@ -81,7 +81,7 @@
 }
 
 :root {
-  --background: oklch(100% 0 0deg);
+  --background: #f9faf2;
   --foreground: oklch(14.5% 0 0deg);
   --card: oklch(96.5% 0.005 265deg);
   --card-foreground: oklch(14.5% 0 0deg);

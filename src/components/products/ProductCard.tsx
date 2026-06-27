@@ -10,6 +10,33 @@ type Props = {
   showFavorite?: boolean
 }
 
+const CATEGORY_COLORS = {
+  produce: {
+    solid: 'bg-[#dcf0dc] text-[#1a5c1a]',
+    overlay: 'bg-[#dcf0dc]/90 text-[#1a5c1a]',
+  },
+  dairy: {
+    solid: 'bg-[#fff8e1] text-[#7a5c00]',
+    overlay: 'bg-[#fff8e1]/90 text-[#7a5c00]',
+  },
+  eggs: {
+    solid: 'bg-[#fff3cd] text-[#856404]',
+    overlay: 'bg-[#fff3cd]/90 text-[#856404]',
+  },
+  meat: {
+    solid: 'bg-[#fce8e8] text-[#8b0000]',
+    overlay: 'bg-[#fce8e8]/90 text-[#8b0000]',
+  },
+  honey: {
+    solid: 'bg-[#fef3c7] text-[#78580a]',
+    overlay: 'bg-[#fef3c7]/90 text-[#78580a]',
+  },
+  baked_goods: {
+    solid: 'bg-[#ede0cd] text-[#5c3d11]',
+    overlay: 'bg-[#ede0cd]/90 text-[#5c3d11]',
+  },
+} as const
+
 export function ProductCard({ product, variant = 'small', showFavorite = true }: Props) {
   const image = product.photos?.[0]
   const isLarge = variant === 'large'
@@ -82,15 +109,17 @@ export function ProductCard({ product, variant = 'small', showFavorite = true }:
               <div className="h-full bg-[#e2e3dc]" />
             )}
 
-            <div className="absolute left-4 top-4 flex gap-2">
+            <div className="hidden md:flex absolute left-4 top-4 gap-2">
               {categoryName && (
-                <span className="rounded-full bg-[#ffdcc3] px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
+                <span
+                  className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${getCategoryColors(categoryName).solid}`}
+                >
                   {categoryName}
                 </span>
               )}
 
               {typeof product.farm === 'object' && product.farm.organic && (
-                <span className="rounded-full bg-[#bcf0ae] px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
+                <span className="hidden md:block rounded-full bg-[#bcf0ae] px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
                   Organic
                 </span>
               )}
@@ -109,24 +138,24 @@ export function ProductCard({ product, variant = 'small', showFavorite = true }:
           )}
         </div>
 
-        <div className="flex flex-1 flex-col p-4">
-          <h3 className="mb-1 text-xl text-primary">{product.name}</h3>
+        <div className="flex flex-1 flex-col p-3">
+          <h3 className="mb-0.5 text-sm lg:text-lg font-semibold text-primary">{product.name}</h3>
 
-          <p className="mb-4 text-sm text-secondary">
+          <p className="mb-3 text-xs text-secondary">
             {typeof product.farm === 'object' ? product.farm.name : ''}
           </p>
 
-          <div className="mt-auto flex items-center justify-between gap-4">
+          <div className="mt-auto flex items-center justify-between gap-2">
             <div>
-              <p className="text-xl font-bold text-primary md:text-2xl">
+              <p className="text-sm lg:text-lg font-bold text-primary">
                 €{product.price.toFixed(2)}
               </p>
 
-              <p className="text-xs text-secondary">per {product.unit}</p>
+              <p className="text-xs lg:text-base text-secondary">per {product.unit}</p>
             </div>
 
             {disabled ? (
-              <p className="rounded-lg bg-red-50 px-3 py-2 text-xs font-semibold text-destructive md:text-sm">
+              <p className="rounded-lg bg-red-50 px-2 py-1.5 text-xs xl:text-sm font-semibold text-destructive text-center flex">
                 {getProductAvailability(product)}
               </p>
             ) : (
@@ -134,7 +163,7 @@ export function ProductCard({ product, variant = 'small', showFavorite = true }:
                 productId={product.id}
                 farmId={farmId}
                 disabled={disabled}
-                className="rounded-lg bg-primary px-6 py-2 text-sm font-semibold text-white disabled:opacity-50"
+                className="rounded-lg bg-primary px-3 py-1.5 text-xs lg:text-sm font-semibold text-white disabled:opacity-50"
               />
             )}
           </div>
@@ -145,8 +174,8 @@ export function ProductCard({ product, variant = 'small', showFavorite = true }:
 
   if (!isLarge) {
     return (
-      <div className="min-w-[260px] flex-shrink-0 snap-start group cursor-pointer">
-        <div className="relative mb-3 h-56 overflow-hidden rounded-xl">
+      <div className="min-w-[190px] flex-shrink-0 snap-start group cursor-pointer">
+        <div className="relative mb-2 h-40 overflow-hidden rounded-xl">
           <Link href={`/farms/${product.farm.slug}/products/${product.slug}`}>
             {image?.url ? (
               <Image
@@ -174,23 +203,21 @@ export function ProductCard({ product, variant = 'small', showFavorite = true }:
         </div>
 
         <div className="px-1">
-          <p className="font-serif text-base font-semibold text-primary md:text-lg">
-            {product.name}
-          </p>
-          <p className="mb-3 text-xs text-secondary md:text-sm">
+          <p className="font-serif text-sm font-semibold text-primary">{product.name}</p>
+          <p className="mb-2 text-xs text-secondary">
             {typeof product.farm === 'object' ? product.farm.name : ''}
           </p>
           <div className="flex items-center justify-between">
-            <span className="font-semibold text-primary text-base">
+            <span className="text-sm font-semibold text-primary">
               €{product.price.toFixed(2)} / {product.unit}
             </span>
             <AddToCartButton
               productId={product.id}
               farmId={farmId}
               disabled={disabled}
-              className="rounded-lg bg-primary p-2 text-white disabled:opacity-50"
+              className="rounded-lg bg-primary p-1.5 text-white disabled:opacity-50"
             >
-              <Plus size={20} />
+              <Plus size={16} />
             </AddToCartButton>
           </div>
         </div>
@@ -210,7 +237,9 @@ export function ProductCard({ product, variant = 'small', showFavorite = true }:
 
           <div className="absolute left-3 top-3 flex flex-wrap gap-2">
             {categoryName && (
-              <span className="rounded-full bg-white/90 px-2.5 py-1 text-xs font-semibold text-primary backdrop-blur-sm">
+              <span
+                className={`rounded-full px-2.5 py-1 text-xs font-semibold backdrop-blur-sm ${getCategoryColors(categoryName).overlay}`}
+              >
                 {categoryName}
               </span>
             )}

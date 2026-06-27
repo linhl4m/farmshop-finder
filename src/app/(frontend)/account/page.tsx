@@ -25,7 +25,10 @@ export default async function AccountPage() {
         <section className="space-y-6 lg:col-span-8">
           <div className="flex items-end justify-between">
             <h2 className="md:text-2xl">Active Orders</h2>
-            <Link href="#" className="text-sm font-medium text-primary hover:underline">
+            <Link
+              href="/account/orders"
+              className="text-sm font-medium text-primary hover:underline"
+            >
               View all
             </Link>
           </div>

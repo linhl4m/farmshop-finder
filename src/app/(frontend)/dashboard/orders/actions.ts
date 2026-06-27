@@ -5,6 +5,8 @@ import { getPayload } from 'payload'
 import config from '@payload-config'
 import { requireUser } from '@/lib/auth'
 
+type OrderStatus = 'pending' | 'confirmed' | 'cancelled' | 'shipped' | 'completed'
+
 export async function updateOrderStatusAction(formData: FormData) {
   const user = await requireUser()
 
@@ -15,11 +17,13 @@ export async function updateOrderStatusAction(formData: FormData) {
   const orderId = String(formData.get('orderId'))
   const status = String(formData.get('status'))
 
-  const allowedStatuses = ['confirmed', 'shipped', 'cancelled']
+  const allowedStatuses: OrderStatus[] = ['confirmed', 'shipped', 'cancelled']
 
-  if (!allowedStatuses.includes(status)) {
+  if (!allowedStatuses.includes(status as OrderStatus)) {
     throw new Error('Invalid status')
   }
+
+  const validatedStatus = status as OrderStatus
 
   const payload = await getPayload({ config })
 
@@ -27,7 +31,7 @@ export async function updateOrderStatusAction(formData: FormData) {
     collection: 'orders',
     id: orderId,
     data: {
-      status,
+      status: validatedStatus,
     },
     user,
     overrideAccess: false,

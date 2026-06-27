@@ -30,7 +30,7 @@ export async function addToCartAction(formData: FormData) {
     existing.quantity += quantity
 
     await setCart(cart)
-    revalidatePath('/cart')
+    revalidatePath('/', 'layout')
 
     return { isNewProduct: false }
   }
@@ -38,7 +38,7 @@ export async function addToCartAction(formData: FormData) {
   cart.push({ productId, farmId, quantity })
 
   await setCart(cart)
-  revalidatePath('/cart')
+  revalidatePath('/', 'layout')
 
   return { isNewProduct: true }
 }
@@ -54,7 +54,7 @@ export async function incrementCartItemAction(formData: FormData) {
 
   await setCart(nextCart)
 
-  revalidatePath('/cart')
+  revalidatePath('/', 'layout')
 }
 
 export async function decrementCartItemAction(formData: FormData) {
@@ -68,7 +68,7 @@ export async function decrementCartItemAction(formData: FormData) {
 
   await setCart(nextCart)
 
-  revalidatePath('/cart')
+  revalidatePath('/', 'layout')
 }
 
 export async function removeCartItemAction(formData: FormData) {
@@ -80,7 +80,7 @@ export async function removeCartItemAction(formData: FormData) {
 
   await setCart(nextCart)
 
-  revalidatePath('/cart')
+  revalidatePath('/', 'layout')
 }
 
 export async function checkoutAction() {

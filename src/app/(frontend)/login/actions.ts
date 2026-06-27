@@ -23,4 +23,5 @@ export async function loginAction(prevState: LoginState, formData: FormData): Pr
     }
   }
   redirectByRole(role)
+  return {}
 }

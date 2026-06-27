@@ -1,4 +1,4 @@
-import type { CollectionConfig } from 'payload'
+import type { CollectionConfig, Where } from 'payload'
 import { createOrderSnapshot } from './hooks/createOrderSnapshot'
 import { isAdmin } from '@/access/roles'
 
@@ -9,11 +9,7 @@ export const Orders: CollectionConfig = {
       if (req.user?.role === 'admin') return true
 
       if (req.user?.role === 'customer') {
-        return {
-          customer: {
-            equals: req.user.id,
-          },
-        }
+        return { customer: { equals: req.user.id } } as Where
       }
 
       if (req.user?.role === 'farm') {
@@ -27,11 +23,7 @@ export const Orders: CollectionConfig = {
 
         if (!farmId) return false
 
-        return {
-          farm: {
-            equals: farmId,
-          },
-        }
+        return { farm: { equals: farmId } } as Where
       }
 
       return false

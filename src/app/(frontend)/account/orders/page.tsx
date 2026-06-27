@@ -36,7 +36,7 @@ export default async function OrderHistoryPage() {
           </Link>
         </div>
       ) : (
-        <div className="space-y-5">
+        <div className="max-w-3xl space-y-5">
           {orders.map((order) => (
             <OrderCard key={order.id} order={order} />
           ))}

@@ -1,7 +1,8 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
-import { parseAsArrayOf, parseAsBoolean, parseAsString, useQueryState } from 'nuqs'
+import { parseAsArrayOf, parseAsBoolean, parseAsString, useQueryState, useQueryStates } from 'nuqs'
+import { toast } from 'sonner'
 import { Check, ChevronDown, Locate, Map, SlidersHorizontal, X } from 'lucide-react'
 import { SearchInput } from '@/components/products/SearchInput'
 
@@ -58,8 +59,12 @@ export function FilterSidebar({
     parseAsString.withDefault('').withOptions(opts),
   )
   const [price, setPrice] = useQueryState('price', parseAsString.withDefault('').withOptions(opts))
-  const [lat, setLat] = useQueryState('lat', parseAsString.withDefault('').withOptions(opts))
-  const [lng, setLng] = useQueryState('lng', parseAsString.withDefault('').withOptions(opts))
+  const [coords, setCoords] = useQueryStates(
+    { lat: parseAsString, lng: parseAsString },
+    opts,
+  )
+  const lat = coords.lat ?? ''
+  const lng = coords.lng ?? ''
 
   const distanceIndex = Math.max(0, DISTANCE_STEPS.indexOf(distance))
   const [localDistanceIndex, setLocalDistanceIndex] = useState(distanceIndex)
@@ -84,8 +89,7 @@ export function FilterSidebar({
     setOrganic(false)
     setDistance('')
     setPrice('')
-    setLat(null)
-    setLng(null)
+    setCoords({ lat: null, lng: null })
     closeDrawer()
   }
 
@@ -93,19 +97,51 @@ export function FilterSidebar({
     setLocalDistanceIndex(distanceIndex)
   }, [distanceIndex])
 
-  const requestLocation = useCallback(() => {
-    if (!navigator.geolocation) return
+  const requestLocation = useCallback(async () => {
     setLocating(true)
+
+    const applyCoords = (lat: number, lng: number) => {
+      setCoords({ lat: lat.toFixed(6), lng: lng.toFixed(6) })
+    }
+
+    const tryIpFallback = async () => {
+      try {
+        const res = await fetch('https://ipapi.co/json/')
+        const data = await res.json()
+        if (data.latitude && data.longitude) {
+          applyCoords(data.latitude, data.longitude)
+        } else {
+          toast.error('Could not determine your location.')
+        }
+      } catch {
+        toast.error('Could not determine your location.')
+      } finally {
+        setLocating(false)
+      }
+    }
+
+    if (!navigator.geolocation) {
+      await tryIpFallback()
+      return
+    }
+
     navigator.geolocation.getCurrentPosition(
       (pos) => {
         setLocating(false)
-        setLat(pos.coords.latitude.toFixed(6))
-        setLng(pos.coords.longitude.toFixed(6))
+        applyCoords(pos.coords.latitude, pos.coords.longitude)
       },
-      () => setLocating(false),
-      { timeout: 8000, maximumAge: 300000, enableHighAccuracy: false },
+      async (err) => {
+        if (err.code === err.PERMISSION_DENIED) {
+          setLocating(false)
+          toast.error('Location access denied. Please allow it in your browser settings.')
+          return
+        }
+        // POSITION_UNAVAILABLE or TIMEOUT → IP fallback
+        await tryIpFallback()
+      },
+      { timeout: 10000, maximumAge: 0, enableHighAccuracy: false },
     )
-  }, [setLat, setLng])
+  }, [setCoords])
 
   const filterControls = (
     <div className="space-y-6">
@@ -187,7 +223,7 @@ export function FilterSidebar({
           <select
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="w-full appearance-none rounded-xl border border-[#c2c9bb]/40 bg-white py-2 pl-4 pr-10 text-sm"
+            className="w-full appearance-none rounded-xl border border-[#c2c9bb]/40 py-2 pl-4 pr-10 text-sm"
           >
             <option value="">Any price</option>
             <option value="3">Up to €3</option>
@@ -252,7 +288,7 @@ export function FilterSidebar({
   return (
     <>
       {/* Desktop sidebar (lg+) */}
-      <div className="hidden lg:block sticky top-24 space-y-6">
+      <div className="hidden lg:block sticky top-24 w-64 shrink-0 space-y-6">
         <div>
           <h3 className="text-2xl text-primary">
             Discover {showGlobalFilters ? 'Local Farms' : 'Products'}

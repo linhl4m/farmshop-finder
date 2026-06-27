@@ -41,6 +41,7 @@ export async function registerCustomerAction(
   }
 
   redirectByRole(role)
+  return {}
 }
 
 export async function registerFarmAction(
@@ -68,10 +69,8 @@ export async function registerFarmAction(
     await payload.create({
       collection: 'farms',
       overrideAccess: true,
-      data: {
-        owner: user.id,
-        name: farmName,
-      },
+      draft: false,
+      data: { owner: user.id, name: farmName } as any,
     })
 
     const result = await loginUser(email, password)
@@ -85,4 +84,5 @@ export async function registerFarmAction(
   }
 
   redirectByRole(role)
+  return {}
 }

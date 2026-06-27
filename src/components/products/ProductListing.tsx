@@ -11,7 +11,7 @@ type Props = {
 export function ProductListing({ title, description, products, filters, showFavorite }: Props) {
   return (
     <main className="container-page">
-      <div className="flex gap-8">
+      <div className="flex gap-6">
         {filters}
 
         <section className="flex-1">
@@ -24,9 +24,14 @@ export function ProductListing({ title, description, products, filters, showFavo
           </div>
 
           {products.length > 0 ? (
-            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-2 gap-4 lg:grid-cols-3 xl:grid-cols-4">
               {products.map((product) => (
-                <ProductCard key={product.id} product={product} variant="market" showFavorite={showFavorite} />
+                <ProductCard
+                  key={product.id}
+                  product={product}
+                  variant="market"
+                  showFavorite={showFavorite}
+                />
               ))}
             </div>
           ) : (

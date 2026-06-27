@@ -28,7 +28,7 @@ export default async function FarmOrdersPage() {
           </p>
         </div>
       ) : (
-        <div className="space-y-5">
+        <div className="max-w-3xl space-y-5">
           {orders.map((order: any) => {
             const customer = typeof order.customer === 'object' ? order.customer.email : 'Customer'
 

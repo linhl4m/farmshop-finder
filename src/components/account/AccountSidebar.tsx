@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { Heart, LogOut, ReceiptText, Settings, User } from 'lucide-react'
+import { Heart, LogOut, ReceiptText, Settings, User, LayoutDashboard } from 'lucide-react'
 import { logoutAction } from '@/app/(frontend)/account/actions'
 import { usePathname } from 'next/navigation'
 
@@ -36,7 +36,7 @@ export function AccountSidebar({ email }: Props) {
               : 'text-muted-foreground hover:bg-muted'
           }`}
         >
-          <ReceiptText size={20} />
+          <LayoutDashboard size={20} />
           Dashboard
         </Link>
 

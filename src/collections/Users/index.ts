@@ -4,7 +4,7 @@ import { anyone, isAdmin } from '@/access/roles'
 export const Users: CollectionConfig = {
   slug: 'users',
   access: {
-    admin: isAdmin,
+    admin: ({ req: { user } }) => user?.role === 'admin',
     create: anyone,
     read: ({ req: { user } }) => {
       if (user?.role === 'admin') return true

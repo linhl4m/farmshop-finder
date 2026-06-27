@@ -38,16 +38,17 @@ export async function createProductAction(prevState: any, formData: FormData) {
 
     await payload.create({
       collection: 'products',
+      draft: false,
       data: {
         name: String(formData.get('name')),
         description: String(formData.get('description')),
         price: Number(formData.get('price')),
-        unit: String(formData.get('unit')),
+        unit: String(formData.get('unit')) as 'kg' | 'lb' | 'dozen' | 'bunch' | 'piece',
         productCategory: String(formData.get('productCategory')),
         stock: Number(formData.get('stock')),
-        status: String(formData.get('status')),
+        status: String(formData.get('status')) as 'in_season' | 'out_of_season' | 'sold_out',
         photos: photoId ? [photoId] : [],
-      },
+      } as any,
       overrideAccess: false,
       user,
     })

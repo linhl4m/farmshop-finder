@@ -10,13 +10,12 @@ import { CheckoutButton } from '@/components/cart/CheckoutButton'
 export default async function CartPage() {
   const cartGroups = await getCartWithProducts()
 
-  const subtotal = cartGroups.reduce((sum, group) => {
-    return (
-      sum +
-      group.items.reduce((itemSum, item) => {
-        return itemSum + item.price * item.quantity
-      }, 0)
-    )
+  const subtotal = cartGroups.reduce((sum: number, group: any) => {
+    const groupTotal = group.items.reduce((itemSum: number, item: any) => {
+      return itemSum + item.price * item.quantity
+    }, 0)
+
+    return sum + groupTotal
   }, 0)
 
   const deliveryFee = subtotal > 50 || subtotal === 0 ? 0 : 4.99
@@ -63,7 +62,7 @@ export default async function CartPage() {
                   </div>
 
                   <div className="space-y-4">
-                    {group.items.map((item) => (
+                    {group.items.map((item: any) => (
                       <div
                         key={item.productId}
                         className="flex items-start gap-3 p-3 sm:gap-4 sm:p-4"
