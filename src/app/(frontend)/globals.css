@@ -233,6 +233,7 @@
 
 html {
   opacity: 0;
+  overflow-x: hidden;
 }
 
 html[data-theme='dark'],

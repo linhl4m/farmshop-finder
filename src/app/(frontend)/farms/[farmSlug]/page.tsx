@@ -47,7 +47,7 @@ export default async function FarmPage({ params }: Props) {
   }))
 
   const seasonalProducts = await getSeasonalProductsByFarmId(farm.id)
-  const reviews = await getReviewsByFarmId(farm.id)
+  const { docs: reviews, totalDocs: reviewCount } = await getReviewsByFarmId(farm.id)
 
   const heroImage = typeof farm.coverImage === 'object' ? farm.coverImage?.url : undefined
 
@@ -129,7 +129,7 @@ export default async function FarmPage({ params }: Props) {
               <div className="flex justify-between">
                 <span className="text-secondary">Rating</span>
                 <span className="font-semibold text-primary">
-                  {farm.ratingAverage?.toFixed(1) ?? 0} ({farm.ratingCount ?? 0} reviews)
+                  {farm.ratingAverage?.toFixed(1) ?? 0} ({reviewCount} reviews)
                 </span>
               </div>
 
@@ -200,7 +200,7 @@ export default async function FarmPage({ params }: Props) {
       <ReviewsSection
         reviews={reviews}
         ratingAverage={farm.ratingAverage ?? 0}
-        ratingCount={farm.ratingCount ?? 0}
+        ratingCount={reviewCount}
         canWriteReview={canWriteReview}
         reviewButton={<ReviewModalButton farmId={farm.id} farmSlug={farm.slug} />}
         viewAllHref="#"

@@ -33,7 +33,7 @@ export default async function ProductDetailPage({ params }: Props) {
   const product = await getProductBySlugAndFarmId(productSlug, farm.id)
   if (!product) notFound()
 
-  const reviews = await getReviewsByProductId(product.id)
+  const { docs: reviews, totalDocs: reviewCount } = await getReviewsByProductId(product.id)
 
   const user = await getCurrentUser()
 
@@ -109,14 +109,24 @@ export default async function ProductDetailPage({ params }: Props) {
             <h1 className="text-primary md:text-4xl lg:text-5xl">{product.name}</h1>
 
             <div className="mt-4 flex items-center gap-2">
-              <div className="flex text-[#5a2e00]">
-                {[1, 2, 3, 4, 5].map((star) => (
-                  <Star key={star} className="h-5 w-5 fill-current" />
-                ))}
+              <div className="flex">
+                {[1, 2, 3, 4, 5].map((star) => {
+                  const fill = Math.max(0, Math.min(1, product.ratingAverage - (star - 1)))
+
+                  return (
+                    <div key={star} className="relative h-4 w-4">
+                      <Star className="absolute h-4 w-4 text-gray-300" />
+
+                      <div className="absolute overflow-hidden" style={{ width: `${fill * 100}%` }}>
+                        <Star className="h-4 w-4 fill-yellow-500 text-yellow-500" />
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
 
               <span className="text-sm font-semibold text-secondary">
-                ({product.ratingCount ?? 0} Reviews)
+                ({reviewCount} Reviews)
               </span>
             </div>
 
@@ -187,10 +197,15 @@ export default async function ProductDetailPage({ params }: Props) {
       <ReviewsSection
         reviews={reviews}
         ratingAverage={product.ratingAverage ?? 0}
-        ratingCount={product.ratingCount ?? 0}
+        ratingCount={reviewCount}
         canWriteReview={canWriteReview}
         reviewButton={
-          <ReviewModalButton farmId={farm.id} farmSlug={farm.slug} productId={product.id} productSlug={product.slug} />
+          <ReviewModalButton
+            farmId={farm.id}
+            farmSlug={farm.slug}
+            productId={product.id}
+            productSlug={product.slug}
+          />
         }
         viewAllHref={`/farms/${farm.slug}/products/${product.slug}/reviews`}
       />

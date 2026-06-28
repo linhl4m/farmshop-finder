@@ -20,6 +20,7 @@ export function Footer() {
             <div className="flex flex-col gap-2 text-sm text-secondary">
               <Link href="/">Home</Link>
               <Link href="/products">Products</Link>
+              <Link href="/farms">Farms</Link>
             </div>
           </div>
 

@@ -90,7 +90,7 @@ export async function getReviewsByFarmId(farmId: string) {
     depth: 2,
   })
 
-  return reviews.docs
+  return { docs: reviews.docs, totalDocs: reviews.totalDocs }
 }
 
 export async function getProductCategoriesByFarmId(farmId: string) {

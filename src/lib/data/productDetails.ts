@@ -40,7 +40,8 @@ export async function getReviewsByProductId(productId: string) {
     },
     depth: 1,
     sort: '-createdAt',
+    pagination: false,
   })
 
-  return result.docs
+  return { docs: result.docs, totalDocs: result.totalDocs }
 }

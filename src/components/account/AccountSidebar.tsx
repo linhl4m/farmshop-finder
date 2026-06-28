@@ -25,9 +25,9 @@ export function AccountSidebar({ email, user }: Props) {
           <User size={22} />
         </div>
 
-        <div>
+        <div className="min-w-0">
           <p className="text-xs text-muted-foreground">Welcome back,</p>
-          <p className="font-semibold">{email}</p>
+          <p className="truncate font-semibold">{email}</p>
         </div>
       </div>
 

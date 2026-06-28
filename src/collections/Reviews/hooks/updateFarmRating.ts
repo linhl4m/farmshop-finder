@@ -16,10 +16,11 @@ async function recalculateRating(
   const reviews = await req.payload.find({
     collection: 'reviews',
     where: { [whereField]: { equals: id } },
-    limit: 1000,
+    pagination: false,
+    overrideAccess: true,
   })
 
-  const count = reviews.docs.length
+  const count = reviews.totalDocs
   const average =
     count === 0
       ? 0

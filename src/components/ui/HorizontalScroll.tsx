@@ -45,7 +45,7 @@ export function HorizontalScroll({ children }: { children: React.ReactNode }) {
   }
 
   return (
-    <div className="relative">
+    <div className="relative overflow-hidden">
       {canScrollLeft && (
         <button
           onClick={() => scroll('left')}
