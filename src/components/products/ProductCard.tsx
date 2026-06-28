@@ -37,6 +37,15 @@ const CATEGORY_COLORS = {
   },
 } as const
 
+function getCategoryColors(value?: string) {
+  return (
+    CATEGORY_COLORS[value as keyof typeof CATEGORY_COLORS] ?? {
+      solid: 'bg-[#ffdcc3] text-[#5a2e00]',
+      overlay: 'bg-[#ffdcc3]/90 text-[#5a2e00]',
+    }
+  )
+}
+
 export function ProductCard({ product, variant = 'small', showFavorite = true }: Props) {
   const image = product.photos?.[0]
   const isLarge = variant === 'large'
@@ -49,6 +58,9 @@ export function ProductCard({ product, variant = 'small', showFavorite = true }:
 
   const categoryName =
     typeof product.productCategory === 'object' ? product.productCategory.name : ''
+
+  const categorySlug =
+    typeof product.productCategory === 'object' ? product.productCategory.slug : ''
 
   function getProductAvailability(product: any) {
     if (product.status === 'out_of_season') return 'Out of Season'
@@ -112,7 +124,7 @@ export function ProductCard({ product, variant = 'small', showFavorite = true }:
             <div className="hidden md:flex absolute left-4 top-4 gap-2">
               {categoryName && (
                 <span
-                  className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${getCategoryColors(categoryName).solid}`}
+                  className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wider ${getCategoryColors(categorySlug).solid}`}
                 >
                   {categoryName}
                 </span>
@@ -238,7 +250,7 @@ export function ProductCard({ product, variant = 'small', showFavorite = true }:
           <div className="absolute left-3 top-3 flex flex-wrap gap-2">
             {categoryName && (
               <span
-                className={`rounded-full px-2.5 py-1 text-xs font-semibold backdrop-blur-sm ${getCategoryColors(categoryName).overlay}`}
+                className={`rounded-full px-2.5 py-1 text-xs font-semibold backdrop-blur-sm ${getCategoryColors(categorySlug).overlay}`}
               >
                 {categoryName}
               </span>
