@@ -18,16 +18,17 @@ This was built as a scoped MVP within a 20-hour budget. The goal was not exhaust
 
 ## Tech Stack
 
-| Layer         | Technology              |
-| ------------- | ----------------------- |
-| Framework     | Next.js 16 (App Router) |
-| CMS / Backend | Payload CMS 3           |
-| Database      | MongoDB Atlas           |
-| Styling       | Tailwind CSS            |
-| Map           | Mapbox GL JS            |
-| URL state     | nuqs                    |
-| Icons         | Lucide React            |
-| Deployment    | Vercel                  |
+| Layer                   | Technology              |
+| ----------------------- | ----------------------- |
+| Framework               | Next.js 16 (App Router) |
+| CMS / Backend           | Payload CMS 3           |
+| Database                | MongoDB Atlas           |
+| Styling                 | Tailwind CSS            |
+| Map                     | Mapbox GL JS            |
+| URL state               | nuqs                    |
+| Icons                   | Lucide React            |
+| Deployment              | Vercel                  |
+| Image uploads & storage | Vercel Blob Storage     |
 
 ---
 
@@ -137,6 +138,10 @@ Farm locations are displayed on an interactive Mapbox map. Clicking a farm pin o
 ### MongoDB Atlas
 
 MongoDB integrates directly with Payload and works well for document-based data such as farms, products, reviews, and orders.
+
+### Vercel Blob Storage
+
+Uploaded farm and product images are stored in Vercel Blob. Since the application is deployed on Vercel, using Blob Storage provided a simple, fully managed solution without introducing additional infrastructure such as S3 or Cloudinary.
 
 ### Icons with Lucide
 
