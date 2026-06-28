@@ -59,10 +59,7 @@ export function FilterSidebar({
     parseAsString.withDefault('').withOptions(opts),
   )
   const [price, setPrice] = useQueryState('price', parseAsString.withDefault('').withOptions(opts))
-  const [coords, setCoords] = useQueryStates(
-    { lat: parseAsString, lng: parseAsString },
-    opts,
-  )
+  const [coords, setCoords] = useQueryStates({ lat: parseAsString, lng: parseAsString }, opts)
   const lat = coords.lat ?? ''
   const lng = coords.lng ?? ''
 
@@ -100,8 +97,18 @@ export function FilterSidebar({
   const requestLocation = useCallback(async () => {
     setLocating(true)
 
-    const applyCoords = (lat: number, lng: number) => {
-      setCoords({ lat: lat.toFixed(6), lng: lng.toFixed(6) })
+    const applyCoords = (nextLat: number, nextLng: number) => {
+      const nextLatString = nextLat.toFixed(6)
+      const nextLngString = nextLng.toFixed(6)
+
+      if (lat === nextLatString && lng === nextLngString) {
+        return
+      }
+
+      setCoords({
+        lat: nextLatString,
+        lng: nextLngString,
+      })
     }
 
     const tryIpFallback = async () => {
@@ -141,7 +148,7 @@ export function FilterSidebar({
       },
       { timeout: 10000, maximumAge: 0, enableHighAccuracy: false },
     )
-  }, [setCoords])
+  }, [setCoords, lat, lng])
 
   const filterControls = (
     <div className="space-y-6">

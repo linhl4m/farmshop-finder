@@ -3,12 +3,16 @@ import Link from 'next/link'
 import { Heart, LogOut, ReceiptText, Settings, User, LayoutDashboard } from 'lucide-react'
 import { logoutAction } from '@/app/(frontend)/account/actions'
 import { usePathname } from 'next/navigation'
+import { User as PayloadUser } from '@/payload-types'
 
 type Props = {
   email?: string | null
+  user: PayloadUser
 }
 
-export function AccountSidebar({ email }: Props) {
+export function AccountSidebar({ email, user }: Props) {
+  const isCustomer = user.role === 'customer'
+  const dashboardHref = user.role === 'admin' ? '/account/admin' : '/account'
   const pathname = usePathname()
 
   const isActive = (href: string) =>
@@ -29,9 +33,9 @@ export function AccountSidebar({ email }: Props) {
 
       <nav className="flex flex-col gap-2">
         <Link
-          href="/account"
+          href={dashboardHref}
           className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
-            isActive('/account')
+            isActive(dashboardHref)
               ? 'bg-primary/10 font-semibold text-primary'
               : 'text-muted-foreground hover:bg-muted'
           }`}
@@ -40,29 +44,33 @@ export function AccountSidebar({ email }: Props) {
           Dashboard
         </Link>
 
-        <Link
-          href="/account/orders"
-          className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
-            isActive('/account/orders')
-              ? 'bg-primary/10 font-semibold text-primary'
-              : 'text-muted-foreground hover:bg-muted'
-          }`}
-        >
-          <ReceiptText size={20} />
-          My Orders
-        </Link>
+        {isCustomer && (
+          <>
+            <Link
+              href="/account/orders"
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
+                isActive('/account/orders')
+                  ? 'bg-primary/10 font-semibold text-primary'
+                  : 'text-muted-foreground hover:bg-muted'
+              }`}
+            >
+              <ReceiptText size={20} />
+              My Orders
+            </Link>
 
-        <Link
-          href="/account/saved"
-          className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
-            isActive('/account/saved')
-              ? 'bg-primary/10 font-semibold text-primary'
-              : 'text-muted-foreground hover:bg-muted'
-          }`}
-        >
-          <Heart size={20} />
-          Saved Farms
-        </Link>
+            <Link
+              href="/account/saved"
+              className={`flex items-center gap-3 rounded-xl px-4 py-3 ${
+                isActive('/account/saved')
+                  ? 'bg-primary/10 font-semibold text-primary'
+                  : 'text-muted-foreground hover:bg-muted'
+              }`}
+            >
+              <Heart size={20} />
+              Saved Farms
+            </Link>
+          </>
+        )}
       </nav>
 
       <div className="border-t pt-4">

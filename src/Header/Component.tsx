@@ -45,7 +45,7 @@ export async function Header({ cartCount = 0 }: Props) {
         </nav>
 
         <div className="flex items-center gap-2">
-          {user?.role !== 'farm' && <CartButton />}
+          {user?.role === 'customer' && <CartButton />}
 
           {user ? (
             <>

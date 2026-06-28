@@ -12,11 +12,11 @@ export default async function AccountLayout({ children }: { children: React.Reac
 
   return (
     <main className="flex bg-background">
-      <AccountSidebar email={user.email} />
+      <AccountSidebar email={user.email} user={user} />
 
       <div className="flex-1 pb-10 md:pb-0">{children}</div>
 
-      <AccountBottomNav />
+      <AccountBottomNav user={user} />
     </main>
   )
 }

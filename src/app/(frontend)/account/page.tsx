@@ -6,9 +6,14 @@ import { OrderCard } from '@/components/account/OrderCard'
 import { SavedFarmsCard } from '@/components/account/SavedFarmsCard'
 import { ReviewPromptCard } from '@/components/account/ReviewPromptCard'
 import { SeasonalCard } from '@/components/account/SeasonalCard'
+import { redirect } from 'next/navigation'
 
 export default async function AccountPage() {
   const user = await requireUser()
+
+  if (user?.role === 'admin') {
+    redirect('/account/admin')
+  }
 
   const orders = await getOrdersByCustomer(user.id)
 

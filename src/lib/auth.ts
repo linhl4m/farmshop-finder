@@ -53,6 +53,9 @@ export function redirectByRole(role?: string) {
     redirect('/dashboard')
   }
 
+  if (role === 'admin') {
+    redirect('/account/admin')
+  }
+
   redirect('/')
 }
-

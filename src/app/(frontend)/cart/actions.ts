@@ -18,6 +18,14 @@ export async function addToCartAction(formData: FormData) {
     }
   }
 
+  if (user?.role === 'admin') {
+    return {
+      success: false,
+      message: 'Admin accounts cannot order.',
+      isNewProduct: false,
+    }
+  }
+
   const productId = String(formData.get('productId'))
   const farmId = String(formData.get('farmId'))
   const quantity = Number(formData.get('quantity') || 1)
