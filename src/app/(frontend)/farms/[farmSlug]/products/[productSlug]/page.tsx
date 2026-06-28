@@ -34,6 +34,12 @@ export default async function ProductDetailPage({ params }: Props) {
   if (!product) notFound()
 
   const { docs: reviews, totalDocs: reviewCount } = await getReviewsByProductId(product.id)
+  const ratingAverage =
+    reviewCount > 0
+      ? Math.round(
+          (reviews.reduce((sum, r) => sum + Number((r as any).rating ?? 0), 0) / reviewCount) * 10,
+        ) / 10
+      : 0
 
   const user = await getCurrentUser()
 
@@ -111,7 +117,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <div className="mt-4 flex items-center gap-2">
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((star) => {
-                  const fill = Math.max(0, Math.min(1, (product.ratingAverage ?? 0) - (star - 1)))
+                  const fill = Math.max(0, Math.min(1, ratingAverage - (star - 1)))
 
                   return (
                     <div key={star} className="relative h-4 w-4">
@@ -194,7 +200,7 @@ export default async function ProductDetailPage({ params }: Props) {
       </section>
       <ReviewsSection
         reviews={reviews}
-        ratingAverage={product.ratingAverage ?? 0}
+        ratingAverage={ratingAverage}
         ratingCount={reviewCount}
         canWriteReview={canWriteReview}
         reviewButton={

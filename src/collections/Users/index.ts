@@ -35,7 +35,7 @@ export const Users: CollectionConfig = {
     },
   },
   admin: {
-    defaultColumns: ['name', 'email'],
+    defaultColumns: ['email'],
     useAsTitle: 'name',
   },
   auth: true,

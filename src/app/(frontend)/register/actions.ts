@@ -54,17 +54,30 @@ export async function registerFarmAction(
   const password = String(formData.get('password'))
   const farmName = String(formData.get('farmName'))
 
+  let userId: string | undefined
   let role: string | undefined
 
   try {
+    const existing = await payload.find({
+      collection: 'farms',
+      overrideAccess: true,
+      where: { name: { equals: farmName } },
+      limit: 1,
+    })
+
+    if (existing.totalDocs > 0) {
+      return {
+        error: 'A farm with this name already exists. Please choose a different name.',
+        email,
+        farmName,
+      }
+    }
+
     const user = await payload.create({
       collection: 'users',
-      data: {
-        email,
-        password,
-        role: 'farm',
-      },
+      data: { email, password, role: 'farm' },
     })
+    userId = user.id
 
     await payload.create({
       collection: 'farms',
@@ -75,9 +88,16 @@ export async function registerFarmAction(
 
     const result = await loginUser(email, password)
     role = result.user?.role
-  } catch {
+  } catch (err: any) {
+    if (userId) {
+      await payload.delete({ collection: 'users', id: userId, overrideAccess: true }).catch(() => {})
+    }
+    const isDuplicateName =
+      err?.code === 11000 || JSON.stringify(err).includes('"name"')
     return {
-      error: 'Unable to create account. Please check your details and try again.',
+      error: isDuplicateName
+        ? 'A farm with this name already exists. Please choose a different name.'
+        : 'Unable to create account. Please check your details and try again.',
       email,
       farmName,
     }

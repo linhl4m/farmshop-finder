@@ -14,6 +14,13 @@ This was built as a scoped MVP within a 20-hour budget. The goal was not exhaust
 
 **Discover a farm → Browse products → Place an order**
 
+## Demo Access
+
+Admin:
+
+- Email: admin@farmshop.com
+- Password: admin123
+
 ---
 
 ## Tech Stack
@@ -50,16 +57,6 @@ PAYLOAD_SECRET=
 NEXT_PUBLIC_SERVER_URL=
 NEXT_PUBLIC_MAPBOX_ACCESS_TOKEN=
 ```
-
-### Seed the database
-
-```bash
-pnpm seed
-```
-
-Seeds 1 admin, 10 customers, 20 farms with 5–12 products each, reviews, and orders.
-
-Images are downloaded from `picsum.photos` and are intentionally random. They do not necessarily match the seeded farm or product data and are only meant to provide visual placeholders for the demo.
 
 ### Start development server
 
@@ -307,7 +304,9 @@ In a production version, both entities would likely support multiple images and 
 
 The application is deployed on Vercel and uses MongoDB Atlas as its database. Environment variables are configured through the Vercel project settings.
 
----
+## Browser Compatibility
+
+The MVP was primarily developed and tested in Google Chrome. Other browsers may show slightly different behavior in certain areas. For example, Firefox may handle native HTML form validation differently and might not display the same built-in `required` field warnings as Chrome.
 
 ## Notes on Scope
 
