@@ -2,10 +2,13 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Package, ReceiptText, Store, LogOut } from 'lucide-react'
-import { logoutAction } from '@/app/(frontend)/account/actions'
+import { LayoutDashboard, Package, ReceiptText, Pencil, Eye } from 'lucide-react'
 
-export function DashboardBottomNav() {
+type Props = {
+  farmSlug?: string
+}
+
+export function DashboardBottomNav({ farmSlug }: Props) {
   const pathname = usePathname()
 
   const linkClass = (href: string) => {
@@ -22,9 +25,16 @@ export function DashboardBottomNav() {
         <span>Overview</span>
       </Link>
 
+      {farmSlug && (
+        <Link href={`/farms/${farmSlug}`} className={linkClass(`/farms/${farmSlug}`)}>
+          <Eye size={22} />
+          View Farm
+        </Link>
+      )}
+
       <Link href="/dashboard/farm" className={linkClass('/dashboard/farm')}>
-        <Store size={22} />
-        <span>Farm</span>
+        <Pencil size={22} />
+        <span>Edit Farm</span>
       </Link>
 
       <Link href="/dashboard/orders" className={linkClass('/dashboard/orders')}>
@@ -36,16 +46,6 @@ export function DashboardBottomNav() {
         <Package size={22} />
         <span>Products</span>
       </Link>
-
-      <form
-        action={logoutAction}
-        className="flex flex-1 flex-col items-center gap-1 py-2 text-xs font-medium transition text-destructive"
-      >
-        <button>
-          <LogOut size={22} />
-          <span>Logout</span>
-        </button>
-      </form>
     </nav>
   )
 }

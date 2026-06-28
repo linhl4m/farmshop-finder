@@ -23,7 +23,7 @@ export function DashboardSidebar({ farmName, farmSlug }: Props) {
         </div>
       </div>
 
-      <DashboardSidebarNav />
+      <DashboardSidebarNav farmSlug={farmSlug} />
     </aside>
   )
 }

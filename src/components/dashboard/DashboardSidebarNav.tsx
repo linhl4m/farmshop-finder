@@ -2,10 +2,14 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { LayoutDashboard, Package, ReceiptText, Store, LogOut } from 'lucide-react'
+import { LayoutDashboard, Package, ReceiptText, Store, LogOut, Eye } from 'lucide-react'
 import { logoutAction } from '@/app/(frontend)/account/actions'
 
-export function DashboardSidebarNav() {
+type Props = {
+  farmSlug?: string
+}
+
+export function DashboardSidebarNav({ farmSlug }: Props) {
   const pathname = usePathname()
 
   function getLinkClasses(href: string) {
@@ -22,6 +26,13 @@ export function DashboardSidebarNav() {
         <LayoutDashboard size={20} />
         Seller Dashboard
       </Link>
+
+      {farmSlug && (
+        <Link href={`/farms/${farmSlug}`} className={getLinkClasses(`/farms/${farmSlug}`)}>
+          <Eye size={20} />
+          View Farm Page
+        </Link>
+      )}
 
       <Link href="/dashboard/farm" className={getLinkClasses('/dashboard/farm')}>
         <Store size={20} />

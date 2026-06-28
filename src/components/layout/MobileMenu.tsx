@@ -15,7 +15,9 @@ import {
   ShoppingBasket,
   TrendingUp,
   Leaf,
+  LogOut,
 } from 'lucide-react'
+import { logoutAction } from '@/app/(frontend)/account/actions'
 
 type Props = {
   isLoggedIn: boolean
@@ -114,6 +116,16 @@ export function MobileMenu({ isLoggedIn, isCustomer }: Props) {
                         Favorites
                       </Link>
                     )}
+
+                    <form action={logoutAction}>
+                      <button
+                        type="submit"
+                        className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-base font-semibold text-destructive transition-colors hover:bg-destructive/10"
+                      >
+                        <LogOut size={18} />
+                        Logout
+                      </button>
+                    </form>
                   </div>
                 </>
               )}

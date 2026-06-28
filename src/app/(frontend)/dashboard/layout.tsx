@@ -23,7 +23,7 @@ export default async function DashboardLayout({ children }: { children: React.Re
 
       <div className="flex-1 pb-10 md:pb-0">{children}</div>
 
-      <DashboardBottomNav />
+      <DashboardBottomNav farmSlug={farm.slug} />
     </main>
   )
 }
