@@ -153,7 +153,7 @@ export default async function FarmPage({ params }: Props) {
             href={`/farms/${farm.slug}/products`}
             className="font-semibold text-primary hover:underline"
           >
-            View all products <ArrowRight className="inline h-4 w-4" />
+            View all <ArrowRight className="inline h-4 w-4" />
           </Link>
         </div>
 

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { FavoriteFarmButton } from '@/components/favorites/FavoriteFarmButton'
-import { ChevronRight } from 'lucide-react'
+import { ChevronRight, MapPin } from 'lucide-react'
 
 type Props = {
   farm: any
@@ -37,7 +37,7 @@ export function FarmCard({ farm, showFavorite = true }: Props) {
         <div className="p-4">
           <div className="mb-1 flex items-start justify-between">
             <h3 className="text-base text-primary truncate line-clamp-1">{farm.name}</h3>
-            <div className="flex items-center gap-1 text-primary">
+            <div className="items-center gap-1 text-primary hidden md:flex">
               <span className="text-base">★</span>
               <span className="text-sm font-semibold">{farm.ratingAverage.toFixed(1) ?? 0}</span>
             </div>
@@ -45,9 +45,7 @@ export function FarmCard({ farm, showFavorite = true }: Props) {
 
           {farm.region && (
             <div className="mb-2 flex items-center gap-1 text-secondary">
-              <svg className="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
-              </svg>
+              <MapPin className="h-3 w-3 md:h-4 md:w-4" />
               <span className="text-xs md:text-sm truncate line-clamp-1">{farm.region}</span>
             </div>
           )}

@@ -22,7 +22,7 @@ export async function Header({ cartCount = 0 }: Props) {
         <HeaderNav />
 
         <div className="flex items-center gap-2">
-          {user?.role === 'customer' && <CartButton />}
+          {(user?.role === 'customer' || !user) && <CartButton />}
 
           {/* Desktop only icons */}
           {user ? (
