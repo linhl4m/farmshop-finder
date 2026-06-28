@@ -135,6 +135,8 @@ Search filters are synchronized with the URL via `nuqs`, making filter state sha
 
 Farm locations are displayed on an interactive Mapbox map. Clicking a farm pin opens a popup with a link to the farm profile. The map is rendered as a client component because it relies on browser APIs.
 
+For simplicity, the map defaults to Berlin when no user location has been selected or shared. This provides a sensible starting point for exploring the application without requiring immediate location access.
+
 ### MongoDB Atlas
 
 MongoDB integrates directly with Payload and works well for document-based data such as farms, products, reviews, and orders.
