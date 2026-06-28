@@ -8,17 +8,39 @@ type FarmFilters = {
   search?: string
 }
 
+const completenessConditions = [
+  { name: { exists: true } },
+  { name: { not_equals: '' } },
+  { description: { exists: true } },
+  { description: { not_equals: '' } },
+  { type: { exists: true } },
+  { type: { not_equals: '' } },
+  { region: { exists: true } },
+  { region: { not_equals: '' } },
+  { 'location.address': { exists: true } },
+  { 'location.address': { not_equals: '' } },
+  { 'location.city': { exists: true } },
+  { 'location.city': { not_equals: '' } },
+  { coverImage: { exists: true } },
+] as const
+
 export async function getFarms(filters: FarmFilters = {}) {
   const payload = await getPayload({ config })
 
-  const where = filters.search
-    ? ({
-        or: [
-          { name: { like: filters.search } },
-          { description: { like: filters.search } },
-        ],
-      } as any)
-    : undefined
+  const searchCondition = filters.search
+    ? [
+        {
+          or: [
+            { name: { like: filters.search } },
+            { description: { like: filters.search } },
+          ],
+        },
+      ]
+    : []
+
+  const where = {
+    and: [...completenessConditions, ...searchCondition],
+  } as any
 
   const farms = await payload.find({
     collection: 'farms',

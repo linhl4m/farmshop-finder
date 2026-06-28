@@ -1,51 +1,35 @@
-import { updateFarmAction } from '@/app/(frontend)/dashboard/farm/actions'
 import { EditFarmSubmit } from './EditFarmSubmit'
-import Image from 'next/image'
-import { Upload } from 'lucide-react'
+import { ImageUploadWithPreview } from './ImageUploadWithPreview'
 
 type Props = {
   farm: any
 }
 
 export function EditFarmForm({ farm }: Props) {
+  const existingImageUrl =
+    farm.coverImage && typeof farm.coverImage === 'object' ? farm.coverImage?.url : null
+
   return (
     <EditFarmSubmit>
       <input type="hidden" name="farmId" value={farm.id} />
-      <div>
-        <label className="mb-2 block text-sm font-semibold text-primary">Farm Cover Image</label>
-        {farm.coverImage && typeof farm.coverImage === 'object' && farm.coverImage?.url ? (
-          <Image
-            src={farm.coverImage?.url}
-            alt={farm.name}
-            width={300}
-            height={200}
-            className="mb-4 h-64 w-full rounded-xl object-cover"
-          />
-        ) : null}
-        <div className="flex min-w-0 flex-col gap-2 sm:flex-row sm:items-center">
-          <Upload className="hidden shrink-0 sm:block" size={20} />
 
-          <input
-            type="file"
-            name="coverImage"
-            accept="image/*"
-            className="w-full min-w-0 max-w-full cursor-pointer rounded-xl border px-3 py-2 text-sm file:mr-3 file:rounded-lg file:border-0 file:bg-primary file:px-3 file:py-2 file:text-sm file:font-semibold file:text-white"
-          />
-        </div>
-      </div>
+      <ImageUploadWithPreview existingImageUrl={existingImageUrl} existingImageAlt={farm.name} />
+
       <div>
-        <label className="mb-2 block text-sm font-semibold text-primary">Farm Name</label>
+        <label className="mb-2 block text-sm font-semibold text-primary">Farm Name*</label>
         <input
           name="name"
+          required
           defaultValue={farm.name || ''}
           className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-primary"
         />
       </div>
 
       <div>
-        <label className="mb-2 block text-sm font-semibold text-primary">Description</label>
+        <label className="mb-2 block text-sm font-semibold text-primary">Description*</label>
         <textarea
           name="description"
+          required
           defaultValue={farm.description || ''}
           rows={6}
           className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-primary"
@@ -54,9 +38,10 @@ export function EditFarmForm({ farm }: Props) {
 
       <div className="grid gap-4 md:grid-cols-2">
         <div>
-          <label className="mb-2 block text-sm font-semibold text-primary">Farm Type</label>
+          <label className="mb-2 block text-sm font-semibold text-primary">Farm Type*</label>
           <select
             name="type"
+            required
             defaultValue={farm.type || ''}
             className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-primary"
           >
@@ -70,9 +55,10 @@ export function EditFarmForm({ farm }: Props) {
         </div>
 
         <div>
-          <label className="mb-2 block text-sm font-semibold text-primary">Region</label>
+          <label className="mb-2 block text-sm font-semibold text-primary">Region*</label>
           <input
             name="region"
+            required
             defaultValue={farm.region || ''}
             placeholder="e.g. Bavaria"
             className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-primary"
@@ -90,18 +76,20 @@ export function EditFarmForm({ farm }: Props) {
 
         <div className="grid gap-4 md:grid-cols-2">
           <div>
-            <label className="mb-2 block text-sm font-semibold text-primary">Address</label>
+            <label className="mb-2 block text-sm font-semibold text-primary">Address*</label>
             <input
               name="address"
+              required
               defaultValue={farm.location?.address || ''}
               className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-primary"
             />
           </div>
 
           <div>
-            <label className="mb-2 block text-sm font-semibold text-primary">City</label>
+            <label className="mb-2 block text-sm font-semibold text-primary">City*</label>
             <input
               name="city"
+              required
               defaultValue={farm.location?.city || ''}
               className="w-full rounded-xl border bg-background px-4 py-3 outline-none focus:border-primary"
             />

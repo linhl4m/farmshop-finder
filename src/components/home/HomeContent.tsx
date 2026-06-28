@@ -9,22 +9,28 @@ import { Map, SlidersHorizontal } from 'lucide-react'
 
 type Props = {
   farms: any[]
-  products: any[]
+  products?: any[]
   categories: any[]
   lat?: string
   lng?: string
   distance?: string
   showFavorite?: boolean
+  hideTrending?: boolean
+  title?: string
+  description?: string
 }
 
 export function HomeContent({
   farms,
-  products,
+  products = [],
   categories,
   lat,
   lng,
   distance,
   showFavorite,
+  hideTrending,
+  title,
+  description,
 }: Props) {
   const [mapOpen, setMapOpen] = useState(false)
   const [filtersOpen, setFiltersOpen] = useState(false)
@@ -36,9 +42,11 @@ export function HomeContent({
 
   return (
     <main className="container-page pb-24 lg:pb-12">
-      <section className="mb-6">
-        <TrendingProducts products={products} showFavorite={showFavorite} />
-      </section>
+      {!hideTrending && (
+        <section className="mb-6">
+          <TrendingProducts products={products} showFavorite={showFavorite} />
+        </section>
+      )}
 
       <section className="grid grid-cols-1 lg:grid-cols-[16rem_1fr] lg:gap-6">
         <aside>
@@ -57,7 +65,7 @@ export function HomeContent({
           {mapOpen ? (
             <MapPanel farms={farms} center={mapCenter} distance={distance} />
           ) : (
-            <FarmsFeed farms={farms} showFavorite={showFavorite} />
+            <FarmsFeed farms={farms} showFavorite={showFavorite} title={title} description={description} />
           )}
         </div>
       </section>

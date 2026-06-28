@@ -151,7 +151,9 @@ export function ProductCard({ product, variant = 'small', showFavorite = true }:
         </div>
 
         <div className="flex flex-1 flex-col p-3">
-          <h3 className="mb-0.5 text-sm lg:text-lg font-semibold text-primary">{product.name}</h3>
+          <h3 className="mb-0.5 text-sm lg:text-lg font-semibold text-primary truncate line-clamp-1">
+            {product.name}
+          </h3>
 
           <p className="mb-3 text-xs text-secondary">
             {typeof product.farm === 'object' ? product.farm.name : ''}
@@ -274,7 +276,7 @@ export function ProductCard({ product, variant = 'small', showFavorite = true }:
       </div>
 
       <div className="p-4">
-        <p className="mb-1 font-serif text-lg font-semibold text-primary md:text-xl">
+        <p className="mb-1 truncate line-clamp-1 font-serif text-lg font-semibold text-primary md:text-xl">
           {product.name}
         </p>
 

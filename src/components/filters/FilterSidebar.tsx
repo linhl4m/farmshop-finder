@@ -295,7 +295,7 @@ export function FilterSidebar({
   return (
     <>
       {/* Desktop sidebar (lg+) */}
-      <div className="hidden lg:block sticky top-24 w-64 shrink-0 space-y-6">
+      <div className="hidden lg:block top-24 w-64 shrink-0 space-y-6">
         <div>
           <h3 className="text-2xl text-primary">
             Discover {showGlobalFilters ? 'Local Farms' : 'Products'}

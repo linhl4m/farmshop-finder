@@ -8,7 +8,7 @@ export function CartButton() {
   const { count } = useCart()
 
   return (
-    <Link href="/cart" className="relative rounded-full p-2 text-primary hover:bg-primary/10">
+    <Link href="/cart" className="relative inline-flex items-center justify-center rounded-full p-2 text-primary transition hover:bg-primary/10">
       <ShoppingBasket size={22} />
 
       {count > 0 && (

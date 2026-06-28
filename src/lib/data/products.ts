@@ -131,14 +131,11 @@ export async function getTrendingProducts() {
   const products = await payload.find({
     collection: 'products',
     where: {
-      and: [
-        { status: { equals: 'in_season' } },
-        { stock: { greater_than: 0 } },
-      ],
+      and: [{ status: { equals: 'in_season' } }, { stock: { greater_than: 0 } }],
     },
     sort: '-ratingAverage',
     depth: 2,
-    limit: 7,
+    limit: 10,
   })
 
   return products.docs

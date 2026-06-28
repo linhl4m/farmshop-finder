@@ -22,6 +22,10 @@ export async function updateFarmAction(prevState: any, formData: FormData) {
   let coverImageId: string | undefined
 
   if (file && file.size > 0) {
+    if (file.size > 1 * 1024 * 1024) {
+      return { success: false, message: 'The file size must not exceed 1 MB.' }
+    }
+
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
 

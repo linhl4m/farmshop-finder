@@ -36,7 +36,7 @@ export function FarmCard({ farm, showFavorite = true }: Props) {
         </div>
         <div className="p-4">
           <div className="mb-1 flex items-start justify-between">
-            <h3 className="text-base text-primary">{farm.name}</h3>
+            <h3 className="text-base text-primary truncate line-clamp-1">{farm.name}</h3>
             <div className="flex items-center gap-1 text-primary">
               <span className="text-base">★</span>
               <span className="text-sm font-semibold">{farm.ratingAverage.toFixed(1) ?? 0}</span>
@@ -48,7 +48,7 @@ export function FarmCard({ farm, showFavorite = true }: Props) {
               <svg className="h-4 w-4 flex-shrink-0" viewBox="0 0 24 24" fill="currentColor">
                 <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z" />
               </svg>
-              <span className="text-sm">{farm.region}</span>
+              <span className="text-sm truncate line-clamp-1">{farm.region}</span>
             </div>
           )}
 

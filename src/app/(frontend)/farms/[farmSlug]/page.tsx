@@ -153,14 +153,19 @@ export default async function FarmPage({ params }: Props) {
             href={`/farms/${farm.slug}/products`}
             className="font-semibold text-primary hover:underline"
           >
-            View all <ArrowRight className="inline h-4 w-4" />
+            View all products <ArrowRight className="inline h-4 w-4" />
           </Link>
         </div>
 
         {availableProductsWithFavorites.length > 0 ? (
           <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {availableProductsWithFavorites.slice(0, 4).map((product: any) => (
-              <ProductCard key={product.id} product={product} variant="large" showFavorite={user?.role === 'customer'} />
+              <ProductCard
+                key={product.id}
+                product={product}
+                variant="large"
+                showFavorite={user?.role === 'customer'}
+              />
             ))}
           </div>
         ) : (

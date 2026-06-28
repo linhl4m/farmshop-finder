@@ -1,7 +1,9 @@
 import Link from 'next/link'
-import { Bell, User } from 'lucide-react'
+import { Bell, User, Heart } from 'lucide-react'
 import { CartButton } from '@/components/cart/CartButton'
 import { getCurrentUser } from '@/lib/auth'
+import { HeaderNav } from '@/components/layout/HeaderNav'
+import { MobileMenu } from '@/components/layout/MobileMenu'
 
 type Props = {
   cartCount?: number
@@ -17,41 +19,26 @@ export async function Header({ cartCount = 0 }: Props) {
           Farmshop Finder
         </Link>
 
-        <nav className="hidden md:flex items-center gap-7">
-          <Link
-            href="/"
-            className="text-sm font-semibold text-secondary hover:text-primary transition-colors"
-          >
-            Farms
-          </Link>
-          <Link
-            href="/products"
-            className="text-sm font-semibold text-secondary hover:text-primary transition-colors"
-          >
-            Products
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-semibold text-secondary hover:text-primary transition-colors"
-          >
-            Trending
-          </Link>
-          <Link
-            href="#"
-            className="text-sm font-semibold text-secondary hover:text-primary transition-colors"
-          >
-            Seasonal
-          </Link>
-        </nav>
+        <HeaderNav />
 
         <div className="flex items-center gap-2">
           {user?.role === 'customer' && <CartButton />}
 
+          {/* Desktop only icons */}
           {user ? (
-            <>
+            <div className="hidden md:flex items-center gap-2">
               <button className="rounded-full p-2 text-primary transition hover:bg-primary/10">
                 <Bell size={22} />
               </button>
+
+              {user.role === 'customer' && (
+                <Link
+                  href="/account/saved"
+                  className="rounded-full p-2 text-primary transition hover:bg-primary/10"
+                >
+                  <Heart size={22} />
+                </Link>
+              )}
 
               <Link
                 href="/account"
@@ -59,15 +46,18 @@ export async function Header({ cartCount = 0 }: Props) {
               >
                 <User size={22} />
               </Link>
-            </>
+            </div>
           ) : (
             <Link
               href="/login"
-              className="rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary/90"
+              className="hidden md:block rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white transition hover:bg-primary/90"
             >
               Sign In
             </Link>
           )}
+
+          {/* Mobile hamburger */}
+          <MobileMenu isLoggedIn={!!user} isCustomer={user?.role === 'customer'} />
         </div>
       </div>
     </header>
