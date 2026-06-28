@@ -111,7 +111,7 @@ export default async function ProductDetailPage({ params }: Props) {
             <div className="mt-4 flex items-center gap-2">
               <div className="flex">
                 {[1, 2, 3, 4, 5].map((star) => {
-                  const fill = Math.max(0, Math.min(1, product.ratingAverage - (star - 1)))
+                  const fill = Math.max(0, Math.min(1, (product.ratingAverage ?? 0) - (star - 1)))
 
                   return (
                     <div key={star} className="relative h-4 w-4">
@@ -125,9 +125,7 @@ export default async function ProductDetailPage({ params }: Props) {
                 })}
               </div>
 
-              <span className="text-sm font-semibold text-secondary">
-                ({reviewCount} Reviews)
-              </span>
+              <span className="text-sm font-semibold text-secondary">({reviewCount} Reviews)</span>
             </div>
 
             <p className="mt-6 text-xl font-bold text-primary md:text-2xl">
