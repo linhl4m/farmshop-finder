@@ -14,13 +14,6 @@ This was built as a scoped MVP within a 20-hour budget. The goal was not exhaust
 
 **Discover a farm → Browse products → Place an order**
 
-## Demo Access
-
-Admin:
-
-- Email: admin@farmshop.com
-- Password: admin123
-
 ---
 
 ## Tech Stack
